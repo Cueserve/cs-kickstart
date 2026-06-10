@@ -33,6 +33,7 @@ This document gives a complete, accurate picture of the project: what it is, how
 
 ## Rules
 
+- This step **replaces the boilerplate template README** with the project's own. The template README's "Starting a New Project?" callout and the dummy worked-example content are removed here — by Step 6 the initiation process is complete, so the boilerplate entry point is no longer needed. The Project Initiation guides in `docs/guides/proj-init/` remain as the durable reference.
 - Write README last. It documents what exists, not what you plan to build.
 - Every command in README must be tested and working before it is committed.
 - `.env.example` must list every environment variable the app reads — no undocumented keys.

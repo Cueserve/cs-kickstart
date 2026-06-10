@@ -1,76 +1,54 @@
-# MemoriesInMail Website - UPS Store#1125
+# Project Initiation Boilerplate
 
-[![Next.js](https://img.shields.io/badge/Next.js-v16+-black.svg)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)](https://www.typescriptlang.org/)
+A starter template that enforces a documented, **gated project-initiation process** before any code is written. Clone it, run the steps in order, and you end up with an aligned set of source-of-truth documents (`PRODUCT.md` → `README.md`) plus the governance to keep them honest.
 
-> A community‑driven campaign and website to build a sales funnel that brings customers into our print shop using digital engagement.
-
----
-
-## Table of Contents
-
-- [Objective](#objective)
-- [Documentation](#documentation)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Development](#development)
-- [Build](#build)
-- [Testing](#testing)
+This template is **stack-agnostic** — the technology stack is a decision *made during* initiation (Step 4), not baked into the boilerplate.
 
 ---
 
-## Objective
+## 🚀 Start Here
 
-_UPS Store #1125_ is launching a community‑focused marketing campaign called **"Memories in Mail"**, celebrating **250 years of American freedom** and the **store's 5th anniversary**. The campaign blends **online engagement with the in-store experience** to drive foot traffic, strengthen local relationships, and position the store as the **area’s trusted printing hub**.
+Before writing any code, run the Project Initiation process:
 
-At the center of the campaign is a simple promotional website where customers can upload personal or family stories and photos. This submissions are turned into **custom printed postcards**. This will create an emotional connection while generating qualified leads. The website attracts customers online and guides them directly into the store, forming a clear sales funnel from first click to in-store visit. 
+**→ [Project Initiation Guide](docs/guides/proj-init/00-overview.md)**
 
-The goal is straightforward: celebrate the community, capture meaningful stories, and convert engagement into real customers for UPS Store #1125.
-
----
-
-## Documentation
-
-| Document | Purpose |
-| -------- | ------- |
-| [PRODUCT.md](PRODUCT.md) | What we are building and why |
-| [PRD.md](PRD.md) | Detailed, testable requirements |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | System structure and design decisions |
-| [TECH-STACK.md](TECH-STACK.md) | Approved technologies and usage rules |
+It walks through one prerequisite plus six steps. Each step is run as a slash command, produces one source-of-truth document, and is finalized by a pull request that the right reviewer must approve.
 
 ---
- 
-## Prerequisites
 
-- Node.js 18+
-- npm (package manager)
+## How It Works
 
-## Installation
+Every step is the same loop — a document is **final only when its PR is merged to `main`**:
 
-```bash
-npm install
+1. **Branch** off `main` (`init/<step>`).
+2. **Run the step's command** — it interviews you and writes the document.
+3. **Open a PR.**
+4. **The CODEOWNER reviews and merges** — merge = finalized.
+5. **The next step branches off the updated `main`** — and refuses to start if its upstream document isn't merged yet.
+
+No draft files, no status flags: a doc on a branch is a draft, a doc on `main` is final.
+
+## The Steps
+
+| Step | Command | Produces |
+| ---- | ------- | -------- |
+| 0 | *manual setup* | `.github/CODEOWNERS`, branch protection, `CONTRIBUTING.md` (governance) |
+| 1 | `/init-product` | `PRODUCT.md` |
+| 2 | `/init-prd` | `PRD.md` |
+| 3 | `/init-architecture` | `ARCHITECTURE.md` |
+| 4 | `/init-techstack` | `TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) |
+| 5 | `/init-aitools` | `AI-TOOL-GUIDE.md` + tool adapter files |
+| 6 | `/init-readme` | `README.md` (replaces this file) |
+
+See the [Project Initiation Guide](docs/guides/proj-init/00-overview.md) for who owns each step, the PR gate, and the full rules.
+
+## Repository Structure
+
+```text
+docs/guides/proj-init/   ← the initiation guides — what each step does and why
+.claude/commands/        ← the /init-* slash commands that run each step
 ```
 
-## Development
+## After Initiation
 
-```bash
-npm run dev
-```
-
-Starts the Next.js development server on `http://localhost:3000`.
-
-## Build
-
-```bash
-npm run build
-```
-
-Builds the production-optimized bundle.
-
-## Testing
-
-```bash
-npm test
-```
-
-Runs the test suite (configure as needed based on testing framework).
+Step 6 (`/init-readme`) **replaces this README** with your project's own — describing the actual product, its setup, and how to run it. The guides in `docs/guides/proj-init/` stay as the durable reference for the process.

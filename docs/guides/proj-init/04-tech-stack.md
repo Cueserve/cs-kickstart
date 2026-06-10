@@ -29,6 +29,16 @@ This document lists every approved technology (languages, frameworks, datastores
 - Helps new developers quickly understand the stack
 - Keeps track of why each tech was chosen, so future changes are easier and more informed
 
+## Top Up CONTRIBUTING.md (Tooling Layer)
+
+`CONTRIBUTING.md`'s governance layer was created in `00-repo-setup.md`. Its **tooling layer** depends on the stack locked here, so append it once `TECH-STACK.md` is final:
+
+- **Run commands** — how to install, run, test, lint, and build, using the approved tooling only.
+- **Pre-commit / hooks** — formatter, linter, and any commit-time checks tied to the stack.
+- **Versions** — language/runtime versions contributors must use, matching this file.
+
+These reference approved tools only — never introduce a command for a tool not listed in `TECH-STACK.md`. `README.md` (Step 6) reuses these commands, so they must exist before Step 6.
+
 ## Rules
 
 - `TECH-STACK.md` derives from `PRD.md` and `ARCHITECTURE.md`.
