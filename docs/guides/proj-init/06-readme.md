@@ -1,7 +1,7 @@
 # Step 6: README
 
 **Output file:** `README.md`
-**Depends on:** all prior steps (Steps 1–5)
+**Depends on:** `PRODUCT.md` (Step 1), `PRD.md` (Step 2), `ARCHITECTURE.md` (Step 3), `TECH-STACK.md` (Step 4), `AI-TOOL-GUIDE.md` (Step 5)
 **Required before:** sharing the repository with anyone or starting active development
 
 ---
@@ -17,13 +17,13 @@ This document gives a complete, accurate picture of the project: what it is, how
 ## What This Document Covers
 
 - **Project overview** — what the product does and why it exists (derived from `PRODUCT.md`)
-- **Key concepts** — 3–5 terms or ideas a new developer must understand before reading the code
+- **Key concepts** — 3–5 terms or ideas a new developer must understand before reading the code (domain terms from `PRODUCT.md`; structural concepts from `ARCHITECTURE.md`)
 - **Prerequisites** — exact tools, runtimes, and accounts required before setup (with version numbers)
-- **Environment setup** — step-by-step instructions to configure `.env`; document every key in `.env.example` with a description and whether it is required or optional
+- **Environment setup** — step-by-step instructions to configure `.env`; document every key in `.env.example` with a description, whether it is required or optional, and where to obtain the value (service dashboard, team wiki, etc.)
 - **Install and run** — exact commands to install dependencies and start the app locally
 - **Run tests** — exact commands to run the test suite
 - **Project structure** — top-level folder map with one-line purpose per folder
-- **Key decisions** — pointers to `ARCHITECTURE.md` and `TECH-STACK.md` for deeper context
+- **Further reading** — `PRD.md` for requirements and feature scope; `ARCHITECTURE.md`, `TECH-STACK.md`, and `AI-TOOL-GUIDE.md` for deeper context on decisions
 
 ## Why This Matters
 
@@ -38,3 +38,5 @@ This document gives a complete, accurate picture of the project: what it is, how
 - `.env.example` must list every environment variable the app reads — no undocumented keys.
 - Do not duplicate content from `ARCHITECTURE.md` or `TECH-STACK.md` — link to them instead.
 - If setup steps change, update README in the same commit.
+- If any upstream document changes (`PRODUCT.md`, `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, `AI-TOOL-GUIDE.md`), reconcile README accordingly.
+- README must be AI-readable: use clear section headings, avoid ambiguous prose, and include enough context for an AI agent to parse project state without reading any other file first.
