@@ -6,7 +6,7 @@ This folder defines the sequence every new project must follow before developmen
 
 ```text
 PRODUCT.md → PRD.md → ARCHITECTURE.md ─┐
-                  └────────────────────→ TECH-STACK.md
+                  └────────────────────→ TECH-STACK.md → AI-TOOL-GUIDE.md → README.md
 ```
 
 | Step | File | Output | Purpose |
@@ -15,10 +15,12 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md ─┐
 | 2 | [02-prd.md](02-prd.md) | `PRD.md` | Translate concept into detailed, testable requirements |
 | 3 | [03-architecture.md](03-architecture.md) | `ARCHITECTURE.md` | Define system structure and design decisions |
 | 4 | [04-tech-stack.md](04-tech-stack.md) | `TECH-STACK.md` | Lock in approved technologies and usage rules |
+| 5 | [05-ai-tool-guide.md](05-ai-tool-guide.md) | `AI-TOOL-GUIDE.md` + adapter files | Define rules and constraints for all AI tools |
+| 6 | [06-readme.md](06-readme.md) | `README.md` | Entry point: setup, env config, and how to run |
 
 ## Key Rules
 
 - Follow the steps in order. Each document derives from the one before it.
 - If a document changes, reconcile every document that depends on it.
-- No code or implementation work starts until Steps 1–4 are complete and agreed on.
+- No code or implementation work starts until Steps 1–5 are complete and agreed on.
 - These documents are the single source of truth for their respective areas. Always refer back to them when making decisions or writing code.
