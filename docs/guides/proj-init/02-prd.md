@@ -39,3 +39,15 @@ This document specifies exactly what the product must do: a single detailed spec
 
 - `PRD.md` derives from `PRODUCT.md`. If `PRODUCT.md` changes, reconcile this document.
 - Requirements only — no architecture, stack, or implementation details.
+
+## Reviewer checklist
+
+Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
+
+- [ ] Every requirement has a unique ID (e.g. `PRD-001`, `PRD-002`).
+- [ ] Every requirement has explicit acceptance criteria — "done" is objectively verifiable, not a matter of opinion.
+- [ ] Every user story follows the "As a [user], I want [action] so that [outcome]" structure — no orphaned features.
+- [ ] Non-functional requirements state numbers, not adjectives ("responds in under 200ms", not "fast").
+- [ ] Out-of-scope items for this release are explicit, not implied.
+- [ ] No implementation, architecture, or stack details — requirements only.
+- [ ] Every feature traces back to a problem statement or user need in `PRODUCT.md`.

@@ -32,3 +32,14 @@ This document explains what we are building and why. It is the single place anyo
 
 - If the concept changes, update `PRODUCT.md` first before touching designs, code, or anything else.
 - After updating `PRODUCT.md`, reconcile `PRD.md` and all documents downstream.
+
+## Reviewer checklist
+
+Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
+
+- [ ] All six sections are present: Overview, Target users, Purpose, Scope, Success criteria, Anti-patterns.
+- [ ] Target users are specific — not "anyone" or "all users"; a real person with a real problem.
+- [ ] Scope explicitly lists what is **not** being built — not just what is.
+- [ ] Success criteria are measurable — you could verify them without asking the author.
+- [ ] Anti-patterns are approach/behaviour guardrails, not feature exclusions (those belong in Scope).
+- [ ] Nothing in this document dictates implementation, architecture, or tech choices.

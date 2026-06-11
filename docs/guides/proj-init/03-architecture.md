@@ -38,3 +38,14 @@ This document defines how the product is structured: components, data flow, and 
 - Reference technology choices in `TECH-STACK.md`, do not duplicate them here.
 - If `PRD.md` changes, reconcile this document.
 - If structural changes are needed, update this document before modifying code.
+
+## Reviewer checklist
+
+Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
+
+- [ ] Every major component is named and its responsibility is clearly described.
+- [ ] At least one diagram is present (text diagram is acceptable; whitebox or sequence diagram preferred).
+- [ ] Every key design decision includes a rationale — not just "we chose X" but "we chose X because Y".
+- [ ] Every structural choice traces to at least one requirement in `PRD.md` — no gold-plating.
+- [ ] Non-functional requirements from `PRD.md` (performance, security, scale) are addressed structurally.
+- [ ] No technology inventory (that belongs in `TECH-STACK.md`) and no code.

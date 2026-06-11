@@ -39,5 +39,16 @@ This document gives a complete, accurate picture of the project: what it is, how
 - `.env.example` must list every environment variable the app reads — no undocumented keys.
 - Do not duplicate content from `ARCHITECTURE.md` or `TECH-STACK.md` — link to them instead.
 - If setup steps change, update README in the same commit.
-- If any upstream document changes (`PRODUCT.md`, `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, `AI-TOOL-GUIDE.md`), reconcile README accordingly.
+- If any upstream document changes (`PRODUCT.md`, `PRD.MD`, `ARCHITECTURE.md`, `TECH-STACK.md`, `AI-TOOL-GUIDE.md`), reconcile README accordingly.
 - README must be AI-readable: use clear section headings, avoid ambiguous prose, and include enough context for an AI agent to parse project state without reading any other file first.
+
+## Reviewer checklist
+
+Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
+
+- [ ] Every setup command was personally tested — it works from a clean environment without prior knowledge.
+- [ ] Every environment variable is documented in `.env.example` with a description and where to obtain the value.
+- [ ] Version numbers are present for all prerequisites (runtimes, tools, CLIs).
+- [ ] Project structure section exists with a one-line purpose per top-level folder.
+- [ ] Links to `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, and `AI-TOOL-GUIDE.md` are present under Further reading.
+- [ ] The boilerplate "Start Here" callout and scaffold content are fully removed.

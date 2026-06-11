@@ -48,3 +48,14 @@ These reference approved tools only — never introduce a command for a tool not
 - If the approved stack cannot meet a requirement, update this file — do not add a workaround tool in the code.
 - Every tool listed here must map to a requirement in `PRD.md`.
 - How the stack is wired together belongs in `ARCHITECTURE.md`, not here.
+
+## Reviewer checklist
+
+Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
+
+- [ ] Every technology has a version specified and a one-line reason for selection.
+- [ ] Every tool maps to at least one requirement in `PRD.md` — no speculative additions.
+- [ ] Alternatives considered and rejected are noted for every major choice.
+- [ ] Usage rules are stated per technology — not just listed, but scoped to their purpose.
+- [ ] `CONTRIBUTING.md` tooling layer is present: install, run, test, lint, and build commands using only approved tools.
+- [ ] No wiring or integration details — those belong in `ARCHITECTURE.md`.
