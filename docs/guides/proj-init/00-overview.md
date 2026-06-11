@@ -8,8 +8,12 @@ This folder defines the sequence every new project follows before development be
 Step 1: Repo Setup (the gate)
    │
    ▼
-PRODUCT.md → PRD.md → ARCHITECTURE.md ─┐
-                  └────────────────────→ TECH-STACK.md → AI-TOOL-GUIDE.md → README.md → BACKLOG.md
+PRODUCT.md → PRD.md → ARCHITECTURE.md
+              │              │           
+              ────────────────
+                     │
+                     ▼
+               TECH-STACK.md → AI-TOOL-GUIDE.md → README.md → BACKLOG.md
 ```
 
 | Step | Command | Output | Approved by (PR/MR gate) | Purpose |
