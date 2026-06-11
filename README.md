@@ -1,10 +1,8 @@
-# CS AI-Powered Project Kickstart
+# CS Project Kickstart 
 
-Repository: `cs-ai-powered-proj-kickstart`
+> AI‑powered starter kit with co-existince of ClaudeCode and GitHubCopilot that gives developers a starting point for any new project
 
-A boilerplate repository that enforces a documented, **gated project-initiation process** before any code is written. Clone it, run the steps in order, and you end up with an aligned set of source-of-truth documents (`PRODUCT.md` → `README.md`) plus the governance to keep them honest.
-
-This boilerplate is **stack-agnostic** — the technology stack is a decision *made during* initiation (Step 4), not pre-baked.
+A boilerplate project that guides team through a **clear, step‑by‑step project‑initiation process** before any coding begins. You clone it, follow the steps, and end up with a consistent set of source‑of‑truth documents (`PRODUCT.md` → `README.md`) along with the rules that keep everything aligned as the project grows. This boilerplate is not tied to any tech stack to start with — technology stack is chosen during the initiation process (Step 4).
 
 ---
 
