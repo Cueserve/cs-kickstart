@@ -1,8 +1,8 @@
-# Step 6: README
+# Step 7: README
 
 **Output file:** `README.md`
-**Depends on:** `PRODUCT.md` (Step 1), `PRD.md` (Step 2), `ARCHITECTURE.md` (Step 3), `TECH-STACK.md` (Step 4), `AI-TOOL-GUIDE.md` (Step 5)
-**Required before:** sharing the repository with anyone or starting active development
+**Depends on:** `PRODUCT.md` (Step 2), `PRD.md` (Step 3), `ARCHITECTURE.md` (Step 4), `TECH-STACK.md` (Step 5), `AI-TOOL-GUIDE.md` (Step 6)
+**Required before:** wider repository sharing, onboarding, and declaring initiation complete
 
 ---
 
@@ -12,7 +12,7 @@ Create `README.md` as the entry point for any developer — human or AI — pick
 
 ## Objective
 
-This document gives a complete, accurate picture of the project: what it is, how to get it running, and how to work on it. It is written last because it summarizes everything locked in Steps 1–5. It must stay current — a stale README is worse than none.
+This document gives a complete, accurate picture of the project: what it is, how to get it running, and how to work on it. It is written late because it summarizes everything locked in Steps 2–6. It must stay current — a stale README is worse than none.
 
 ## What This Document Covers
 
@@ -33,7 +33,8 @@ This document gives a complete, accurate picture of the project: what it is, how
 
 ## Rules
 
-- This step **replaces the boilerplate README** with the project's own. The boilerplate README's "Start Here" callout and scaffold content are removed here. By Step 6, the initiation process is complete, so the boilerplate entry point is no longer needed. The Project Initiation guides in `docs/guides/proj-init/` remain as the durable reference.
+- This step **replaces the boilerplate README** with the project's own. The boilerplate README's "Start Here" callout and scaffold content are removed here. By Step 7, the project is handoff-ready for sharing. Initiation is declared complete only after Step 8 is merged. The Project Initiation guides in `docs/guides/proj-init/` remain as the durable reference.
+- Production implementation may already be in progress after Step 6; Step 7 is the handoff and sharing gate.
 - Write README last. It documents what exists, not what you plan to build.
 - Every command in README must be tested and working before it is committed.
 - `.env.example` must list every environment variable the app reads — no undocumented keys.

@@ -1,14 +1,14 @@
-# Step 0: Repo Setup (Prerequisite)
+# Step 1: Repo Setup (Prerequisite)
 
 **Output:** `CONTRIBUTING.md` (governance layer) + branch protection (required on all plans) + required-reviewer policy (if your host and plan support it)
 **Depends on:** nothing — this runs before everything else
-**Required before:** Step 1 (Product Concept) — the approval gate must exist before the first PR/MR is opened
+**Required before:** Step 2 (Product Concept) — the approval gate must exist before the first PR/MR is opened
 
 ---
 
 ## Goal
 
-Stand up the governance that gates every later step: who must approve a document before it becomes final, and the branching rules every contributor and AI tool follows. Without this, Step 1's first change merges with no review gate and the whole workflow is bypassed on day one.
+Stand up the governance that gates every later step: who must approve a document before it becomes final, and the branching rules every contributor and AI tool follows. Without this, Step 2's first change merges with no review gate and the whole workflow is bypassed on day one.
 
 ## Objective
 
@@ -32,6 +32,67 @@ This template assumes no specific Git host. The *concepts* below are portable; t
 | Name for the change request | Pull Request (PR) | Pull Request (PR) | Pull Request (PR) | Merge Request (MR) |
 
 > Throughout these guides, **"PR/MR"** means your host's review-and-merge request. On GitHub, Azure DevOps, and Bitbucket that is a **Pull Request**; on GitLab it is a **Merge Request**.
+
+## Step 1 preflight checks (machine-validated, fail hard)
+
+Step 1 is not complete until these checks pass. Run them during Step 1 setup and re-run them at the start of every `/init-*` command.
+
+If any required check fails, stop immediately. Do not continue with Step 2+ until fixed.
+
+### GitHub (`gh`)
+
+Run:
+
+- `gh api repos/<owner>/<repo>/branches/main/protection`
+- Host-enforced mode only: `gh api repos/<owner>/<repo>/contents/.github/CODEOWNERS?ref=main`
+
+Pass criteria:
+
+- `main` protection exists and direct pushes are blocked.
+- PR review enforcement is enabled.
+- In host-enforced mode, `CODEOWNERS` exists on `main`.
+
+### Azure DevOps (`az repos`)
+
+Run:
+
+- `az repos policy list --repository-id <repo-id> --branch main --project <project-name> --org <org-url>`
+
+Pass criteria:
+
+- Policy list contains a blocking PR policy for `main`.
+- Policy list contains minimum reviewer/approval policy.
+- In host-enforced mode, path-based required reviewers are configured.
+
+### GitLab (`glab`)
+
+Run:
+
+- `glab api projects/<project-id>/protected_branches/main`
+- Host-enforced mode only: `glab api projects/<project-id>/repository/files/CODEOWNERS?ref=main`
+
+Pass criteria:
+
+- `main` is protected and direct pushes are blocked.
+- Approval rules are configured for merge requests.
+- In host-enforced mode, `CODEOWNERS` exists on `main`.
+
+### Bitbucket (REST API or web UI)
+
+Bitbucket has no official PR CLI. Validate via REST API or web UI settings:
+
+- `main` branch restrictions block direct pushes.
+- Merge checks require PR review.
+- In host-enforced mode, required/default reviewers are configured.
+
+### Evidence required
+
+- Save a short "Step 1 preflight evidence" block in `CONTRIBUTING.md` with:
+  - host name,
+  - check timestamp,
+  - command(s) run,
+  - pass/fail result.
+- Every `/init-*` run must verify this evidence still matches current host settings.
 
 ## Enforcement modes
 
@@ -103,7 +164,7 @@ Example (`CODEOWNERS` syntax — translate to ADO path policies):
 
 ### 3. `CONTRIBUTING.md` — governance layer
 
-This layer depends on nothing and is written now. The **tooling layer** (test/lint/build commands, hooks) depends on the stack and is appended later — see `04-tech-stack.md`.
+This layer depends on nothing and is written now. The **tooling layer** (test/lint/build commands, hooks) depends on the stack and is appended later — see `05-tech-stack.md`.
 
 The governance layer covers:
 
@@ -111,8 +172,10 @@ The governance layer covers:
 - **Branch naming** — `init/<step>` for initiation work (`init/product`, `init/prd`, `init/architecture`, `init/techstack`, `init/aitools`, `init/readme`).
 - **Review flow** — open a PR/MR per branch; merge to `main` = finalized. A merged doc is the only "final" doc.
 - **Approval gate** — in host-enforced mode: a PR/MR cannot merge without the required reviewer (product owner for product docs, architect for governance docs). In process-enforced mode: the author completes the self-review checklist before merging.
+- **Approval continuity** — define primary and backup approvers for product and architect gates, review SLA (first response within one business day), and escalation/delegation path if approvers are unavailable.
+- **Step 1 preflight evidence** — record the host checks and latest validation timestamp.
 - **Enforcement mode** — state which mode this project uses (host-enforced or process-enforced) and why.
-- **Commit convention** — Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, …). Matches `05-ai-tool-guide.md`.
+- **Commit convention** — Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, …). Matches `06-ai-tool-guide.md`.
 - **Direct-push rule** — never push to `main`; no force-pushes to shared branches.
 
 ## Why This Matters
@@ -124,9 +187,11 @@ The governance layer covers:
 
 ## Rules
 
-- This step runs **before** Step 1. Nothing earlier depends on it; everything later does.
+- This step runs **before** Step 2. Nothing earlier depends on it; everything later does.
 - Required reviewers must differ by document type: product docs → product owner, governance/engineering docs → architect. In process-enforced mode, the self-review checklist serves the same separation.
-- Only the **governance layer** of `CONTRIBUTING.md` is written here. Do not add stack-specific commands yet — they depend on `TECH-STACK.md` (Step 4).
+- Only the **governance layer** of `CONTRIBUTING.md` is written here. Do not add stack-specific commands yet — they depend on `TECH-STACK.md` (Step 5).
 - Changing the enforcement mode or branching strategy means updating `CONTRIBUTING.md` first, then reconciling the host's branch-protection settings.
+- Step 1 is incomplete until machine preflight checks pass and evidence is recorded in `CONTRIBUTING.md`.
+- If preflight checks fail on any `/init-*` run, stop and return to Step 1. Do not continue by trust or assumption.
 - Requires the repo to be on a supported Git host — GitHub, Azure DevOps, Bitbucket, or GitLab. Branch protection (no direct push to `main`) is required regardless of plan. Required-reviewer enforcement is optional — configure it if your host and plan support it.
 - Anyone running the `/init-*` commands opens PRs/MRs via their host's CLI (`gh` / `az repos` / `glab`) or the host's web UI.

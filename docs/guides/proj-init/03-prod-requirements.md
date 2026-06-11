@@ -1,8 +1,8 @@
-# Step 2: Product Requirements Document (PRD)
+# Step 3: Product Requirements Document (PRD)
 
 **Output file:** `PRD.md`
-**Depends on:** `PRODUCT.md` (Step 1)
-**Required before:** Step 3 (Architecture) and Step 4 (Tech Stack)
+**Depends on:** `PRODUCT.md` (Step 2)
+**Required before:** Step 4 (Architecture) and Step 5 (Tech Stack)
 
 ---
 

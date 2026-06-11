@@ -1,8 +1,8 @@
-# Step 4: Tech Stack
+# Step 5: Tech Stack
 
 **Output file:** `TECH-STACK.md`
-**Depends on:** `PRD.md` (Step 2), `ARCHITECTURE.md` (Step 3)
-**Required before:** development begins
+**Depends on:** `PRD.md` (Step 3), `ARCHITECTURE.md` (Step 4)
+**Required before:** Step 6 (AI Tool Guide) and any sandbox spike work
 
 ---
 
@@ -31,13 +31,13 @@ This document lists every approved technology (languages, frameworks, datastores
 
 ## Top Up CONTRIBUTING.md (Tooling Layer)
 
-`CONTRIBUTING.md`'s governance layer was created in `00-repo-setup.md`. Its **tooling layer** depends on the stack locked here, so append it once `TECH-STACK.md` is final:
+`CONTRIBUTING.md`'s governance layer was created in `01-repo-setup.md`. Its **tooling layer** depends on the stack locked here, so append it once `TECH-STACK.md` is final:
 
 - **Run commands** — how to install, run, test, lint, and build, using the approved tooling only.
 - **Pre-commit / hooks** — formatter, linter, and any commit-time checks tied to the stack.
 - **Versions** — language/runtime versions contributors must use, matching this file.
 
-These reference approved tools only — never introduce a command for a tool not listed in `TECH-STACK.md`. `README.md` (Step 6) reuses these commands, so they must exist before Step 6.
+These reference approved tools only — never introduce a command for a tool not listed in `TECH-STACK.md`. `README.md` (Step 7) reuses these commands, so they must exist before Step 7.
 
 ## Rules
 

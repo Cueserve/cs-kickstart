@@ -1,8 +1,8 @@
-# Step 1: Product Concept
+# Step 2: Product Concept
 
 **Output file:** `PRODUCT.md`
 **Depends on:** nothing — this is the starting point
-**Required before:** Step 2 (PRD)
+**Required before:** Step 3 (PRD)
 
 ---
 

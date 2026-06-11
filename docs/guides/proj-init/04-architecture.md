@@ -1,8 +1,8 @@
-# Step 3: Architecture
+# Step 4: Architecture
 
 **Output file:** `ARCHITECTURE.md`
-**Depends on:** `PRD.md` (Step 2)
-**Required before:** Step 4 (Tech Stack), and before development begins
+**Depends on:** `PRD.md` (Step 3)
+**Required before:** Step 5 (Tech Stack)
 
 ---
 
@@ -22,7 +22,8 @@ This document defines how the product is structured: components, data flow, and 
 - **Key design decisions** — important structural choices (layering, sync vs async, service boundaries, etc.) and their rationale; technology selection lives in `TECH-STACK.md`
 - **Implementation conventions** — patterns, standards, and structural rules developers must follow (how to build, not the code itself)
 - **Integration points** — how the system connects with APIs, services, or dependencies
-- **Non-functional approach** — how `PRD.md` non-functional requirements (security, scale, performance, availability, etc.) are met structurally
+- **Security posture and data classification** — what data the system handles and its sensitivity level (public / internal / confidential / restricted); auth and authorization model; encryption at rest and in transit approach; trust boundaries and network exposure; compliance requirements from `PRD.md` (GDPR, HIPAA, SOC 2, etc.) and how the architecture satisfies them; known threat vectors the design must account for
+- **Non-functional approach** — how remaining `PRD.md` non-functional requirements (scale, performance, availability, resilience) are met structurally
 
 ## Why This Matters
 
@@ -47,5 +48,7 @@ Before approving the PR/MR, verify every item. An unchecked item is a reason to 
 - [ ] At least one diagram is present (text diagram is acceptable; whitebox or sequence diagram preferred).
 - [ ] Every key design decision includes a rationale — not just "we chose X" but "we chose X because Y".
 - [ ] Every structural choice traces to at least one requirement in `PRD.md` — no gold-plating.
-- [ ] Non-functional requirements from `PRD.md` (performance, security, scale) are addressed structurally.
+- [ ] A security posture and data classification section is present: data sensitivity levels are named, the auth/authz model is described, encryption approach (at rest and in transit) is stated, and trust boundaries are explicit.
+- [ ] Any compliance requirements from `PRD.md` are named and the architectural response to each is described — not deferred.
+- [ ] Non-functional requirements from `PRD.md` (performance, scale, availability) are addressed structurally.
 - [ ] No technology inventory (that belongs in `TECH-STACK.md`) and no code.
