@@ -3,7 +3,7 @@ agent: agent
 description: Step 2 project initiation - generate PRODUCT.md
 ---
 
-# Init Product
+# Project Init Product
 
 Run the shared Project Initiation workflow for Step 2.
 

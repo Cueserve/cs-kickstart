@@ -3,7 +3,7 @@ description: Step 3 project initiation - generate PRD.md
 allowed-tools: Read, Write, Edit, Glob, Bash(git:*), Bash(gh:*), Bash(az:*), Bash(glab:*)
 ---
 
-# Init PRD
+# Project Init PRD
 
 Run the shared Project Initiation workflow for Step 3.
 

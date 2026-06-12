@@ -3,7 +3,7 @@ description: Step 2 project initiation - generate PRODUCT.md
 allowed-tools: Read, Write, Edit, Glob, Bash(git:*), Bash(gh:*), Bash(az:*), Bash(glab:*)
 ---
 
-# Init Product
+# Project Init Product
 
 Run the shared Project Initiation workflow for Step 2.
 

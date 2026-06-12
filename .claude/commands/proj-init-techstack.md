@@ -3,7 +3,7 @@ description: Step 5 project initiation - generate TECH-STACK.md and CONTRIBUTING
 allowed-tools: Read, Write, Edit, Glob, Bash(git:*), Bash(gh:*), Bash(az:*), Bash(glab:*)
 ---
 
-# Init Tech Stack
+# Project Init Tech Stack
 
 Run the shared Project Initiation workflow for Step 5.
 

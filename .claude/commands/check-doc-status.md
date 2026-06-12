@@ -59,7 +59,7 @@ Render a single Markdown table with one row per step. Use the status symbols bel
 
 Example output format:
 
-```
+```markdown
 ## Project Initiation Status
 
 | Step | Document / Gate | Status | Detail |
@@ -73,7 +73,7 @@ Example output format:
 | 7    | README.md       | — not started | |
 | 8    | BACKLOG.md      | — not started | |
 
-**Next:** Step 5 — `/init-techstack` (blocked until Step 4 PR is merged)
+**Next:** Step 5 — `/proj-init-techstack` (blocked until Step 4 PR is merged)
 ```
 
 ## "Next" callout rules

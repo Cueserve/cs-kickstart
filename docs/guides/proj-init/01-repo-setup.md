@@ -35,7 +35,7 @@ This template assumes no specific Git host. The *concepts* below are portable; t
 
 ## Step 1 preflight checks (machine-validated, fail hard)
 
-Step 1 is not complete until these checks pass. Run them during Step 1 setup and re-run them at the start of every `/init-*` command.
+Step 1 is not complete until these checks pass. Run them during Step 1 setup and re-run them at the start of every `/proj-init-*` command.
 
 If any required check fails, stop immediately. Do not continue with Step 2+ until fixed.
 
@@ -92,7 +92,7 @@ Bitbucket has no official PR CLI. Validate via REST API or web UI settings:
   - check timestamp,
   - command(s) run,
   - pass/fail result.
-- Every `/init-*` run must verify this evidence still matches current host settings.
+- Every `/proj-init-*` run must verify this evidence still matches current host settings.
 
 ## Enforcement modes
 
@@ -192,6 +192,6 @@ The governance layer covers:
 - Only the **governance layer** of `CONTRIBUTING.md` is written here. Do not add stack-specific commands yet — they depend on `TECH-STACK.md` (Step 5).
 - Changing the enforcement mode or branching strategy means updating `CONTRIBUTING.md` first, then reconciling the host's branch-protection settings.
 - Step 1 is incomplete until machine preflight checks pass and evidence is recorded in `CONTRIBUTING.md`.
-- If preflight checks fail on any `/init-*` run, stop and return to Step 1. Do not continue by trust or assumption.
+- If preflight checks fail on any `/proj-init-*` run, stop and return to Step 1. Do not continue by trust or assumption.
 - Requires the repo to be on a supported Git host — GitHub, Azure DevOps, Bitbucket, or GitLab. Branch protection (no direct push to `main`) is required regardless of plan. Required-reviewer enforcement is optional — configure it if your host and plan support it.
-- Anyone running the `/init-*` commands opens PRs/MRs via their host's CLI (`gh` / `az repos` / `glab`) or the host's web UI.
+- Anyone running the `/proj-init-*` commands opens PRs/MRs via their host's CLI (`gh` / `az repos` / `glab`) or the host's web UI.

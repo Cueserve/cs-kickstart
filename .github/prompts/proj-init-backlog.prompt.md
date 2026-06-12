@@ -1,9 +1,9 @@
 ---
+agent: agent
 description: Step 8 project initiation - generate BACKLOG.md and seed host work items
-allowed-tools: Read, Write, Edit, Glob, Bash(git:*), Bash(gh:*), Bash(az:*), Bash(glab:*)
 ---
 
-# Init Backlog
+# Project Init Backlog
 
 Run the shared Project Initiation workflow for Step 8.
 

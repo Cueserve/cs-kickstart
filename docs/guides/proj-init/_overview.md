@@ -19,13 +19,13 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 | Step | Claude Code | GitHub Copilot | Output | Approved by (PR/MR gate) | Purpose |
 | ---- | ----------- | -------------- | ------ | ------------------------ | ------- |
 | 1 | manual — [01-repo-setup.md](01-repo-setup.md) | manual — [01-repo-setup.md](01-repo-setup.md) | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it | Architect | Stand up the approval gate before any doc is written |
-| 2 | `/init-product` | `.github/prompts/init-product.prompt.md` | `PRODUCT.md` | Product Owner | Define what we are building and why |
-| 3 | `/init-prd` | `.github/prompts/init-prd.prompt.md` | `PRD.md` | Product Owner | Translate concept into testable requirements |
-| 4 | `/init-architecture` | `.github/prompts/init-architecture.prompt.md` | `ARCHITECTURE.md` | Architect + PO | Define system structure and design decisions |
-| 5 | `/init-techstack` | `.github/prompts/init-techstack.prompt.md` | `TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) | Architect | Lock approved technologies and usage rules |
-| 6 | `/init-aitoolguide` | `.github/prompts/init-aitoolguide.prompt.md` | `AI-TOOL-GUIDE.md` + adapter files | Architect | Define rules and constraints for all AI tools |
-| 7 | `/init-readme` | `.github/prompts/init-readme.prompt.md` | `README.md` | Architect | Entry point: setup, env config, and how to run |
-| 8 | `/init-backlog` | `.github/prompts/init-backlog.prompt.md` | `BACKLOG.md` + host issues/work items | Product Owner | Seed the issue tracker; bridge initiation to execution |
+| 2 | `/proj-init-product` | `.github/prompts/proj-init-product.prompt.md` | `PRODUCT.md` | Product Owner | Define what we are building and why |
+| 3 | `/proj-init-prd` | `.github/prompts/proj-init-prd.prompt.md` | `PRD.md` | Product Owner | Translate concept into testable requirements |
+| 4 | `/proj-init-architecture` | `.github/prompts/proj-init-architecture.prompt.md` | `ARCHITECTURE.md` | Architect + PO | Define system structure and design decisions |
+| 5 | `/proj-init-techstack` | `.github/prompts/proj-init-techstack.prompt.md` | `TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) | Architect | Lock approved technologies and usage rules |
+| 6 | `/proj-init-aitoolguide` | `.github/prompts/proj-init-aitoolguide.prompt.md` | `AI-TOOL-GUIDE.md` + adapter files | Architect | Define rules and constraints for all AI tools |
+| 7 | `/proj-init-readme` | `.github/prompts/proj-init-readme.prompt.md` | `README.md` | Architect | Entry point: setup, env config, and how to run |
+| 8 | `/proj-init-backlog` | `.github/prompts/proj-init-backlog.prompt.md` | `BACKLOG.md` + host issues/work items | Product Owner | Seed the issue tracker; bridge initiation to execution |
 
 The workflow is maintained in one place: [_run-step.md](_run-step.md). Step metadata is maintained in [_steps.yml](_steps.yml). Claude commands and Copilot prompts are adapters only.
 
@@ -39,8 +39,8 @@ Every step is the same five-move loop. A document is **final only when its PR/MR
 
 1. **Branch** off `main`: `init/<step>` (e.g. `init/product`).
 2. **Produce the document** — choose the path for your AI tool:
-   - **Claude Code**: run the step's `/init-*` slash command. It loads `_run-step.md`, `_steps.yml`, and the step guide.
-   - **GitHub Copilot**: run the matching `.github/prompts/init-*.prompt.md` prompt. It loads the same shared runner, registry, and step guide.
+   - **Claude Code**: run the step's `/proj-init-*` slash command. It loads `_run-step.md`, `_steps.yml`, and the step guide.
+   - **GitHub Copilot**: run the matching `.github/prompts/proj-init-*.prompt.md` prompt. It loads the same shared runner, registry, and step guide.
    - **Any other AI tool**: open `_run-step.md`, the step entry in `_steps.yml`, and the step guide in your AI chat.
 3. **Open a PR/MR.**
 4. **The required reviewer reviews and merges** — merge = finalized. Product docs are gated by the product owner; engineering docs by the architect.

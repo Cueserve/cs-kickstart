@@ -3,7 +3,7 @@ description: Step 4 project initiation - generate ARCHITECTURE.md
 allowed-tools: Read, Write, Edit, Glob, Bash(git:*), Bash(gh:*), Bash(az:*), Bash(glab:*)
 ---
 
-# Init Architecture
+# Project Init Architecture
 
 Run the shared Project Initiation workflow for Step 4.
 

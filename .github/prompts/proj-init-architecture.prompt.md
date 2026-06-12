@@ -3,7 +3,7 @@ agent: agent
 description: Step 4 project initiation - generate ARCHITECTURE.md
 ---
 
-# Init Architecture
+# Project Init Architecture
 
 Run the shared Project Initiation workflow for Step 4.
 

@@ -1,6 +1,6 @@
 steps:
   - id: 2
-    command: init-product
+    command: proj-init-product
     title: Product Concept
     branch: init/product
     outputs:
@@ -14,7 +14,7 @@ steps:
     finalReminder: "PRODUCT.md becomes final only when the Product Owner approves and merges the PR/MR."
 
   - id: 3
-    command: init-prd
+    command: proj-init-prd
     title: Product Requirements Document
     branch: init/prd
     outputs:
@@ -29,7 +29,7 @@ steps:
     finalReminder: "PRD.md becomes final only when the Product Owner approves and merges the PR/MR."
 
   - id: 4
-    command: init-architecture
+    command: proj-init-architecture
     title: Architecture
     branch: init/architecture
     outputs:
@@ -44,7 +44,7 @@ steps:
     finalReminder: "ARCHITECTURE.md becomes final only when the Architect and Product Owner approve and merge the PR/MR."
 
   - id: 5
-    command: init-techstack
+    command: proj-init-techstack
     title: Tech Stack
     branch: init/techstack
     outputs:
@@ -63,7 +63,7 @@ steps:
       - Append the tooling layer to CONTRIBUTING.md using only technologies approved in TECH-STACK.md. Preserve the Step 1 governance layer.
 
   - id: 6
-    command: init-aitoolguide
+    command: proj-init-aitoolguide
     title: AI Tool Guide
     branch: init/aitoolguide
     outputs:
@@ -87,7 +87,7 @@ steps:
       - When generating .github/copilot-instructions.md, preserve the INITIATION-RUNNER block (including its HTML comment markers) verbatim and append project-specific rules after it. Do not remove or rewrite that block.
 
   - id: 7
-    command: init-readme
+    command: proj-init-readme
     title: README
     branch: init/readme
     outputs:
@@ -110,7 +110,7 @@ steps:
       - Test every command included in README.md before committing.
 
   - id: 8
-    command: init-backlog
+    command: proj-init-backlog
     title: Initial Backlog
     branch: init/backlog
     outputs:

@@ -3,7 +3,7 @@ agent: agent
 description: Step 5 project initiation - generate TECH-STACK.md and CONTRIBUTING.md tooling layer
 ---
 
-# Init Tech Stack
+# Project Init Tech Stack
 
 Run the shared Project Initiation workflow for Step 5.
 
