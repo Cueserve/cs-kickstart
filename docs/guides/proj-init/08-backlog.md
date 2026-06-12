@@ -35,7 +35,7 @@ This step closes the gap between project definition and execution. By the end, t
 ## Rules
 
 - Do not invent requirements. Every epic and story must trace to `PRODUCT.md` or `PRD.md`.
-- Do not refine or change requirements during this step. If a gap is discovered, flag it for a `/update-doc PRD.md` — do not patch it here.
+- Do not refine or change requirements during this step. If a gap is discovered, flag it for a `/proj-init-doc-update PRD.md` — do not patch it here.
 - Acceptance criteria are copied from the PRD, not rewritten. The PRD is the source of truth.
 - `BACKLOG.md` must record the host item ID for every created item. If the host CLI is unavailable, record items as `PENDING` and note that manual creation is required.
 - Epics first, then stories under them. Do not create stories without a parent epic.

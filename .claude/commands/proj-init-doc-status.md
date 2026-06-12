@@ -3,7 +3,7 @@ description: "Show project initiation status — which steps are merged, in prog
 allowed-tools: Read, Glob, Bash(git:*), Bash(gh:*), Bash(az:*), Bash(glab:*)
 ---
 
-# /check-doc-status — Project Initiation Status
+# /proj-init-doc-status — Project Initiation Status
 
 Read-only. No files written, no branches created. Run this any time to see where initiation stands.
 
@@ -81,7 +81,7 @@ Example output format:
 After the table, always print one `**Next:**` line:
 
 - If any step before the first gap is `PR open` or `branch open` → state that it must be merged before the next step can start, and name the blocked step.
-- If all steps are merged → print "Initiation complete. Run `/update-doc <docname>` if any document diverges from reality."
+- If all steps are merged → print "Initiation complete. Run `/proj-init-doc-update <docname>` if any document diverges from reality."
 - Otherwise → name the lowest-numbered step that is `not started` and the command to run it.
 
 ## Nothing else

@@ -3,9 +3,9 @@ description: "Update any source-of-truth document after initiation — opens a P
 allowed-tools: Read, Write, Edit, Glob, Bash(git:*), Bash(gh:*), Bash(az:*), Bash(glab:*)
 ---
 
-# /update-doc — Update a source-of-truth document
+# /proj-init-doc-update — Update a source-of-truth document
 
-Use this any time reality diverges from one of the initiation documents. Pass the document name inline (e.g. `/update-doc PRD.md`) or run `/update-doc` and be asked.
+Use this any time reality diverges from one of the initiation documents. Pass the document name inline (e.g. `/proj-init-doc-update PRD.md`) or run `/proj-init-doc-update` and be asked.
 
 ## Supported documents and their review gates
 
@@ -21,7 +21,7 @@ Use this any time reality diverges from one of the initiation documents. Pass th
 
 ## 1. Identify the document and the change
 
-- **If a document name was passed as an argument** (e.g. `/update-doc PRD.md`): use it. Validate it is in the supported list above — if not, tell the user and stop.
+- **If a document name was passed as an argument** (e.g. `/proj-init-doc-update PRD.md`): use it. Validate it is in the supported list above — if not, tell the user and stop.
 - **If no argument was given**: ask which document needs updating.
 
 Then ask one question: *What changed?* (one or two sentences is enough.) Do not ask for more detail yet.
@@ -90,7 +90,7 @@ Write `.claude/reconciliation/<docname>-reconcile.md` with:
 ## Downstream checklist
 
 - [ ] `<DOC>` — <required-update | review-only>: <one-line justification>
-      Next action: run `/update-doc <DOC>` if update is required.
+      Next action: run `/proj-init-doc-update <DOC>` if update is required.
 - [ ] `<DOC>` — ...
 
 ## Completed
@@ -115,4 +115,4 @@ Ask the user to confirm before pushing. On confirmation:
 - Body: what changed, why, which downstream documents are flagged, path to `.claude/reconciliation/<docname>-reconcile.md`, and the reviewer checklist from the document's step guide (`docs/guides/proj-init/`).
 - Reviewer: same gate as the original initiation step (see the table in Section 1).
 
-Remind the user: the document is only updated once the PR/MR is merged to `main`. Work through the reconciliation checklist afterward — one `/update-doc <doc>` per flagged downstream document.
+Remind the user: the document is only updated once the PR/MR is merged to `main`. Work through the reconciliation checklist afterward — one `/proj-init-doc-update <doc>` per flagged downstream document.

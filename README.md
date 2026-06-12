@@ -49,7 +49,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 
 Claude commands and Copilot prompts are thin adapters. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
 
-Run `/check-doc-status` at any time to see which steps are merged, which PR is open, and what's next.
+Run `/proj-init-doc-status` at any time to see which steps are merged, which PR is open, and what's next.
 
 See the [Project Initiation Guide](docs/guides/proj-init/_overview.md) for who owns each step, the PR gate, and the full rules.
 
@@ -57,7 +57,7 @@ See the [Project Initiation Guide](docs/guides/proj-init/_overview.md) for who o
 
 ```text
 docs/guides/proj-init/           ← shared runner, step registry, and step-by-step guides
-.claude/commands/                ← thin /proj-init-* adapters + /update-doc and /check-doc-status
+.claude/commands/                ← thin /proj-init-* adapters + /proj-init-doc-update and /proj-init-doc-status
 .github/prompts/                 ← thin Copilot prompt adapters for the /proj-init-* steps
 .github/copilot-instructions.md  ← Copilot rule: use docs/guides/proj-init/ as source of truth
 README.md                        ← this boilerplate entrypoint (replaced in Step 7)
@@ -81,4 +81,4 @@ Step 7 (`/proj-init-readme`) **replaces this README** with your project's own �
 
 ### Keeping docs current
 
-Run `/update-doc <docname>` any time a source-of-truth document diverges from reality — a changed requirement, a new library, an architecture decision. It updates only the affected sections and opens a PR through the same review gate that originally finalized the document. See the [trigger table](docs/guides/proj-init/_overview.md#keeping-docs-current) for when to update which doc.
+Run `/proj-init-doc-update <docname>` any time a source-of-truth document diverges from reality — a changed requirement, a new library, an architecture decision. It updates only the affected sections and opens a PR through the same review gate that originally finalized the document. See the [trigger table](docs/guides/proj-init/_overview.md#keeping-docs-current) for when to update which doc.

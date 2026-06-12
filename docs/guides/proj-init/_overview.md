@@ -31,7 +31,7 @@ The workflow is maintained in one place: [_run-step.md](_run-step.md). Step meta
 
 ## Check where you are
 
-Run `/check-doc-status` at any time to see which steps are merged, which PR is open, and what to run next. Read-only — nothing is written or pushed.
+Run `/proj-init-doc-status` at any time to see which steps are merged, which PR is open, and what to run next. Read-only — nothing is written or pushed.
 
 ## How to run a step
 
@@ -68,7 +68,7 @@ To avoid approval bottlenecks, Step 1 must define a backup path in `CONTRIBUTING
 
 - Follow the steps in order. Each document derives from the one before it.
 - A document becomes final only by merging its PR/MR to `main` — past the required reviewer.
-- If a document changes, run `/update-doc`. It now generates a reconciliation checklist automatically for all downstream documents that may be impacted.
+- If a document changes, run `/proj-init-doc-update`. It now generates a reconciliation checklist automatically for all downstream documents that may be impacted.
 - Sandbox spikes are allowed only after Step 5 is merged, on isolated spike branches, and must not merge to `main`.
 - Production implementation work starts only after Step 6 is merged.
 - Step 7 is required before wider repository sharing.
@@ -79,11 +79,11 @@ To avoid approval bottlenecks, Step 1 must define a backup path in `CONTRIBUTING
 
 ## Keeping docs current
 
-After initiation, run `/update-doc <docname>` any time a source-of-truth document diverges from reality. It updates only the changed sections and opens a PR through the same review gate that finalized the document.
+After initiation, run `/proj-init-doc-update <docname>` any time a source-of-truth document diverges from reality. It updates only the changed sections and opens a PR through the same review gate that finalized the document.
 
 **When to update which document:**
 
-| If this happens | Run `/update-doc` on |
+| If this happens | Run `/proj-init-doc-update` on |
 | --------------- | -------------------- |
 | Product scope, goal, or target users change | `PRODUCT.md` |
 | Requirements added, removed, or acceptance criteria changed | `PRD.md` |
@@ -93,4 +93,4 @@ After initiation, run `/update-doc <docname>` any time a source-of-truth documen
 | Setup steps, env config, or run commands change | `README.md` |
 | Epics or stories added, removed, rescoped, or host IDs change | `BACKLOG.md` |
 
-`/update-doc` now runs an impact analyzer and creates a reconciliation checklist file automatically. Keep checking off that list until no downstream document is stale.
+`/proj-init-doc-update` now runs an impact analyzer and creates a reconciliation checklist file automatically. Keep checking off that list until no downstream document is stale.
