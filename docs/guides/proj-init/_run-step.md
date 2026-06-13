@@ -9,6 +9,11 @@ Before starting, load:
 1. The requested step entry from `docs/guides/proj-init/_steps.yml`.
 2. The step's guide file from the `guide` field.
 3. Any upstream documents listed in the step's `upstream` field, from `main`.
+4. The role context file for the step's `owner`:
+   - `Product Owner` → `.claude/roles/product-owner.md`
+   - `Architect` → `.claude/roles/solution-architect.md`
+
+Act as that role for the entire step — document creation, reviewer checklist, and PR/MR summary. If the step has multiple reviewers (e.g., Step 4: `Architect + Product Owner`), load both role files.
 
 The step guide is the content contract. The registry is the execution metadata. This runner is the workflow.
 
@@ -37,7 +42,7 @@ Present the precondition results as a checklist and wait for an explicit `yes` b
 
 The checklist must include:
 
-- Operator role matches the step's `owner`.
+- Operator role matches the step's `owner`, and the corresponding role context file has been loaded.
 - Reviewer gate matches the step's `reviewer`.
 - Step 1 gate is in place and machine-validated.
 - Approval continuity is defined in `CONTRIBUTING.md`.
