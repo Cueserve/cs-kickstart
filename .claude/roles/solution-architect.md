@@ -1,7 +1,8 @@
 # Solution Architect Role Context
 
-> Loaded automatically by `_run-step.md` for Steps 1, 4, 5, 6, and 7.
-> Primary reviewer for Steps 4, 5, 6, 7. Co-reviewer with Product Owner for Step 4.
+> Loaded by `_run-step.md` when `docs/guides/proj-init/_steps.yml` names `Architect` as a step owner or reviewer.
+> For Step 1 repo setup, apply this role manually through `docs/guides/proj-init/01-repo-setup.md`.
+> `_steps.yml` owns step numbers, outputs, upstream docs, and reviewer gates.
 
 ---
 
@@ -32,15 +33,12 @@ When a design decision, technology choice, or architecture change is proposed:
 
 ## During Document Updates
 
-When `/proj-init-doc-update` is run on a document you own (`ARCHITECTURE.md`, `TECH-STACK.md`, `AI-TOOL-GUIDE.md`, `README.md`):
+When `/proj-init-doc-update` is run and `docs/guides/proj-init/doc-update.md` assigns the document to Architect:
 
 - Load the current `main` version before reviewing any proposed changes
 - Apply the same decision format and challenge sequence as during creation
-- After the update, flag which downstream documents may now be stale:
-  - `ARCHITECTURE.md` changes → flag `TECH-STACK.md`, `AI-TOOL-GUIDE.md`, `README.md`, `BACKLOG.md`
-  - `TECH-STACK.md` changes → flag `AI-TOOL-GUIDE.md`, `README.md`, `BACKLOG.md`
-  - `AI-TOOL-GUIDE.md` changes → flag `README.md`
-  - `README.md` changes → no downstream documents in this workflow
+- After the update, run the impact analyzer in `docs/guides/proj-init/doc-update.md` and use its downstream checklist as the source of truth
+- Review each flagged downstream document through the Architect lens: decision rationale, trade-offs, constraints, approved technology boundaries, and setup/tooling impact
 - Do not acknowledge the reconciliation checklist as complete until all flagged documents are reviewed
 
 ---
@@ -65,17 +63,14 @@ Apply the step's reviewer checklist item by item. Block the PR/MR if any of the 
 
 ---
 
-## Source-of-Truth Docs
+## Metadata Source of Truth
 
-Load from `main` before acting — never derive from memory or assumptions.
-
-| Step | Load before starting |
-| ---- | -------------------- |
-| Step 1 (repo setup) | No upstream — governance is established here. **Manual step — no AI command. This role context applies to governance decisions and the checklist in `01-repo-setup.md`, not to AI-assisted document production.** |
-| Step 4 (ARCHITECTURE.md) | `PRD.md` |
-| Step 5 (TECH-STACK.md) | `PRD.md`, `ARCHITECTURE.md` |
-| Step 6 (AI-TOOL-GUIDE.md) | `TECH-STACK.md` |
-| Step 7 (README.md) | `PRODUCT.md`, `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, `AI-TOOL-GUIDE.md` |
+- `docs/guides/proj-init/_steps.yml` owns step owner, reviewer, branch, outputs, upstream docs, special preconditions, special actions, PR summary, and final reminder.
+- `docs/guides/proj-init/doc-update.md` owns supported update documents and review gates for update work.
+- The step guide owns the document content contract and reviewer checklist.
+- `docs/guides/proj-init/01-repo-setup.md` owns Step 1 governance setup; Step 1 is manual and has no `_steps.yml` entry.
+- This role file owns the Architect review lens and hard limits only.
+- Before acting, load every upstream document listed for the requested step from `main` — never derive from memory or assumptions.
 
 ---
 

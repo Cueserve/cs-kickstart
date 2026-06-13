@@ -1,7 +1,7 @@
 # Step 6: AI Tool Guide
 
 **Output file:** `AI-TOOL-GUIDE.md` + one adapter file per AI tool in use on this project
-**Depends on:** `TECH-STACK.md` (Step 5)
+**Depends on:** `ARCHITECTURE.md` (Step 4), `TECH-STACK.md` (Step 5)
 **Required before:** production implementation and any AI-assisted source-code changes begin
 
 ---
@@ -28,7 +28,7 @@ Only generate adapters for tools the team will actually use. Do not create adapt
 
 ## What This Document Covers
 
-- **Project context** — brief summary of what the project is and the tech stack in use
+- **Project context** — brief summary of what the project is, how it is structured, and the tech stack in use
 - **Coding conventions** — naming, formatting, file structure rules for this project
 - **Scope boundaries** — what AI tools are and are not allowed to touch
 - **Banned patterns** — things AI must never generate or suggest (e.g., mocks, certain libs, anti-patterns flagged in ARCHITECTURE.md)
@@ -63,7 +63,7 @@ AI tools must never touch the following without explicit human instruction:
 
 - Rules stay in sync across tools — no separate maintenance per tool
 - New team members and new tools onboard to the same standards automatically
-- Prevents AI tools from drifting into patterns or technologies not approved in TECH-STACK.md
+- Prevents AI tools from drifting into architectural patterns or technologies not approved in `ARCHITECTURE.md` and `TECH-STACK.md`
 
 ## Workflow Conventions
 
@@ -75,7 +75,7 @@ AI tools must never touch the following without explicit human instruction:
 
 ## Rules
 
-- `AI-TOOL-GUIDE.md` derives from `TECH-STACK.md` — only approved technologies apply.
+- `AI-TOOL-GUIDE.md` derives from `ARCHITECTURE.md` and `TECH-STACK.md` — structural boundaries and only approved technologies apply.
 - Adapter files have two layers: (1) a reference to `AI-TOOL-GUIDE.md` for shared project rules, and (2) tool-specific config that has no cross-tool equivalent (e.g., Claude's tone/memory behavior, Copilot's suggestion filters). Only layer 2 lives in the adapter — never duplicate layer 1 rules there.
 - If a rule changes, update `AI-TOOL-GUIDE.md` first, then sync all adapter files in use.
 - Adding a new AI tool to the project requires a new adapter file — run `/proj-init-doc-update AI-TOOL-GUIDE.md` to add the tool and generate its adapter.

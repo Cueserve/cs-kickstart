@@ -35,10 +35,8 @@ When `/proj-init-doc-update` is run on a document you own (`PRODUCT.md`, `PRD.md
 
 - Load the current `main` version before reviewing any proposed changes
 - Apply the same challenge sequence as during creation — every change must trace to a user need or business outcome
-- After the update, flag which downstream documents may now be stale:
-  - `PRODUCT.md` changes → flag `PRD.md`, `BACKLOG.md`
-  - `PRD.md` changes → flag `BACKLOG.md`
-  - `BACKLOG.md` changes → no downstream documents in this workflow
+- After the update, run the impact analyzer in `docs/guides/proj-init/doc-update.md` and use its downstream checklist as the source of truth
+- Review each flagged downstream document through the Product Owner lens: user value, traceability, scope boundary, and testability
 - Do not acknowledge the reconciliation checklist as complete until all flagged documents are reviewed
 
 ---
@@ -63,7 +61,7 @@ Your scope in this review is product-boundary validation only:
 - Implementation, architecture, or stack details appear anywhere in `PRD.md`
 - Out-of-scope items for this release are implied rather than explicitly listed
 - Requirements lack unique IDs
-- A change to `PRD.md` renders `BACKLOG.md` stale and no reconciliation has been flagged
+- The impact analyzer identifies stale downstream documents and no reconciliation checklist has been created
 
 ---
 
@@ -77,6 +75,14 @@ Load from `main` before acting — never derive from memory or assumptions.
 | Step 3 (PRD.md) | `PRODUCT.md` |
 | Step 4 co-review | `PRD.md`, `ARCHITECTURE.md` |
 | Step 8 (BACKLOG.md) | `PRODUCT.md`, `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, `AI-TOOL-GUIDE.md`, `README.md` |
+
+### More pointers to avoid assumptions
+
+- `docs/guides/proj-init/_steps.yml` owns step owner, reviewer, branch, outputs, upstream docs, special preconditions, special actions, PR summary, and final reminder.
+- `docs/guides/proj-init/doc-update.md` owns supported update documents and review gates for update work.
+- The step guide owns the document content contract and reviewer checklist.
+- This role file owns the Product Owner review lens and hard limits only.
+- Before acting, load every upstream document listed for the requested step from `main` — never derive from memory or assumptions.
 
 ---
 

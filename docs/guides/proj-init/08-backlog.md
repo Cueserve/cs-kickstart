@@ -2,7 +2,7 @@
 
 **Output file:** `BACKLOG.md` (manifest of created work items)
 **Creates in host:** GitHub Issues or Azure DevOps work items
-**Depends on:** `PRODUCT.md` (Step 2), `PRD.md` (Step 3), `README.md` (Step 7)
+**Depends on:** `PRODUCT.md` (Step 2), `PRD.md` (Step 3), `ARCHITECTURE.md` (Step 4), `TECH-STACK.md` (Step 5), `README.md` (Step 7)
 **Required before:** first sprint planning, development kickoff
 
 ---
@@ -35,6 +35,7 @@ This step closes the gap between project definition and execution. By the end, t
 ## Rules
 
 - Do not invent requirements. Every epic and story must trace to `PRODUCT.md` or `PRD.md`.
+- Load `ARCHITECTURE.md`, `TECH-STACK.md`, and `README.md` for context and readiness checks only. Do not derive new backlog scope from them.
 - Do not refine or change requirements during this step. If a gap is discovered, flag it for a `/proj-init-doc-update PRD.md` — do not patch it here.
 - Acceptance criteria are copied from the PRD, not rewritten. The PRD is the source of truth.
 - `BACKLOG.md` must record the host item ID for every created item. If the host CLI is unavailable, record items as `PENDING` and note that manual creation is required.

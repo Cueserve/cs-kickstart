@@ -73,6 +73,7 @@ steps:
     conditionalOutputs: true
     guide: docs/guides/proj-init/06-ai-tool-guide.md
     upstream:
+      - ARCHITECTURE.md
       - TECH-STACK.md
     owner: Architect
     reviewer: Architect
