@@ -33,7 +33,7 @@ Introduce one standardized, self-contained markdown **template per generated doc
 
 ```text
 docs/guides/proj-init/templates/
-├── _writing-rules.md          # shared: tone, MUST/SHOULD/MAY, measurability, metadata expectations
+├── _writing-rules.md          # shared: tone, MUST/SHOULD/MAY, measurability, metadata, MoSCoW priority scale
 ├── README.md                  # what these templates are; how the runner consumes them
 ├── PRODUCT.template.md         (full skeleton)
 ├── PRD.template.md             (full skeleton + TOC)
@@ -101,7 +101,7 @@ Headings below are the **canonical structure** each template enforces. They are 
 5. User Stories
 6. Functional Requirements *(table: ID, requirement, priority)*
 7. Non-Functional Requirements
-8. Acceptance Criteria
+8. Acceptance Criteria *(table: requirement ID, acceptance criteria)*
 9. Out of Scope (This Release)
 10. Dependencies & Assumptions
 11. Constraints (Non-Architectural)
@@ -176,7 +176,7 @@ Adapter files (`CLAUDE.md`, `.github/copilot-instructions.md`) are **not** templ
 2. **`_run-step.md` §4 "Produce The Output"** — add one rule: *"Load the step's `template`. Produce the output by filling it — preserve its header block, section headings, references table, and dividers; replace `[placeholders]` with interview answers. Do not add or drop top-level sections."*
 3. **Each step guide** — trim "What This Document Covers" to a one-line-per-section map that points at the template as the structure contract. The guide keeps **intent, interview questions, rules, reviewer checklist**; it stops re-listing headings as prose.
 4. **Reviewer checklists** — add one item to each templated step: *"Output matches the template skeleton — header block, all sections, and references table present; no top-level sections added or removed."*
-5. **`_writing-rules.md`** — referenced from `_run-step.md` as shared guidance applied to every generated doc (tone, MUST/SHOULD/MAY, measurable requirements, define-acronyms-on-first-use, metadata expectations).
+5. **`_writing-rules.md`** — referenced from `_run-step.md` as shared guidance applied to every generated doc (tone, MUST/SHOULD/MAY, measurable requirements, define-acronyms-on-first-use, metadata expectations, priority scale — **MoSCoW: Must / Should / Could**, the single source PRD §6 and BACKLOG inherit).
 6. **Markdownlint compliance** — every template (and therefore every generated doc) MUST pass this repo's markdownlint config. Observed active rules: MD060 (padded table pipes), MD040 (fenced blocks need a language), MD022 (blanks around headings), MD032 (blanks around lists). The template skeletons must be lint-clean as authored, since generated docs inherit their structure.
 
 ## 9. Drift control (the one real risk)
