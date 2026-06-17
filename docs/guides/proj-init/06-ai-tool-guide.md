@@ -28,13 +28,18 @@ Only generate adapters for tools the team will actually use. Do not create adapt
 
 ## What This Document Covers
 
-- **Project context** — brief summary of what the project is, how it is structured, and the tech stack in use
-- **Coding conventions** — naming, formatting, file structure rules for this project
-- **Scope boundaries** — what AI tools are and are not allowed to touch
-- **Banned patterns** — things AI must never generate or suggest (e.g., mocks, certain libs, anti-patterns flagged in ARCHITECTURE.md)
-- **Testing rules** — how tests must be written; what counts as a valid test
-- **Documentation rules** — when and how to comment; what to leave out
-- **Decision escalation** — explicit criteria for when AI must stop and get approval: new package additions, schema/migration changes, auth-related code, breaking API changes, anything touching CI/CD or deployment config
+Structure is fixed by the template — `docs/guides/proj-init/templates/AI-TOOL-GUIDE.template.md`. The template owns the section headings and their order; this guide owns what each section must contain. Sections 8–10 are detailed in their own sections below. Fill every section; add or drop none.
+
+1. **Project Context** — brief summary of what the project is, how it is structured, and the tech stack in use
+2. **Coding Conventions** — naming, formatting, file structure rules for this project
+3. **Scope Boundaries** — what AI tools are and are not allowed to touch
+4. **Banned Patterns** — things AI must never generate or suggest (e.g., mocks, certain libs, anti-patterns flagged in ARCHITECTURE.md)
+5. **Testing Rules** — how tests must be written; what counts as a valid test
+6. **Documentation Rules** — when and how to comment; what to leave out
+7. **Decision Escalation** — explicit criteria for when AI must stop and get approval: new package additions, schema/migration changes, auth-related code, breaking API changes, anything touching CI/CD or deployment config
+8. **Agent Behavior Rules** — how AI agents operate (plan before execute, ask don't assume, scope discipline, stop and report); see the section below
+9. **Off-Limits Boundaries** — files AI must never touch without instruction (secrets/env, lock files, migrations, CI/CD, auth code, dependency changes); see the section below
+10. **Workflow Conventions** — branching, commits, PRs, pushing, breaking-change sign-off; see the section below
 
 ## Agent Behavior Rules
 
@@ -84,6 +89,7 @@ AI tools must never touch the following without explicit human instruction:
 
 Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
 
+- [ ] `AI-TOOL-GUIDE.md` matches the template skeleton (`templates/AI-TOOL-GUIDE.template.md`) — header block, all ten sections in order, and the references table present; no top-level section added or removed, and no `[placeholder]` left unfilled.
 - [ ] AI tools in use on the project are identified and an adapter file exists for each.
 - [ ] Scope boundaries are explicit — specific files, directories, or actions AI must not touch without approval.
 - [ ] Banned patterns are project-specific, not generic boilerplate (e.g. references actual libraries or anti-patterns flagged in `ARCHITECTURE.md`).

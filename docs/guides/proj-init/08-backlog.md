@@ -17,14 +17,12 @@ This step closes the gap between project definition and execution. By the end, t
 
 ## What This Document Covers
 
-`BACKLOG.md` is a manifest, not a planning tool. It records:
+`BACKLOG.md` is a manifest, not a planning tool. Structure is fixed by the template — `docs/guides/proj-init/templates/BACKLOG.template.md`. The template owns the section headings and their order; this guide owns what each section must contain. Fill every section; add or drop none.
 
-- **Epics** — derived from product goals and feature areas in `PRODUCT.md`; each maps to one or more PRD features
-- **Stories** — derived from PRD requirements; each story cites the PRD requirement ID(s) it fulfills
-- **Host item IDs** — the issue number (GitHub) or work item ID (ADO) assigned at creation; `PENDING` if no CLI was available
-- **Priority** — Must/Should/Could (MoSCoW) inherited directly from the PRD
-- **Acceptance criteria** — copied or summarized from the PRD; not rewritten
-- **Out-of-scope note** — any PRD item deliberately excluded from the initial backlog, with reason
+1. **Summary** — epic count, story count, and the Must/Should/Could priority breakdown for the created backlog
+2. **Epics** — derived from product goals and feature areas in `PRODUCT.md`; each maps to one or more PRD features and records its host item ID (`PENDING` if no CLI was available)
+3. **Stories** — derived from PRD requirements; each cites the PRD requirement ID(s) it fulfills, its parent epic, MoSCoW priority, host item ID, and acceptance criteria copied (not rewritten) from the PRD
+4. **Out-of-Scope Notes** — any PRD item deliberately excluded from the initial backlog, with reason
 
 ## Why This Matters
 
@@ -48,6 +46,7 @@ This step closes the gap between project definition and execution. By the end, t
 
 Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
 
+- [ ] Output matches the template skeleton (`templates/BACKLOG.template.md`) — header block, all four sections in order, and the references table present; no top-level section added or removed, and no `[placeholder]` left unfilled.
 - [ ] Every epic maps to a product goal or feature area in `PRODUCT.md`.
 - [ ] Every story cites the PRD requirement ID(s) it fulfills.
 - [ ] Every item in `BACKLOG.md` has a host item ID or is explicitly marked `PENDING` with a reason.

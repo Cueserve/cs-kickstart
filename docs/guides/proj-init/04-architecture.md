@@ -16,14 +16,16 @@ This document defines how the product is structured: components, data flow, and 
 
 ## What This Document Covers
 
-- **System architecture** — high-level breakdown of components, modules, or services and how they connect, with at least one diagram
-- **Data design** — core entities, schema/storage layout, and how data flows
-- **Data flow and interactions** — how data moves between components and external systems
-- **Key design decisions** — important structural choices (layering, sync vs async, service boundaries, etc.) and their rationale; technology selection lives in `TECH-STACK.md`
-- **Implementation conventions** — patterns, standards, and structural rules developers must follow (how to build, not the code itself)
-- **Integration points** — how the system connects with APIs, services, or dependencies
-- **Security posture and data classification** — what data the system handles and its sensitivity level (public / internal / confidential / restricted); auth and authorization model; encryption at rest and in transit approach; trust boundaries and network exposure; compliance requirements from `PRD.md` (GDPR, HIPAA, SOC 2, etc.) and how the architecture satisfies them; known threat vectors the design must account for
-- **Non-functional approach** — how remaining `PRD.md` non-functional requirements (scale, performance, availability, resilience) are met structurally
+Structure is fixed by the template — `docs/guides/proj-init/templates/ARCHITECTURE.template.md`. The template owns the section headings and their order; this guide owns what each section must contain. Fill every section; add or drop none.
+
+1. **System Architecture** — high-level breakdown of components, modules, or services and how they connect, with at least one diagram
+2. **Data Design** — core entities, schema/storage layout, and how data flows
+3. **Data Flow & Interactions** — how data moves between components and external systems
+4. **Key Design Decisions** — important structural choices (layering, sync vs async, service boundaries, etc.) and their rationale; technology selection lives in `TECH-STACK.md`
+5. **Implementation Conventions** — patterns, standards, and structural rules developers must follow (how to build, not the code itself)
+6. **Integration Points** — how the system connects with APIs, services, or dependencies
+7. **Security Posture & Data Classification** — what data the system handles and its sensitivity level (public / internal / confidential / restricted); auth and authorization model; encryption at rest and in transit approach; trust boundaries and network exposure; compliance requirements from `PRD.md` (GDPR, HIPAA, SOC 2, etc.) and how the architecture satisfies them; known threat vectors the design must account for
+8. **Non-Functional Approach** — how remaining `PRD.md` non-functional requirements (scale, performance, availability, resilience) are met structurally
 
 ## Why This Matters
 
@@ -44,6 +46,7 @@ This document defines how the product is structured: components, data flow, and 
 
 Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
 
+- [ ] Output matches the template skeleton (`templates/ARCHITECTURE.template.md`) — header block, all eight sections in order, and the references table present; no top-level section added or removed, and no `[placeholder]` left unfilled.
 - [ ] Every major component is named and its responsibility is clearly described.
 - [ ] At least one diagram is present (text diagram is acceptable; whitebox or sequence diagram preferred).
 - [ ] Every key design decision includes a rationale — not just "we chose X" but "we chose X because Y".

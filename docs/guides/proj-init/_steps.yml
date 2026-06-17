@@ -6,6 +6,7 @@ steps:
     outputs:
       - PRODUCT.md
     guide: docs/guides/proj-init/02-prod-concept.md
+    template: docs/guides/proj-init/templates/PRODUCT.template.md
     upstream: []
     owner: Product Owner
     reviewer: Product Owner
@@ -20,6 +21,7 @@ steps:
     outputs:
       - PRD.md
     guide: docs/guides/proj-init/03-prod-requirements.md
+    template: docs/guides/proj-init/templates/PRD.template.md
     upstream:
       - PRODUCT.md
     owner: Product Owner
@@ -35,6 +37,7 @@ steps:
     outputs:
       - ARCHITECTURE.md
     guide: docs/guides/proj-init/04-architecture.md
+    template: docs/guides/proj-init/templates/ARCHITECTURE.template.md
     upstream:
       - PRD.md
     owner: Architect
@@ -51,6 +54,7 @@ steps:
       - TECH-STACK.md
       - CONTRIBUTING.md
     guide: docs/guides/proj-init/05-tech-stack.md
+    template: docs/guides/proj-init/templates/TECH-STACK.template.md
     upstream:
       - PRD.md
       - ARCHITECTURE.md
@@ -72,6 +76,7 @@ steps:
       - .github/copilot-instructions.md
     conditionalOutputs: true
     guide: docs/guides/proj-init/06-ai-tool-guide.md
+    template: docs/guides/proj-init/templates/AI-TOOL-GUIDE.template.md
     upstream:
       - ARCHITECTURE.md
       - TECH-STACK.md
@@ -94,6 +99,7 @@ steps:
     outputs:
       - README.md
     guide: docs/guides/proj-init/07-readme.md
+    template: docs/guides/proj-init/templates/README.template.md
     upstream:
       - PRODUCT.md
       - PRD.md
@@ -118,6 +124,7 @@ steps:
       - BACKLOG.md
     conditionalOutputs: true
     guide: docs/guides/proj-init/08-backlog.md
+    template: docs/guides/proj-init/templates/BACKLOG.template.md
     upstream:
       - PRODUCT.md
       - PRD.md

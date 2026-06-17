@@ -22,7 +22,7 @@ Introduce one standardized, self-contained markdown **template per generated doc
 ## 3. Decisions locked during brainstorming
 
 | Decision | Choice | Rationale |
-|---|---|---|
+| --- | --- | --- |
 | Where templates live | **Separate template files**, one per doc | Mirrors the PractitionerPRO model; cleanest separation; doubles as a concrete skeleton for the "any other AI tool" path |
 | Section content | **Keep cs-kickstart's existing section sets** | They already enforce traceability (unique `PRD-001` IDs, every feature maps to a problem, NFRs as numbers). Standardize *format*, not taxonomy. |
 | Header block | **Lean** — Owner, Last updated, source-of-truth banner, references | Drops `Status` and `Version` because merge-to-`main` IS status/version in cs-kickstart (`_overview.md:49`: "No draft files, no status flags"). Those fields would rot. |
@@ -128,6 +128,7 @@ Headings below are the **canonical structure** each template enforces. They are 
 6. Versions & Constraints
 
 ### README.template.md (full — **header-block exception**)
+
 The lean metadata block does **not** sit at the top of README (the H1 is the project name and the top is the project pitch). README keeps its existing structure; the cross-doc map is its own **Further Reading** section, not the references table. An optional one-line `_Maintained by · Last updated_` footer may sit at the bottom.
 
 1. Project Overview
@@ -166,7 +167,7 @@ Adapter files (`CLAUDE.md`, `.github/copilot-instructions.md`) are **not** templ
 ## 7. Excluded from templating
 
 | Artifact | Why excluded |
-|---|---|
+| --- | --- |
 | `CONTRIBUTING.md` | Appended layers (Step 1 governance + Step 5 tooling), not a from-scratch doc — a header block would fight the existing file head |
 | `CLAUDE.md`, `.github/copilot-instructions.md` | Tool config with preserved blocks (INITIATION-RUNNER), not narrative docs |
 
@@ -195,3 +196,45 @@ Two files now describe sections (template + guide) and could diverge. The rule t
 ## 11. Impact surface
 
 ~18 files: 7 templates + `_writing-rules.md` + templates `README.md` + `_steps.yml` + `_run-step.md` + 7 guide trims (steps 2–8; the README guide is also edited for the header-block exception). Tool adapters under `.claude/commands/` and `.github/prompts/` are thin and should need **no** change — they already defer to the shared runner.
+
+## 12. Amended during build (2026-06-17)
+
+Three decisions made at build time deviate from the spec as written above, plus
+some refinements. Recorded here so the spec stays an honest record.
+
+- **References table — now single-source (overrides §5).** The `Document
+  References` block is **not** inlined into each template. It lives once in
+  `templates/_doc-references.md` between `BEGIN INJECT` / `END INJECT` markers,
+  and the runner replaces a `<!-- @inject: _doc-references.md -->` marker in
+  each template with it. Honours the repo's DRY/source-of-truth rule (one edit
+  on any doc-set change instead of seven). `_doc-references.md` stays a valid
+  standalone lint-clean file, so the partial does not fight MD041.
+
+- **Drift control — mechanical guard added (extends §9).** The prose rule is
+  kept, and `scripts/check-template-drift.mjs` (zero-dependency Node) now
+  enforces it: it pairs each step's `template` and `guide` from `_steps.yml`
+  and fails (exit 1) when the template's headings and the guide's
+  "What This Document Covers" map diverge. The reviewer-checklist item is a
+  **replace**, not an add — the old "all N sections present" assertion becomes
+  a skeleton-conformance + no-`[placeholder]`-left check.
+
+- **Markdownlint config — committed (resolves §8.6).** `.markdownlint.json` is
+  added at the repo root (`default: true`, `MD013` off, `MD024` siblings-only)
+  so "templates MUST pass lint" is enforceable and inherited downstream. MD060
+  is confirmed real — markdownlint `table-column-style`; all tables use compact
+  style. Note: CLI markdownlint is not available offline in the build
+  environment, so templates are authored to the rules and checked via the
+  editor's live linter, not a CLI batch run.
+
+- **Template refinements.** Sub-section labels use H3 headings (e.g.
+  `### In scope`) rather than bold-as-heading, to pass MD036. README keeps
+  conventional **unnumbered** headings (the header-block exception); the drift
+  script auto-detects this and matches all non-structural H2s when no numbered
+  headings are present. PRD and ARCHITECTURE carry linked TOCs per §6.
+
+- **Delivered (~22 files).** 7 templates + `_writing-rules.md` +
+  `_doc-references.md` + `templates/README.md` + `.markdownlint.json` +
+  `scripts/check-template-drift.mjs` + `_steps.yml` (`template:` fields, steps
+  2–8) + `_run-step.md` §4 rule + 7 guide trims + 7 reviewer-checklist items +
+  `_overview.md` and root `README.md` structure notes. No adapter changes, as
+  predicted.

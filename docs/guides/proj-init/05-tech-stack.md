@@ -16,12 +16,14 @@ This document lists every approved technology (languages, frameworks, datastores
 
 ## What This Document Covers
 
-- **Languages and frameworks** — chosen options, with version and a one-line reason
-- **Datastores** — databases/storage options, with why each fits its role
-- **Cloud and infrastructure services** — the platform services relied on
-- **Key libraries/tools** — non-obvious dependencies that shape the build
-- **Selection trade-offs** — why each major choice beat alternatives
-- **Versions and constraints** — pinned versions, minimums, and known limits
+Structure is fixed by the template — `docs/guides/proj-init/templates/TECH-STACK.template.md`. The template owns the section headings and their order; this guide owns what each section must contain. Fill every section; add or drop none.
+
+1. **Languages & Frameworks** — chosen options, with version and a one-line reason
+2. **Datastores** — databases/storage options, with why each fits its role
+3. **Cloud & Infrastructure Services** — the platform services relied on
+4. **Key Libraries / Tools** — non-obvious dependencies that shape the build
+5. **Selection Trade-offs** — why each major choice beat alternatives
+6. **Versions & Constraints** — pinned versions, minimums, and known limits
 
 ## Why This Matters
 
@@ -53,6 +55,7 @@ These reference approved tools only — never introduce a command for a tool not
 
 Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
 
+- [ ] Output matches the template skeleton (`templates/TECH-STACK.template.md`) — header block, all six sections in order, and the references table present; no top-level section added or removed, and no `[placeholder]` left unfilled.
 - [ ] Every technology has a version specified and a one-line reason for selection.
 - [ ] Every tool maps to at least one requirement in `PRD.md` — no speculative additions.
 - [ ] Alternatives considered and rejected are noted for every major choice.

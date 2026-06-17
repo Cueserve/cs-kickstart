@@ -71,6 +71,15 @@ Use these shared rules for every step:
 - Write only the files listed in `outputs`, plus any conditional outputs explicitly allowed by the step guide.
 - Show drafts and revise until the operator approves the content.
 
+If the step has a `template` field, produce the output by filling that template — do not invent the structure:
+
+- Load the template named in the step's `template` field. It owns the document's structure (its headings and their order).
+- Fill the header block: `Owner` (the step's `owner`), `Last updated` (today, `YYYY-MM-DD`), `Source of truth for` (one line), and `Derived from` / `Downstream` from the step's `upstream` field and the steps that list this document as upstream.
+- Replace the `<!-- @inject: _doc-references.md -->` marker with the block between the `BEGIN INJECT` / `END INJECT` markers in `docs/guides/proj-init/templates/_doc-references.md`.
+- Replace every `[placeholder]` with interview answers. No placeholder may remain in the committed document.
+- Preserve the header block, every top-level (`## N.`) heading and its order, the references table, and the `---` dividers. Do not add or remove top-level sections.
+- Apply `docs/guides/proj-init/templates/_writing-rules.md` to all prose, requirements, and tables of every generated document.
+
 If the step has `specialActions`, perform them in the order listed after the guide-specific interview rules are satisfied.
 
 ## 5. Commit

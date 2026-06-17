@@ -57,6 +57,8 @@ See the [Project Initiation Guide](docs/guides/proj-init/_overview.md) for who o
 
 ```text
 docs/guides/proj-init/           ← shared runner, utility workflows, step registry, and step-by-step guides
+docs/guides/proj-init/templates/ ← output templates per generated doc + shared writing rules and references
+scripts/check-template-drift.mjs ← guard: template headings must match each guide's section map
 .claude/commands/                ← thin /proj-init-* adapters + /proj-init-doc-update and /proj-init-doc-status
 .github/prompts/                 ← thin Copilot prompt adapters for /proj-init-* steps and doc utilities
 .github/copilot-instructions.md  ← Copilot rule: use docs/guides/proj-init/ as source of truth
