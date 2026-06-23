@@ -14,6 +14,9 @@ Copilot prompt files are thin adapters only. Do not duplicate shared workflow ru
 
 ## graphify
 
+`graphify-out/` is generated local state and is intentionally ignored by git. Use it when it
+exists locally, but never commit it.
+
 For any question about this repo's architecture, structure, components, or how to add/modify/find
 code, use this sequence:
 

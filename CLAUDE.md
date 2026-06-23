@@ -10,6 +10,7 @@ projects that use the kit; this file is for maintaining the kit.)
 Source of truth lives in `docs/guides/proj-init/`:
 
 - `_run-step.md` — shared execution workflow every step runs
+- `00-bootstrap-target-repo.md` — Step 0 target-repo bootstrap workflow
 - `_steps.yml` — step registry (branch, outputs, owner, reviewer, upstream, special actions)
 - `01`–`08` numbered guides — per-document rules
 - `_overview.md`, `doc-status.md`, `doc-update.md` — process + utility workflows
@@ -35,6 +36,10 @@ Changing one step usually touches up to four places — update all that apply:
 
 Adding/removing/reordering a step ALSO means the `README.md` step table and `_overview.md`.
 
+Step 0 is a bootstrap utility, not a document-producing `_run-step.md` step. Keep its behavior in
+`docs/guides/proj-init/00-bootstrap-target-repo.md` and `scripts/bootstrap-target-repo.mjs`; keep
+its adapters thin.
+
 ## Protected blocks — do not rewrite
 
 `.github/copilot-instructions.md` contains an `INITIATION-RUNNER` block fenced by HTML
@@ -49,13 +54,17 @@ product code.
 
 ## graphify
 
-This repo has a knowledge graph at `graphify-out/`.
+This repo can generate a local knowledge graph at `graphify-out/`. That folder is generated
+developer-local state and must not be committed.
 
-- Codebase questions: run `graphify query "<question>"` first (scoped subgraph, smaller
-  than GRAPH_REPORT.md or grep). Use `graphify path "<A>" "<B>"` for relationships,
-  `graphify explain "<concept>"` for a focused concept.
+- Codebase questions: if `graphify-out/graph.json` exists locally, run
+  `graphify query "<question>"` first (scoped subgraph, smaller than GRAPH_REPORT.md or
+  grep). Use `graphify path "<A>" "<B>"` for relationships, `graphify explain "<concept>"`
+  for a focused concept. If the graph is absent, build it locally with `/graphify` or read
+  source files directly.
 - Broad navigation: `graphify-out/wiki/index.md` (if present). Architecture review:
   `graphify-out/GRAPH_REPORT.md`.
-- After changing files, run `graphify update .` to refresh the graph (AST-only, no API cost).
+- After changing files, run `graphify update .` if you rely on the local graph. Do not commit
+  `graphify-out/`.
 
 The `/graphify` trigger and skill invocation are defined in `.claude/CLAUDE.md`.
