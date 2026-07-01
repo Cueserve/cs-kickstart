@@ -22,7 +22,7 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 | Step | Claude Code | GitHub Copilot | Output | Approved by (PR/MR gate) | Purpose |
 | ---- | ----------- | -------------- | ------ | ------------------------ | ------- |
 | 0 | `/proj-init-bootstrap` | `.github/prompts/proj-init-bootstrap.prompt.md` | cloned target repo + `.proj-init/state.json` | Operator review before apply | Clone the target repo and register it so later steps operate on it |
-| 1 | manual — [01-repo-setup.md](01-repo-setup.md) | manual — [01-repo-setup.md](01-repo-setup.md) | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it | Architect | Stand up the approval gate before any doc is written |
+| 1 | `/proj-init-repo-setup` | `.github/prompts/proj-init-repo-setup.prompt.md` | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it | Architect | Stand up the approval gate before any doc is written |
 | 2 | `/proj-init-product` | `.github/prompts/proj-init-product.prompt.md` | `PRODUCT.md` | Product Owner | Define what we are building and why |
 | 3 | `/proj-init-prd` | `.github/prompts/proj-init-prd.prompt.md` | `PRD.md` | Product Owner | Translate concept into testable requirements |
 | 4 | `/proj-init-architecture` | `.github/prompts/proj-init-architecture.prompt.md` | `ARCHITECTURE.md` | Architect + PO | Define system structure and design decisions |
@@ -52,6 +52,8 @@ Step 0 does not copy kit files into the target, create source-of-truth documents
 ## How to run a step
 
 Every step is the same five-move loop. A document is **final only when its PR/MR is merged to `main`**.
+
+Run exactly one step per session. Before running any step command, run `/proj-init-doc-status` (or the Copilot prompt equivalent) so the session starts from current truth.
 
 1. **Branch** off `main`: `init/<step>` (e.g. `init/product`).
 2. **Produce the document** — choose the path for your AI tool:
@@ -84,6 +86,8 @@ To avoid approval bottlenecks, Step 1 must define a backup path in `CONTRIBUTING
 
 - Follow the steps in order. Each document derives from the one before it.
 - Run Step 0 before Step 1 to clone the target repo and register it. Every later step reads that registration and operates on the clone.
+- Run one step per session. Do not execute multiple initiation steps in a single chat/session.
+- Start each step session with `/proj-init-doc-status` (or `.github/prompts/proj-init-doc-status.prompt.md`) before running the step command.
 - A document becomes final only by merging its PR/MR to `main` — past the required reviewer.
 - If a document changes, run `/proj-init-doc-update`. It now generates a reconciliation checklist automatically for all downstream documents that may be impacted.
 - Sandbox spikes are allowed only after Step 5 is merged, on isolated spike branches, and must not merge to `main`.

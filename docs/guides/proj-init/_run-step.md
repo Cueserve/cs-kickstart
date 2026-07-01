@@ -18,6 +18,15 @@ Then, for the rest of this runner and the step guide:
 - Read and write every produced document under `$TARGET/` (e.g. `$TARGET/PRODUCT.md`).
 - Keep loading guides, templates, role files, and `_steps.yml` from **this kit** (they are not in the target).
 
+## 0.5 Session Boundary (Required)
+
+Run exactly one initiation step per chat/session.
+
+- Do not execute two step commands in the same session.
+- At the start of every step session, run `docs/guides/proj-init/doc-status.md` against `$TARGET` first.
+- Continue only the single requested step after status is known.
+- If the user asks to run a different step in the same session, stop and tell them to start a new session for that step.
+
 ## Inputs
 
 Before starting, load:
@@ -83,9 +92,19 @@ Use these shared rules for every step:
 - Read every upstream document from `main` in the target (`git -C "$TARGET" show main:<document>`) and use it as source of truth.
 - Interview the operator for every section the guide requires.
 - Ask one focused question at a time.
+- Ask as many focused questions as needed until every required section is complete and every template placeholder is resolved.
 - Never assume an answer.
 - Write only the files listed in `outputs`, plus any conditional outputs explicitly allowed by the step guide — all under `$TARGET/`.
 - Show drafts and revise until the operator approves the content.
+
+Use these token optimization rules for every step:
+
+- Load only the requested step entry, its guide, and the upstream documents listed for that step. Do not load unrelated step guides.
+- Reuse facts already confirmed in the current step session. Do not re-ask answered questions.
+- Keep prompts and responses compact: one question at a time, one decision at a time.
+- Show only changed sections when revising drafts; do not reprint unchanged sections.
+- Summarize long upstream content into concise decision inputs before asking the next question.
+- Stop asking once all required sections are complete and no placeholders remain.
 
 If the step has a `template` field, produce the output by filling that template — do not invent the structure:
 

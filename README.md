@@ -16,6 +16,8 @@ Start with **Step 0**. It clones your target repository into a local folder and 
 
 After Step 0, the process walks through Steps 1–8. Steps 2–8 each produce one source-of-truth document, finalized by a pull request. **Claude Code users** run the `/proj-init-*` slash commands. **GitHub Copilot users** run the matching prompt files from `.github/prompts/`. Both tool paths load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
 
+Run exactly one step per session. Start each step session by running `/proj-init-doc-status` (or `.github/prompts/proj-init-doc-status.prompt.md`) before executing the step command.
+
 ## Prerequisites
 
 - **Git** and a repository on a supported **Git host** — GitHub, Azure DevOps, Bitbucket, or GitLab. Step 1 configures branch governance to match your host, plan, and team size — see [Step 1](docs/guides/proj-init/01-repo-setup.md) for what's available on free vs. paid plans.
@@ -48,7 +50,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 | Step | Claude Code | GitHub Copilot | Produces |
 | ---- | ----------- | -------------- | -------- |
 | 0 | `/proj-init-bootstrap` | `.github/prompts/proj-init-bootstrap.prompt.md` | cloned target repo + `.proj-init/state.json` registration |
-| 1 | *manual setup* | *manual setup* | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it |
+| 1 | `/proj-init-repo-setup` | `.github/prompts/proj-init-repo-setup.prompt.md` | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it |
 | 2 | `/proj-init-product` | `.github/prompts/proj-init-product.prompt.md` | `PRODUCT.md` |
 | 3 | `/proj-init-prd` | `.github/prompts/proj-init-prd.prompt.md` | `PRD.md` |
 | 4 | `/proj-init-architecture` | `.github/prompts/proj-init-architecture.prompt.md` | `ARCHITECTURE.md` |
