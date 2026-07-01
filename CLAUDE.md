@@ -23,7 +23,7 @@ copy-in or make a step assume cwd is the target.
 Source of truth lives in `docs/guides/proj-init/`:
 
 - `_run-step.md` — shared execution workflow every step runs (resolves `TARGET` first)
-- `00-bootstrap-target-repo.md` — Step 0 clone + register workflow
+- `00-bootstrap.md` — Step 0 clone + register workflow
 - `_steps.yml` — step registry (branch, outputs, owner, reviewer, upstream, special actions)
 - `01`–`08` numbered guides — per-document rules
 - `_overview.md`, `doc-status.md`, `doc-update.md`, `cleanup.md` — process + utility workflows
@@ -50,7 +50,7 @@ Changing one step usually touches up to four places — update all that apply:
 Adding/removing/reordering a step ALSO means the `README.md` step table and `_overview.md`.
 
 Step 0 (clone + register) and cleanup (clear state) are utilities, not document-producing
-`_run-step.md` steps. Keep Step 0's behavior in `docs/guides/proj-init/00-bootstrap-target-repo.md`
+`_run-step.md` steps. Keep Step 0's behavior in `docs/guides/proj-init/00-bootstrap.md`
 and `scripts/bootstrap-target-repo.mjs`, and cleanup's in `docs/guides/proj-init/cleanup.md`
 (clears state via `bootstrap-target-repo.mjs --clear`); keep their adapters thin.
 

@@ -32,7 +32,7 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 | 8 | `/proj-init-backlog` | `.github/prompts/proj-init-backlog.prompt.md` | `BACKLOG.md` + host issues/work items | Product Owner | Seed the issue tracker; bridge initiation to execution |
 | — | `/proj-init-cleanup` | `.github/prompts/proj-init-cleanup.prompt.md` | workspace unregistered | Operator confirm | Unregister the workspace after Step 8 merges |
 
-Step 0 is maintained in [00-bootstrap-target-repo.md](00-bootstrap-target-repo.md) and implemented by `scripts/bootstrap-target-repo.mjs`. The document-producing workflow for Steps 2–8 is maintained in one place: [_run-step.md](_run-step.md) — it resolves the registered target and runs every git operation and output write against it. Step metadata is maintained in [_steps.yml](_steps.yml). The output structure of each generated document is fixed by its template in [templates/](templates/), with shared writing rules in [templates/_writing-rules.md](templates/_writing-rules.md). Claude commands and Copilot prompts are adapters only. Post-init utility workflows live in [doc-status.md](doc-status.md), [doc-update.md](doc-update.md), and [cleanup.md](cleanup.md).
+Step 0 is maintained in [00-bootstrap.md](00-bootstrap.md) and implemented by `scripts/bootstrap-target-repo.mjs`. The document-producing workflow for Steps 2–8 is maintained in one place: [_run-step.md](_run-step.md) — it resolves the registered target and runs every git operation and output write against it. Step metadata is maintained in [_steps.yml](_steps.yml). The output structure of each generated document is fixed by its template in [templates/](templates/), with shared writing rules in [templates/_writing-rules.md](templates/_writing-rules.md). Claude commands and Copilot prompts are adapters only. Post-init utility workflows live in [doc-status.md](doc-status.md), [doc-update.md](doc-update.md), and [cleanup.md](cleanup.md).
 
 ## Check where you are
 
@@ -42,7 +42,7 @@ Run `/proj-init-doc-status` in Claude Code or `.github/prompts/proj-init-doc-sta
 
 Run Step 0 once, before Step 1, to clone the target repo and register it in `.proj-init/state.json`.
 
-1. **Dry-run first** — Claude Code: `/proj-init-bootstrap`; GitHub Copilot: `.github/prompts/proj-init-bootstrap.prompt.md`; any other tool: read [00-bootstrap-target-repo.md](00-bootstrap-target-repo.md). The underlying script is `node scripts/bootstrap-target-repo.mjs --target <folder> --url <git-url>`.
+1. **Dry-run first** — Claude Code: `/proj-init-bootstrap`; GitHub Copilot: `.github/prompts/proj-init-bootstrap.prompt.md`; any other tool: read [00-bootstrap.md](00-bootstrap.md). The underlying script is `node scripts/bootstrap-target-repo.mjs --target <folder> --url <git-url>`.
 2. **Confirm the target folder and git URL** — the folder must be empty or non-existent; the URL is the target repo's remote.
 3. **Apply** — re-run with `--apply` to clone the target and write `.proj-init/state.json`.
 4. **Start Step 1** — repo governance is set up in the target and is still required before Step 2.
@@ -86,6 +86,7 @@ To avoid approval bottlenecks, Step 1 must define a backup path in `CONTRIBUTING
 
 - Follow the steps in order. Each document derives from the one before it.
 - Run Step 0 before Step 1 to clone the target repo and register it. Every later step reads that registration and operates on the clone.
+- Initiation is single-operator and single-machine: `.proj-init/state.json` is operator-local and gitignored. Run every step from the same machine and operator that ran Step 0. To resume on another machine or as another operator, re-run Step 0 to re-register the target.
 - Run one step per session. Do not execute multiple initiation steps in a single chat/session.
 - Start each step session with `/proj-init-doc-status` (or `.github/prompts/proj-init-doc-status.prompt.md`) before running the step command.
 - A document becomes final only by merging its PR/MR to `main` — past the required reviewer.

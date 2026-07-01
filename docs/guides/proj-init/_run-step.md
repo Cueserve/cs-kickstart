@@ -2,6 +2,8 @@
 
 Use this runner for document-producing Project Initiation steps. Tool-specific command and prompt files are adapters only; this file owns the shared workflow.
 
+Registry entries marked `runner: false` (e.g. Step 0, the bootstrap utility) are **not** governed by this runner. They have their own guide and script and do not branch, commit, or open a PR — skip them here.
+
 This kit is the **control plane**: you run this command from *this* repo, but the produced document and every git operation land in the **target repository** registered in Step 0. Resolve the target first (§0), then treat every git command and output path below as target-relative.
 
 ## 0. Resolve The Target Repository
@@ -55,11 +57,16 @@ Run these checks against the target (`$TARGET`) before creating a branch or writ
    - Non-zero for any document: **STOP** and tell the operator which prerequisite document must be merged before this step can run.
    - Empty `upstream`: no upstream document is required.
 
-3. **Step 1 gate** - verify Step 1 preflight evidence in `$TARGET/CONTRIBUTING.md` and re-run the relevant host checks from `docs/guides/proj-init/01-repo-setup.md`.
+3. **Step not already finalized** - unless the step sets `replacesExisting: true` in `_steps.yml`, run `git -C "$TARGET" show main:<primary-output>` for the step's primary output document — the first entry in the step's `outputs` field (for Steps 2–8 this is the document its `template` produces).
+   - Non-zero (not on `main`): proceed — the step has not been finalized.
+   - Exit 0 (already on `main`): **STOP**. The step is already complete. Tell the operator the document is final and to run `/proj-init-doc-update <document>` to revise it instead of re-running the step. Do not branch or regenerate.
+   - `replacesExisting: true` (e.g. Step 7, which overwrites the target's pre-existing README): skip this check — the file's presence on `main` is expected and is not proof the step ran. Rely on the §3 branch check and operator confirmation.
+
+4. **Step 1 gate** - verify Step 1 preflight evidence in `$TARGET/CONTRIBUTING.md` and re-run the relevant host checks from `docs/guides/proj-init/01-repo-setup.md`.
    - Evidence present and host checks pass: proceed.
    - Evidence missing, stale, or checks fail: **STOP** and direct the operator to complete Step 1.
 
-4. **Additional step preconditions** - apply any `specialPreconditions` from `_steps.yml` and any preconditions in the step guide.
+5. **Additional step preconditions** - apply any `specialPreconditions` from `_steps.yml` and any preconditions in the step guide.
 
 ## 2. Confirm Before Proceeding
 
@@ -72,6 +79,7 @@ The checklist must include:
 - Step 1 gate is in place and machine-validated.
 - Approval continuity is defined in `CONTRIBUTING.md`.
 - Upstream documents are final on `main`.
+- This step's output is not already final on `main`, or the step is marked `replacesExisting: true`.
 - Working tree is clean and work will branch from an up-to-date `main`.
 - Host PR/MR CLI status is known, unless the step has a stricter host requirement.
 

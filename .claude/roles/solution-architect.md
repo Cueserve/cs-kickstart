@@ -68,7 +68,7 @@ Apply the step's reviewer checklist item by item. Block the PR/MR if any of the 
 - `docs/guides/proj-init/_steps.yml` owns step owner, reviewer, branch, outputs, upstream docs, special preconditions, special actions, PR summary, and final reminder.
 - `docs/guides/proj-init/doc-update.md` owns supported update documents and review gates for update work.
 - The step guide owns the document content contract and reviewer checklist.
-- `docs/guides/proj-init/01-repo-setup.md` owns Step 1 governance setup; Step 1 is manual and has no `_steps.yml` entry.
+- `docs/guides/proj-init/01-repo-setup.md` owns Step 1 governance setup. Step 0 (bootstrap) is a utility registry entry (`runner: false`) with its own guide and script — it is not governed by `_run-step.md`.
 - This role file owns the Architect review lens and hard limits only.
 - Before acting, load every upstream document listed for the requested step from `main` — never derive from memory or assumptions.
 

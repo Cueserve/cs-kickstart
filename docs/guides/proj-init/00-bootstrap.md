@@ -36,13 +36,18 @@ Step 0 does two things and nothing else:
 `.proj-init/` is gitignored — it is operator-local state pointing at a folder on
 this machine. It is removed by `/proj-init-cleanup` once Step 8 is merged.
 
-## Operator Questions
+## Operator Questions — ASK FIRST, do not skip
 
-Ask these before running the script:
+STOP. Before running **any** command (including `--status` or a dry-run), ask the
+operator for these and wait for answers. Never proceed with assumed, placeholder,
+or prompt-derived values — if the operator's prompt seems to contain them, confirm
+explicitly before using them.
 
 1. Git URL — the remote URL of the target repository to clone.
 2. Target folder — an empty or non-existent local path to clone into.
-3. Existing workspace — if a workspace is already registered, should it be replaced (`--force`) or finished first (`/proj-init-cleanup`)?
+3. Existing workspace — a read-only `--status` check answers this; if one is
+   already registered, ask whether to replace it (`--force`) or finish it first
+   (`/proj-init-cleanup`).
 
 Do not ask about AI tools, product, architecture, stack, or backlog in Step 0.
 AI tool selection happens in Step 6; the rest belong to their own steps.

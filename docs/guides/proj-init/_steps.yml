@@ -1,4 +1,25 @@
 steps:
+  - id: 0
+    command: proj-init-bootstrap
+    title: Register Target Repository
+    kind: utility            # not a document-producing _run-step.md step
+    runner: false            # skip the _run-step.md branch/commit/PR flow
+    branch: null             # Step 0 runs on the kit; it does not branch the target
+    outputs:
+      - .proj-init/state.json   # gitignored, operator-local; not a source-of-truth doc
+    guide: docs/guides/proj-init/00-bootstrap.md
+    script: scripts/bootstrap-target-repo.mjs
+    upstream: []
+    owner: Operator
+    reviewer: Operator
+    commitMessage: null      # Step 0 commits nothing
+    prSummary: null          # Step 0 opens no PR/MR
+    finalReminder: "Step 0 is complete when the clone exists and .proj-init/state.json points at it. Nothing is committed, reviewed, or merged; it is not governed by _run-step.md."
+    specialActions:
+      - Dry-run scripts/bootstrap-target-repo.mjs first; apply only after the operator confirms the target folder and git URL.
+      - Clone into an empty or non-existent folder; never write over an existing working tree.
+      - Never copy kit machinery (guides, runner, templates, adapters) into the target.
+
   - id: 1
     command: proj-init-repo-setup
     title: Repo Setup
@@ -114,6 +135,7 @@ steps:
     branch: init/readme
     outputs:
       - README.md
+    replacesExisting: true
     guide: docs/guides/proj-init/07-readme.md
     template: docs/guides/proj-init/templates/README.template.md
     upstream:
