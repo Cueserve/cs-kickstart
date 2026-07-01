@@ -1,4 +1,20 @@
 steps:
+  - id: 1
+    command: proj-init-repo-setup
+    title: Repo Setup
+    branch: init/repo-setup
+    outputs:
+      - CONTRIBUTING.md
+      - .github/CODEOWNERS
+    conditionalOutputs: true
+    guide: docs/guides/proj-init/01-repo-setup.md
+    upstream: []
+    owner: Architect
+    reviewer: Architect
+    commitMessage: "docs: add repo governance baseline (Step 1)"
+    prSummary: "Summarize governance mode, branch protection validation, and include the Step 1 checklist evidence."
+    finalReminder: "Repo governance becomes final only when the Architect approves and merges the PR/MR."
+
   - id: 2
     command: proj-init-product
     title: Product Concept
