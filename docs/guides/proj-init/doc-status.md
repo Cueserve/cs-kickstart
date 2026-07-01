@@ -16,7 +16,7 @@ Run all checks silently first, then render the status table once. Do not print i
 - If exit 0, also check that `CONTRIBUTING.md` contains branch protection evidence (look for the preflight block written by Step-01). If the file exists but the evidence block is missing, mark as `partial`.
 - From the preflight block, read the recorded enforcement mode. If it is `process-enforced`, note `process-enforced` in the Step-01 detail cell: a later `✓ merged` then means the doc is on `main`, not that a second reviewer approved it — the mode qualifies how much the merge signal proves.
 
-### Steps 2–8 — Documents on `main`
+### Step-02 through Step-08 — Documents on `main`
 
 For each document, run `git -C "$TARGET" show main:<doc>` and capture the exit code:
 

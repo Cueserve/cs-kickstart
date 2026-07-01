@@ -57,7 +57,7 @@ Run these checks against the target (`$TARGET`) before creating a branch or writ
    - Non-zero for any document: **STOP** and tell the operator which prerequisite document must be merged before this step can run.
    - Empty `upstream`: no upstream document is required.
 
-3. **Step not already finalized** - unless the step sets `replacesExisting: true` in `_steps.yml`, run `git -C "$TARGET" show main:<primary-output>` for the step's primary output document — the first entry in the step's `outputs` field (for Steps 2–8 this is the document its `template` produces).
+3. **Step not already finalized** - unless the step sets `replacesExisting: true` in `_steps.yml`, run `git -C "$TARGET" show main:<primary-output>` for the step's primary output document — the first entry in the step's `outputs` field (for Step-02 through Step-08 this is the document its `template` produces).
    - Non-zero (not on `main`): proceed — the step has not been finalized.
    - Exit 0 (already on `main`): **STOP**. The step is already complete. Tell the operator the document is final and to run `/proj-init-doc-update <document>` to revise it instead of re-running the step. Do not branch or regenerate.
    - `replacesExisting: true` (e.g. Step-07, which overwrites the target's pre-existing README): skip this check — the file's presence on `main` is expected and is not proof the step ran. Rely on the §3 branch check and operator confirmation.

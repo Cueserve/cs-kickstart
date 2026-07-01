@@ -14,7 +14,7 @@ Before writing any code, register your target repo (Step-00), then run the Proje
 
 Start with **Step-00**. It clones your target repository into a local folder and registers it in `.proj-init/state.json`, so every later step operates on that clone. It does not copy any kit files into the target, create product code, or choose a stack. Run `/proj-init-bootstrap` (or use [Step-00](docs/guides/proj-init/00-bootstrap.md) directly in another AI tool).
 
-After Step-00, the process walks through Steps 1–8. Steps 2–8 each produce one source-of-truth document, finalized by a pull request. Use the `/proj-init-*` commands as the primary interface. All adapters load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
+After Step-00, the process walks through Step-01 to Step-08. Step-02 through Step-08 each produce one source-of-truth document, finalized by a pull request. Use the `/proj-init-*` commands as the primary interface. All adapters load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
 
 Run exactly one step per session. Start each step session by running `/proj-init-doc-status` before executing the step command.
 
@@ -60,7 +60,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 | 8 | `/proj-init-backlog` | `BACKLOG.md` + host issues/work items |
 | — | `/proj-init-cleanup` | unregisters the workspace after Step-08 merges |
 
-Steps 2–8 write their output into the **registered target repo**, not this kit. Adapters are thin wrappers over the same workflow. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
+Step-02 through Step-08 write their output into the **registered target repo**, not this kit. Adapters are thin wrappers over the same workflow. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
 
 GitHub Copilot users can run the matching adapter prompts in `.github/prompts/proj-init-*.prompt.md` if preferred; they resolve to the same underlying steps.
 
@@ -84,7 +84,7 @@ scripts/bootstrap-target-repo.mjs ← Step-00 script: clone the target repo and 
 .proj-init/state.json            ← Step-00 workspace registration (gitignored, operator-local)
 README.md                        ← this kit's entrypoint (the control-plane README)
 
-Generated in the TARGET repo after running Steps 1–8:
+Generated in the TARGET repo after running Step-01 through Step-08:
 PRODUCT.md                       ← product concept (Step-02)
 PRD.md                           ← requirements (Step-03)
 ARCHITECTURE.md                  ← system design (Step-04)

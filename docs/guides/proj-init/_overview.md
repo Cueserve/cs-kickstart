@@ -1,6 +1,6 @@
 # Project Initiation Guide — Overview
 
-This folder defines the sequence every new project follows before development begins. This kit is the control plane: Step-00 clones the target repository and registers it, and Steps 1–8 run from this kit against that clone. Run the steps in order; do not skip or reorder them.
+This folder defines the sequence every new project follows before development begins. This kit is the control plane: Step-00 clones the target repository and registers it, and Step-01 through Step-08 run from this kit against that clone. Run the steps in order; do not skip or reorder them.
 
 ## Workflow
 
@@ -34,7 +34,7 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 
 GitHub Copilot users can run matching prompt adapters in `.github/prompts/proj-init-*.prompt.md`; they resolve to the same underlying workflow.
 
-Step-00 is maintained in [00-bootstrap.md](00-bootstrap.md) and implemented by `scripts/bootstrap-target-repo.mjs`. The document-producing workflow for Steps 2–8 is maintained in one place: [_run-step.md](_run-step.md) — it resolves the registered target and runs every git operation and output write against it. Step metadata is maintained in [_steps.yml](_steps.yml). The output structure of each generated document is fixed by its template in [templates/](templates/), with shared writing rules in [templates/_writing-rules.md](templates/_writing-rules.md). Claude commands and Copilot prompts are adapters only. Post-init utility workflows live in [doc-status.md](doc-status.md), [doc-update.md](doc-update.md), and [cleanup.md](cleanup.md).
+Step-00 is maintained in [00-bootstrap.md](00-bootstrap.md) and implemented by `scripts/bootstrap-target-repo.mjs`. The document-producing workflow for Step-02 through Step-08 is maintained in one place: [_run-step.md](_run-step.md) — it resolves the registered target and runs every git operation and output write against it. Step metadata is maintained in [_steps.yml](_steps.yml). The output structure of each generated document is fixed by its template in [templates/](templates/), with shared writing rules in [templates/_writing-rules.md](templates/_writing-rules.md). Claude commands and Copilot prompts are adapters only. Post-init utility workflows live in [doc-status.md](doc-status.md), [doc-update.md](doc-update.md), and [cleanup.md](cleanup.md).
 
 ## Check where you are
 
@@ -67,8 +67,8 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 
 ## Who does what
 
-- **Product Owner** — runs and owns Steps 2–3 and Step-08, co-reviews Step-04, and approves every product-document PR/MR.
-- **Architect / Tech Lead** — runs Step-01 and Steps 4–7, and approves every engineering-document PR/MR.
+- **Product Owner** — runs and owns Step-02 through Step-03 and Step-08, co-reviews Step-04, and approves every product-document PR/MR.
+- **Architect / Tech Lead** — runs Step-01 and Step-04 through Step-07, and approves every engineering-document PR/MR.
 - **Small teams and solo projects** — one person may hold both roles. The same person who wrote the document should still not merge it immediately: use the process-enforced self-review checklist in [01-repo-setup.md](01-repo-setup.md) as the gate substitute.
 - **No self-finalizing (preferred)** — when a second reviewer is available, they must approve before merge. When they are not, the self-review checklist is the fallback — never a direct push.
 

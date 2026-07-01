@@ -44,7 +44,7 @@ Each check → `PASS` / `GAP` / `FAIL` with a `file:line` or `file:section` anch
 - No step command is a dead adapter (references a guide/template path that doesn't exist).
 
 ### D2 — Produces the output
-- Steps 2–8 each declare exactly **one** output doc; names match README's table and the templates.
+- Step-02 through Step-08 each declare exactly **one** output doc; names match README's table and the templates.
 - `check-template-drift.mjs` is wired as the guard the README claims (template headings → guide section map) — verify by reading the script's intent + one guide/template pair, not by running it.
 - No orphan templates and no doc-producing step missing a template (from Phase 2).
 

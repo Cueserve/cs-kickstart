@@ -2,7 +2,7 @@
 
 **Output:** A cloned target repo on disk + `.proj-init/state.json` registering it in this kit
 **Depends on:** nothing — this runs before Step-01
-**Required before:** every other step — Steps 1–8 read the registered target from state
+**Required before:** every other step — Step-01 through Step-08 read the registered target from state
 
 ---
 
