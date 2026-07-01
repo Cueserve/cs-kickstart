@@ -5,15 +5,28 @@ You're editing the kit's guides, adapters, and runner — the machinery teams cl
 run the 8-step initiation process. (Step 6 generates a *downstream* CLAUDE.md for
 projects that use the kit; this file is for maintaining the kit.)
 
+## Control-plane model
+
+The kit is the **control plane**. Operators run all `/proj-init-*` commands from this
+repo; the machinery never gets copied into the target project. Step 0 clones the target
+repo into a local folder and registers it in `.proj-init/state.json`
+(`{ targetFolder, gitUrl, createdAt }`, gitignored, operator-local). Every later step
+reads that state, sets `TARGET = targetFolder`, and runs all git operations
+(`git -C "$TARGET" …`), host CLIs (from within `$TARGET`), and produced-document writes
+(under `$TARGET/`) against the clone. Guides, templates, roles, and `_steps.yml` always
+load from this kit. `/proj-init-cleanup` clears the state after Step 8 merges. When you
+touch the runner or a step, preserve this kit-vs-target split — do not reintroduce
+copy-in or make a step assume cwd is the target.
+
 ## The one rule that matters: source of truth vs. adapters
 
 Source of truth lives in `docs/guides/proj-init/`:
 
-- `_run-step.md` — shared execution workflow every step runs
-- `00-bootstrap-target-repo.md` — Step 0 target-repo bootstrap workflow
+- `_run-step.md` — shared execution workflow every step runs (resolves `TARGET` first)
+- `00-bootstrap-target-repo.md` — Step 0 clone + register workflow
 - `_steps.yml` — step registry (branch, outputs, owner, reviewer, upstream, special actions)
 - `01`–`08` numbered guides — per-document rules
-- `_overview.md`, `doc-status.md`, `doc-update.md` — process + utility workflows
+- `_overview.md`, `doc-status.md`, `doc-update.md`, `cleanup.md` — process + utility workflows
 - `.claude/roles/` — Product Owner / Solution Architect role context the runner loads
 
 Adapters are thin and carry NO logic:
@@ -36,15 +49,17 @@ Changing one step usually touches up to four places — update all that apply:
 
 Adding/removing/reordering a step ALSO means the `README.md` step table and `_overview.md`.
 
-Step 0 is a bootstrap utility, not a document-producing `_run-step.md` step. Keep its behavior in
-`docs/guides/proj-init/00-bootstrap-target-repo.md` and `scripts/bootstrap-target-repo.mjs`; keep
-its adapters thin.
+Step 0 (clone + register) and cleanup (clear state) are utilities, not document-producing
+`_run-step.md` steps. Keep Step 0's behavior in `docs/guides/proj-init/00-bootstrap-target-repo.md`
+and `scripts/bootstrap-target-repo.mjs`, and cleanup's in `docs/guides/proj-init/cleanup.md`
+(clears state via `bootstrap-target-repo.mjs --clear`); keep their adapters thin.
 
 ## Protected blocks — do not rewrite
 
 `.github/copilot-instructions.md` contains an `INITIATION-RUNNER` block fenced by HTML
-comment markers. Preserve it verbatim, markers included. (Step 8 strips it in downstream
-projects; in this repo, leave it.)
+comment markers. Preserve it verbatim, markers included. Under the control-plane model this
+block is kit-only: it drives initiation from *this* repo and is never copied into the target,
+so nothing downstream strips it.
 
 ## No build toolchain
 

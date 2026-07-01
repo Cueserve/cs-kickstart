@@ -1,4 +1,4 @@
-# Step 3: Product Requirements Document (PRD)
+# Step-03: Product Requirements Document (PRD)
 
 **Output file:** `PRD.md`
 **Depends on:** `PRODUCT.md` (Step 2)

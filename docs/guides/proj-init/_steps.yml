@@ -90,7 +90,7 @@ steps:
       - Generate AI-TOOL-GUIDE.md always.
       - Generate only the adapter files required for the selected tools.
       - Keep shared rules in AI-TOOL-GUIDE.md; adapters contain only tool-specific config.
-      - When generating .github/copilot-instructions.md, preserve the INITIATION-RUNNER block (including its HTML comment markers) verbatim and append project-specific rules after it. Do not remove or rewrite that block.
+      - Generate the target's .github/copilot-instructions.md as the downstream project's Copilot rules only. The initiation runner stays in this kit and is never copied into the target.
 
   - id: 7
     command: proj-init-readme
@@ -112,8 +112,8 @@ steps:
     prSummary: "Note that the boilerplate README is replaced and include the Step 7 reviewer checklist."
     finalReminder: "README.md becomes final only when the Architect approves and merges the PR/MR. Initiation is complete only after Step 8 is merged."
     specialActions:
-      - Replace the boilerplate README with the project README.
-      - Remove initiation scaffold content from README.md.
+      - Replace the target repo's current README with the generated project README.
+      - Remove any leftover placeholder or boilerplate content from README.md.
       - Test every command included in README.md before committing.
 
   - id: 8
@@ -144,4 +144,3 @@ steps:
       - Present the derived backlog and wait for approval before host writes or file writes.
       - Create host work items one at a time and capture IDs.
       - If no supported CLI is available, record PENDING IDs and manual creation notes in BACKLOG.md.
-      - Remove the INITIATION-RUNNER block (including its HTML comment markers) from .github/copilot-instructions.md if present. Include the file in the Step 8 commit.

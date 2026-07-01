@@ -2,19 +2,19 @@
 
 > AI-powered starter kit for structured project initiation — tool-agnostic guides with thin adapters for Claude Code and GitHub Copilot
 
-A boilerplate project that guides team through a **clear, step‑by‑step project‑initiation process** before any coding begins. You bootstrap the initiation scaffold into a target repository, follow the steps, and end up with a consistent set of source‑of‑truth documents (`PRODUCT.md` → `README.md`) along with the rules that keep everything aligned as the project grows. This boilerplate is not tied to any tech stack to start with — technology stack is chosen during the initiation process (Step 5).
+A control-plane kit that guides teams through a **clear, step‑by‑step project‑initiation process** before any coding begins. You run this kit as the control plane: Step 0 clones your target repository and registers it, you run the steps from here, and the target ends up with a consistent set of source‑of‑truth documents (`PRODUCT.md` → `README.md`) along with the rules that keep everything aligned as the project grows. The kit's guides, runner, and adapters are never copied into the target — only the documents you produce land there. This kit is not tied to any tech stack — the technology stack is chosen during the initiation process (Step 5).
 
 ---
 
 ## 🚀 Start Here
 
-Before writing any code, bootstrap the initiation scaffold into the real target repo, then run the Project Initiation process:
+Before writing any code, register your target repo (Step 0), then run the Project Initiation process from this kit:
 
 **→ [Project Initiation Guide](docs/guides/proj-init/_overview.md)**
 
-Start with **Step 0** when the target repository does not already contain this scaffold. Step 0 copies the shared guides, templates, adapters, and starter README into a local folder or git repository; it does not create product code or choose a stack. **Claude Code users** run `/proj-init-bootstrap`. **GitHub Copilot users** run `.github/prompts/proj-init-bootstrap.prompt.md`. Other tools use [Step 0](docs/guides/proj-init/00-bootstrap-target-repo.md) directly.
+Start with **Step 0**. It clones your target repository into a local folder and registers it in `.proj-init/state.json`, so every later step operates on that clone. It does not copy any kit files into the target, create product code, or choose a stack. **Claude Code users** run `/proj-init-bootstrap`. **GitHub Copilot users** run `.github/prompts/proj-init-bootstrap.prompt.md`. Other tools use [Step 0](docs/guides/proj-init/00-bootstrap-target-repo.md) directly.
 
-After bootstrap, the process walks through Steps 1–8. Steps 2–8 each produce one source-of-truth document, finalized by a pull request. **Claude Code users** run the `/proj-init-*` slash commands. **GitHub Copilot users** run the matching prompt files from `.github/prompts/`. Both tool paths load the same shared runner, step registry, and step guides from `docs/guides/proj-init/`.
+After Step 0, the process walks through Steps 1–8. Steps 2–8 each produce one source-of-truth document, finalized by a pull request. **Claude Code users** run the `/proj-init-*` slash commands. **GitHub Copilot users** run the matching prompt files from `.github/prompts/`. Both tool paths load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
 
 ## Prerequisites
 
@@ -30,8 +30,8 @@ Two one-time setup steps come first, then every document-producing step repeats 
 
 **Once, up front:**
 
-- **Step 0 — Bootstrap the target repo** (if needed): run `/proj-init-bootstrap`, `.github/prompts/proj-init-bootstrap.prompt.md`, or `node scripts/bootstrap-target-repo.mjs --target <path>` to copy the initiation scaffold into the real project repository.
-- **Step 1 — Set up governance**: branch protection and the approval gate, before any document is written.
+- **Step 0 — Register the target repo**: run `/proj-init-bootstrap`, `.github/prompts/proj-init-bootstrap.prompt.md`, or `node scripts/bootstrap-target-repo.mjs --target <folder> --url <git-url> --apply` to clone the target repo and register it in `.proj-init/state.json`.
+- **Step 1 — Set up governance** (in the target): branch protection and the approval gate, before any document is written.
 
 **Then, for each document-producing step (2–8):**
 
@@ -47,17 +47,18 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 
 | Step | Claude Code | GitHub Copilot | Produces |
 | ---- | ----------- | -------------- | -------- |
-| 0 | `/proj-init-bootstrap` | `.github/prompts/proj-init-bootstrap.prompt.md` | initiation scaffold in the target repo/folder |
+| 0 | `/proj-init-bootstrap` | `.github/prompts/proj-init-bootstrap.prompt.md` | cloned target repo + `.proj-init/state.json` registration |
 | 1 | *manual setup* | *manual setup* | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it |
 | 2 | `/proj-init-product` | `.github/prompts/proj-init-product.prompt.md` | `PRODUCT.md` |
 | 3 | `/proj-init-prd` | `.github/prompts/proj-init-prd.prompt.md` | `PRD.md` |
 | 4 | `/proj-init-architecture` | `.github/prompts/proj-init-architecture.prompt.md` | `ARCHITECTURE.md` |
 | 5 | `/proj-init-techstack` | `.github/prompts/proj-init-techstack.prompt.md` | `TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) |
 | 6 | `/proj-init-aitoolguide` | `.github/prompts/proj-init-aitoolguide.prompt.md` | `AI-TOOL-GUIDE.md` + one adapter per AI tool in use (e.g. `CLAUDE.md`, `.github/copilot-instructions.md`) |
-| 7 | `/proj-init-readme` | `.github/prompts/proj-init-readme.prompt.md` | `README.md` (replaces this file) |
+| 7 | `/proj-init-readme` | `.github/prompts/proj-init-readme.prompt.md` | the target's project `README.md` |
 | 8 | `/proj-init-backlog` | `.github/prompts/proj-init-backlog.prompt.md` | `BACKLOG.md` + host issues/work items |
+| — | `/proj-init-cleanup` | `.github/prompts/proj-init-cleanup.prompt.md` | unregisters the workspace after Step 8 merges |
 
-Claude commands and Copilot prompts are thin adapters. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
+Steps 2–8 write their output into the **registered target repo**, not this kit. Claude commands and Copilot prompts are thin adapters. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
 
 Run `/proj-init-doc-status` in Claude Code or `.github/prompts/proj-init-doc-status.prompt.md` in GitHub Copilot at any time to see which steps are merged, which PR is open, and what's next.
 
@@ -66,16 +67,18 @@ See the [Project Initiation Guide](docs/guides/proj-init/_overview.md) for who o
 ## Repository Structure
 
 ```text
+This kit (the control plane):
 docs/guides/proj-init/           ← shared runner, utility workflows, step registry, and step-by-step guides
 docs/guides/proj-init/templates/ ← output templates per generated doc + shared writing rules and references
 scripts/check-template-drift.mjs ← guard: template headings must match each guide's section map
-scripts/bootstrap-target-repo.mjs ← Step 0 bootstrap script for copying scaffold into a target repo/folder
-.claude/commands/                ← thin /proj-init-* adapters + /proj-init-doc-update and /proj-init-doc-status
+scripts/bootstrap-target-repo.mjs ← Step 0 script: clone the target repo and register it in .proj-init/state.json
+.claude/commands/                ← thin /proj-init-* adapters + /proj-init-doc-update, /proj-init-doc-status, /proj-init-cleanup
 .github/prompts/                 ← thin Copilot prompt adapters for /proj-init-* steps and doc utilities
 .github/copilot-instructions.md  ← Copilot rule: use docs/guides/proj-init/ as source of truth
-README.md                        ← this boilerplate entrypoint (replaced in Step 7)
+.proj-init/state.json            ← Step 0 workspace registration (gitignored, operator-local)
+README.md                        ← this kit's entrypoint (the control-plane README)
 
-Generated after running Steps 1–8:
+Generated in the TARGET repo after running Steps 1–8:
 PRODUCT.md                       ← product concept (Step 2)
 PRD.md                           ← requirements (Step 3)
 ARCHITECTURE.md                  ← system design (Step 4)
@@ -84,13 +87,13 @@ CONTRIBUTING.md                  ← governance + tooling rules (Steps 1 and 5)
 AI-TOOL-GUIDE.md                 ← AI tool rules shared across all tools (Step 6)
 CLAUDE.md                        ← Claude Code adapter, if in use (Step 6)
 .github/copilot-instructions.md  ← Copilot adapter, if in use (Step 6)
-README.md                        ← project entry point, replaces this file (Step 7)
+README.md                        ← the target's project entry point (Step 7)
 BACKLOG.md                       ← initial backlog manifest + host issue IDs (Step 8)
 ```
 
 ## After Initiation
 
-Step 7 (`/proj-init-readme`) **replaces this README** with your project's own — describing the actual product, its setup, and how to run it. Step 8 (`/proj-init-backlog`) seeds the issue tracker. The guides in `docs/guides/proj-init/` stay as the durable reference for the process.
+Step 7 (`/proj-init-readme`) writes **the target's own README** — describing the actual product, its setup, and how to run it. Step 8 (`/proj-init-backlog`) seeds the issue tracker. Once Step 8 is merged, run `/proj-init-cleanup` to unregister the workspace from this kit. The guides in `docs/guides/proj-init/` stay as the durable reference for the process, and this kit's own README is never overwritten.
 
 ### Keeping docs current
 

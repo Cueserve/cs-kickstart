@@ -1,128 +1,97 @@
-# Step 0: Bootstrap Target Repository
+# Step-00: Register Target Repository
 
-**Output:** Project Initiation scaffold copied into a target repository or local folder
+**Output:** A cloned target repo on disk + `.proj-init/state.json` registering it in this kit
 **Depends on:** nothing — this runs before Step 1
-**Required before:** Step 1 (Repo Setup) when starting from a blank or existing target repository
+**Required before:** every other step — Steps 1–8 read the registered target from state
 
 ---
 
 ## Goal
 
-Install the reusable Project Initiation machinery into the real project repository without creating product code or stack-specific structure.
+Point this starter kit at the real project repository. Step 0 clones the target
+repo into a local folder and records where it lives, so every later
+`/proj-init-*` step operates on that clone.
 
-## Objective
+## Control-plane model
 
-This step turns this starter kit into a usable scaffold inside the target repo. It copies the shared guides, templates, AI adapters, role files, starter README, and drift-check script, then optionally initializes git and connects an `origin` remote.
+This kit is the **control plane**. You run all `/proj-init-*` commands from *this*
+repository; they read the registered target and write the produced source-of-truth
+documents into the **target clone**. The initiation machinery (guides, runner,
+templates, adapters) never gets copied into the target — only the documents you
+produce land there.
 
-The output is a bootstrap baseline that can be committed to `main`. Step 1 then sets up governance before any source-of-truth project document is created.
+Step 0 does two things and nothing else:
 
-## What This Step Copies
+1. `git clone <git-url> <target-folder>` — the operator supplies both.
+2. Write `.proj-init/state.json` in this kit:
 
-The bootstrap script copies only reusable initiation assets:
+   ```json
+   {
+     "targetFolder": "<absolute path to the clone>",
+     "gitUrl": "<target repo git URL>",
+     "createdAt": "<ISO timestamp>"
+   }
+   ```
 
-- `README.md`
-- `docs/guides/proj-init/**`
-- `scripts/check-template-drift.mjs`
-- `.claude/roles/*.md` — shared Product Owner / Solution Architect role context the runner loads, regardless of selected tool
-- `.claude/commands/proj-init-*.md` when Claude Code support is selected
-- `.github/prompts/proj-init-*.prompt.md` when GitHub Copilot support is selected
-- `.github/copilot-instructions.md` when GitHub Copilot support is selected, trimmed to the `INITIATION-RUNNER` block only
-
-It does not copy kit-maintenance or local analysis files:
-
-- root `CLAUDE.md`
-- `scripts/bootstrap-target-repo.mjs` — kit-only; the target repo never re-bootstraps itself
-- `.claude/skills/**`
-- `graphify-out/**`
-- `src/index.ts`
-- `.venv`, caches, local runtime files, or product implementation structure
+`.proj-init/` is gitignored — it is operator-local state pointing at a folder on
+this machine. It is removed by `/proj-init-cleanup` once Step 8 is merged.
 
 ## Operator Questions
 
 Ask these before running the script:
 
-1. Target path — where should the project be bootstrapped?
-2. Git remote URL — should `origin` be configured now, or should this remain a local folder for the moment?
-3. AI tools — Claude Code, GitHub Copilot, both, or neither?
-4. Existing files — if the target path already contains matching scaffold files, should the script fail or overwrite them?
+1. Git URL — the remote URL of the target repository to clone.
+2. Target folder — an empty or non-existent local path to clone into.
+3. Existing workspace — if a workspace is already registered, should it be replaced (`--force`) or finished first (`/proj-init-cleanup`)?
 
-Do not ask product, architecture, stack, or backlog questions in Step 0. Those belong to later steps.
+Do not ask about AI tools, product, architecture, stack, or backlog in Step 0.
+AI tool selection happens in Step 6; the rest belong to their own steps.
 
 ## How to Run
 
-Always run a dry-run first:
+Always dry-run first to confirm the target folder and URL:
 
 ```text
-node scripts/bootstrap-target-repo.mjs --target <target-path> --tools <all|claude|copilot|none>
+node scripts/bootstrap-target-repo.mjs --target <target-folder> --url <git-url>
 ```
 
-Review the file list. If it is correct, apply it:
+Review the output. If it is correct, apply it — this performs the clone and writes state:
 
 ```text
-node scripts/bootstrap-target-repo.mjs --target <target-path> --tools <all|claude|copilot|none> --apply
+node scripts/bootstrap-target-repo.mjs --target <target-folder> --url <git-url> --apply
 ```
 
-To connect a remote while applying:
+To check what is currently registered:
 
 ```text
-node scripts/bootstrap-target-repo.mjs --target <target-path> --remote <repo-url> --tools <all|claude|copilot|none> --apply
+node scripts/bootstrap-target-repo.mjs --status
 ```
 
-To copy files without running `git init` or configuring `origin`:
+To replace an already-registered workspace intentionally:
 
 ```text
-node scripts/bootstrap-target-repo.mjs --target <target-path> --tools <all|claude|copilot|none> --apply --skip-git
-```
-
-To replace existing conflicting scaffold files intentionally:
-
-```text
-node scripts/bootstrap-target-repo.mjs --target <target-path> --tools <all|claude|copilot|none> --apply --overwrite
+node scripts/bootstrap-target-repo.mjs --target <target-folder> --url <git-url> --apply --force
 ```
 
 ## After the Script Runs
 
-In the target repository:
-
-1. Review the copied scaffold files.
-2. Run the template drift check:
-
-   ```text
-   node scripts/check-template-drift.mjs
-   ```
-
-3. Commit the bootstrap baseline to `main`:
-
-   ```text
-   git add .
-   git commit -m "chore: bootstrap project initiation"
-   ```
-
-4. Push the baseline if a remote is configured:
-
-   ```text
-   git push -u origin main
-   ```
-
-5. Start Step 1: `docs/guides/proj-init/01-repo-setup.md`.
+1. Confirm the clone exists at the target folder and `.proj-init/state.json` points at it (`--status`).
+2. Start Step 1 (`01-repo-setup.md`) to stand up governance **in the target repo**. Every later step runs against the registered target.
 
 ## Rules
 
-- Step 0 is optional only when the target repository was created directly from this starter kit and already contains the scaffold.
-- Step 0 must not create application source folders, install dependencies, choose a framework, or add stack-specific commands.
-- Step 0 must not create `PRODUCT.md`, `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, `AI-TOOL-GUIDE.md`, project `README.md`, or `BACKLOG.md`.
-- Step 0 must not push without the operator explicitly choosing to do so after reviewing the copied scaffold.
-- If conflicts exist in the target repository, stop unless the operator explicitly chooses `--overwrite`.
-- After Step 0, Step 1 is still required. Branch protection and the approval gate must exist before Step 2 creates `PRODUCT.md`.
+- Step 0 must clone into an empty or non-existent folder. It never writes over an existing working tree.
+- Step 0 must not copy the kit's guides, runner, templates, or adapters into the target.
+- Step 0 must not create product code, choose a stack, create source-of-truth documents, commit, or push.
+- Only one workspace is registered at a time. Replace it only with `--force`; finish it with `/proj-init-cleanup`.
+- After Step 0, Step 1 is still required. Branch protection and the approval gate must exist in the target before Step 2 creates `PRODUCT.md`.
 
 ## Verification Checklist
 
 Before calling Step 0 complete, verify:
 
 - [ ] Dry-run output was reviewed before `--apply`.
-- [ ] Only reusable initiation scaffold files were copied.
-- [ ] No kit-maintenance files or local analysis outputs were copied.
-- [ ] Git was initialized or intentionally skipped.
-- [ ] `origin` was configured only if a remote URL was provided.
-- [ ] `node scripts/check-template-drift.mjs` passes in the target repository.
-- [ ] The bootstrap baseline is committed to `main` before Step 1 begins.
+- [ ] The target repo was cloned into an empty/new folder.
+- [ ] `.proj-init/state.json` records the target folder and git URL.
+- [ ] No kit machinery (guides, runner, templates, adapters) was copied into the target.
+- [ ] `--status` reports the intended target before Step 1 begins.

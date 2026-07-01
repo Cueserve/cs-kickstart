@@ -1,6 +1,6 @@
 ---
 agent: agent
-description: Step 0 project initiation - bootstrap the initiation scaffold into a target repository
+description: Step 0 project initiation - clone the target repo and register it as the initiation workspace
 ---
 
 # Project Init Bootstrap

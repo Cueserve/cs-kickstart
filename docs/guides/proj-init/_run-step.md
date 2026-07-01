@@ -2,14 +2,30 @@
 
 Use this runner for document-producing Project Initiation steps. Tool-specific command and prompt files are adapters only; this file owns the shared workflow.
 
+This kit is the **control plane**: you run this command from *this* repo, but the produced document and every git operation land in the **target repository** registered in Step 0. Resolve the target first (§0), then treat every git command and output path below as target-relative.
+
+## 0. Resolve The Target Repository
+
+Before anything else, read `.proj-init/state.json` from this kit root.
+
+- Missing or unreadable: **STOP** and tell the operator: `No initiation workspace found. Run Step 0 (/proj-init-bootstrap) first.`
+- Present: set `TARGET` to its `targetFolder`.
+
+Then, for the rest of this runner and the step guide:
+
+- Run every `git` command against the target: `git -C "$TARGET" <args>`.
+- Run every host CLI (`gh`, `az repos`, `glab`) with `$TARGET` as the working directory.
+- Read and write every produced document under `$TARGET/` (e.g. `$TARGET/PRODUCT.md`).
+- Keep loading guides, templates, role files, and `_steps.yml` from **this kit** (they are not in the target).
+
 ## Inputs
 
 Before starting, load:
 
-1. The requested step entry from `docs/guides/proj-init/_steps.yml`.
-2. The step's guide file from the `guide` field.
-3. Any upstream documents listed in the step's `upstream` field, from `main`.
-4. The role context file for the step's `owner`:
+1. The requested step entry from `docs/guides/proj-init/_steps.yml` (in this kit).
+2. The step's guide file from the `guide` field (in this kit).
+3. Any upstream documents listed in the step's `upstream` field, from `main` in the target: `git -C "$TARGET" show main:<document>`.
+4. The role context file for the step's `owner` (in this kit):
    - `Product Owner` → `.claude/roles/product-owner.md`
    - `Architect` → `.claude/roles/solution-architect.md`
 
@@ -19,18 +35,18 @@ The step guide is the content contract. The registry is the execution metadata. 
 
 ## 1. Preconditions
 
-Run these checks before creating a branch or writing files. Do not proceed on assumption.
+Run these checks against the target (`$TARGET`) before creating a branch or writing files. Do not proceed on assumption.
 
-1. **Clean working tree** - run `git status --porcelain`.
+1. **Clean working tree** - run `git -C "$TARGET" status --porcelain`.
    - Empty output: proceed.
-   - Non-empty output: **STOP** and tell the operator: `Uncommitted changes detected — commit or stash before continuing.`
+   - Non-empty output: **STOP** and tell the operator: `Uncommitted changes detected in the target — commit or stash before continuing.`
 
-2. **Upstream documents on `main`** - for every document listed in `upstream`, run `git show main:<document>`.
+2. **Upstream documents on `main`** - for every document listed in `upstream`, run `git -C "$TARGET" show main:<document>`.
    - Exit 0 for every document: proceed.
    - Non-zero for any document: **STOP** and tell the operator which prerequisite document must be merged before this step can run.
    - Empty `upstream`: no upstream document is required.
 
-3. **Step 1 gate** - verify Step 1 preflight evidence in `CONTRIBUTING.md` and re-run the relevant host checks from `docs/guides/proj-init/01-repo-setup.md`.
+3. **Step 1 gate** - verify Step 1 preflight evidence in `$TARGET/CONTRIBUTING.md` and re-run the relevant host checks from `docs/guides/proj-init/01-repo-setup.md`.
    - Evidence present and host checks pass: proceed.
    - Evidence missing, stale, or checks fail: **STOP** and direct the operator to complete Step 1.
 
@@ -54,7 +70,7 @@ If any item fails, stop and resolve it before continuing.
 
 ## 3. Create The Working Branch
 
-From an up-to-date `main`, create and switch to the branch named in the step's `branch` field.
+In the target, from an up-to-date `main`, create and switch to the branch named in the step's `branch` field: `git -C "$TARGET" checkout -b <branch>` off the latest `main`.
 
 If the branch already exists, do not reuse it silently. Ask the operator whether to reuse it, delete it, or create a new branch name.
 
@@ -64,11 +80,11 @@ Follow the step guide exactly.
 
 Use these shared rules for every step:
 
-- Read every upstream document from `main` and use it as source of truth.
+- Read every upstream document from `main` in the target (`git -C "$TARGET" show main:<document>`) and use it as source of truth.
 - Interview the operator for every section the guide requires.
 - Ask one focused question at a time.
 - Never assume an answer.
-- Write only the files listed in `outputs`, plus any conditional outputs explicitly allowed by the step guide.
+- Write only the files listed in `outputs`, plus any conditional outputs explicitly allowed by the step guide — all under `$TARGET/`.
 - Show drafts and revise until the operator approves the content.
 
 If the step has a `template` field, produce the output by filling that template — do not invent the structure:
@@ -84,7 +100,7 @@ If the step has `specialActions`, perform them in the order listed after the gui
 
 ## 5. Commit
 
-Commit the files listed in `outputs` and any conditional outputs generated by the step guide.
+In the target, commit the files listed in `outputs` and any conditional outputs generated by the step guide: `git -C "$TARGET" add <outputs>` then `git -C "$TARGET" commit`.
 
 Use the `commitMessage` from `_steps.yml`.
 
@@ -96,8 +112,8 @@ Never push without explicit operator approval.
 
 After approval:
 
-1. Push the step branch.
-2. Open a PR/MR targeting `main` using the available host CLI: `gh pr create`, `az repos pr create`, or `glab mr create`.
+1. Push the step branch: `git -C "$TARGET" push -u origin <branch>`.
+2. Open a PR/MR targeting `main` using the available host CLI, run from within `$TARGET`: `gh pr create`, `az repos pr create`, or `glab mr create`.
 3. If no host CLI is available, push the branch and give the operator the host URL/path needed to open the PR/MR manually.
 4. Use a title that references the step number and output.
 5. In the body, include the step's `prSummary` and the reviewer checklist from the step guide.

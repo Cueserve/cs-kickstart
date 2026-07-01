@@ -1,4 +1,4 @@
-# Step 7: README
+# Step-07: README
 
 **Output file:** `README.md`
 **Depends on:** `PRODUCT.md` (Step 2), `PRD.md` (Step 3), `ARCHITECTURE.md` (Step 4), `TECH-STACK.md` (Step 5), `AI-TOOL-GUIDE.md` (Step 6)
@@ -35,7 +35,7 @@ Structure is fixed by the template — `docs/guides/proj-init/templates/README.t
 
 ## Rules
 
-- This step **replaces the boilerplate README** with the project's own. The boilerplate README's "Start Here" callout and scaffold content are removed here. By Step 7, the project is handoff-ready for sharing. Initiation is declared complete only after Step 8 is merged. The Project Initiation guides in `docs/guides/proj-init/` remain as the durable reference.
+- This step **writes the target repo's project README**, replacing whatever README the cloned repo currently has (a placeholder, template boilerplate, or an earlier draft). By Step 7, the project is handoff-ready for sharing. Initiation is declared complete only after Step 8 is merged. The Project Initiation guides live in this kit under `docs/guides/proj-init/` and remain as the durable reference — they are not part of the target repo.
 - Production implementation may already be in progress after Step 6; Step 7 is the handoff and sharing gate.
 - Write README last. It documents what exists, not what you plan to build.
 - Every command in README must be tested and working before it is committed.
@@ -55,4 +55,4 @@ Before approving the PR/MR, verify every item. An unchecked item is a reason to 
 - [ ] Version numbers are present for all prerequisites (runtimes, tools, CLIs).
 - [ ] Project structure section exists with a one-line purpose per top-level folder.
 - [ ] Links to `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, and `AI-TOOL-GUIDE.md` are present under Further reading.
-- [ ] The boilerplate "Start Here" callout and scaffold content are fully removed.
+- [ ] The target repo's prior/placeholder README content is fully replaced — no leftover boilerplate or template scaffolding remains.

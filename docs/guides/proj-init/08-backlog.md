@@ -1,4 +1,4 @@
-# Step 8: Initial Backlog
+# Step-08: Initial Backlog
 
 **Output file:** `BACKLOG.md` (manifest of created work items)
 **Creates in host:** GitHub Issues or Azure DevOps work items

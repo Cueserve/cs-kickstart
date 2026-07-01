@@ -1,4 +1,4 @@
-# Step 4: Architecture
+# Step-04: Architecture
 
 **Output file:** `ARCHITECTURE.md`
 **Depends on:** `PRD.md` (Step 3)

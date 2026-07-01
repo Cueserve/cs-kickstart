@@ -1,300 +1,151 @@
 #!/usr/bin/env node
 // bootstrap-target-repo.mjs
 //
-// Copies the reusable Project Initiation scaffold from this starter kit into a
-// target repository or local folder. It intentionally stops at bootstrap: no
-// app framework, stack-specific files, commits, pushes, or Step 1 governance.
+// Control-plane Step 0. Clones the target project repository into a local folder
+// and registers it in .proj-init/state.json so every later /proj-init-* step
+// operates on that external clone. No scaffold is copied into the target: the
+// initiation machinery (guides, runner, adapters) stays in this kit, which acts
+// as the control plane. Cleanup (--clear) removes the registration when the
+// initiation process is complete.
 
 import { spawnSync } from 'node:child_process';
-import { access, mkdir, readdir, readFile, stat, writeFile } from 'node:fs/promises';
-import { dirname, join, resolve, sep } from 'node:path';
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const COPILOT_START = '<!-- INITIATION-RUNNER:';
-const COPILOT_END = '<!-- END INITIATION-RUNNER -->';
+const STATE_DIR = '.proj-init';
+const STATE_FILE = 'state.json';
 
-const ALWAYS_FILES = [
-  'README.md',
-  'scripts/check-template-drift.mjs',
-];
-const ALWAYS_DIRS = ['docs/guides/proj-init', '.claude/roles'];
-
-const TOOL_SCAFFOLD = {
-  claude: {
-    dirs: ['.claude/commands'],
-    files: [],
-  },
-  copilot: {
-    dirs: ['.github/prompts'],
-    files: ['.github/copilot-instructions.md'],
-  },
-};
-
-function toPosixPath(path) {
-  return path.split(sep).join('/');
+export function statePath(kitRoot) {
+  return join(resolve(kitRoot), STATE_DIR, STATE_FILE);
 }
 
-async function pathExists(path) {
+export async function readState(kitRoot) {
   try {
-    await access(path);
-    return true;
+    return JSON.parse(await readFile(statePath(kitRoot), 'utf8'));
   } catch {
-    return false;
+    return null;
   }
 }
 
-async function collectFiles(sourceRoot, relativeDir) {
-  const absoluteDir = join(sourceRoot, relativeDir);
-  if (!(await pathExists(absoluteDir))) return [];
-
-  const out = [];
-  const children = await readdir(absoluteDir, { withFileTypes: true });
-  for (const child of children) {
-    const childRelative = toPosixPath(join(relativeDir, child.name));
-    const childAbsolute = join(sourceRoot, childRelative);
-    if (child.isDirectory()) {
-      out.push(...(await collectFiles(sourceRoot, childRelative)));
-      continue;
-    }
-    if (child.isFile()) out.push(childAbsolute);
-  }
-  return out;
+async function writeState(kitRoot, state) {
+  const path = statePath(kitRoot);
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, `${JSON.stringify(state, null, 2)}\n`, 'utf8');
+  return path;
 }
 
-function normalizeTools(tools = 'all') {
-  const raw = Array.isArray(tools) ? tools : String(tools).split(',');
-  const normalized = raw.map((tool) => tool.trim().toLowerCase()).filter(Boolean);
-  if (normalized.length === 0 || normalized.includes('all')) return ['claude', 'copilot'];
-  if (normalized.includes('none')) return [];
-
-  const unknown = normalized.filter((tool) => !Object.hasOwn(TOOL_SCAFFOLD, tool));
-  if (unknown.length) {
-    throw new Error(`Unknown tool selection: ${unknown.join(', ')}. Use claude, copilot, all, or none.`);
-  }
-  return [...new Set(normalized)].sort();
+export async function clearState(kitRoot) {
+  await rm(join(resolve(kitRoot), STATE_DIR), { recursive: true, force: true });
 }
 
-function scaffoldEntry(sourceRoot, relativePath, transform = null) {
-  return {
-    sourcePath: join(sourceRoot, relativePath),
-    targetRelativePath: toPosixPath(relativePath),
-    transform,
-  };
+async function isEmptyDir(path) {
+  try {
+    const entries = await readdir(path);
+    return entries.length === 0;
+  } catch {
+    // Missing directory is fine — git clone will create it.
+    return true;
+  }
 }
 
-export async function collectScaffoldEntries({ sourceRoot, tools = 'all' }) {
-  const resolvedSourceRoot = resolve(sourceRoot);
-  const entries = new Map();
-
-  for (const relativeFile of ALWAYS_FILES) {
-    if (await pathExists(join(resolvedSourceRoot, relativeFile))) {
-      entries.set(relativeFile, scaffoldEntry(resolvedSourceRoot, relativeFile));
-    }
-  }
-
-  for (const relativeDir of ALWAYS_DIRS) {
-    for (const sourcePath of await collectFiles(resolvedSourceRoot, relativeDir)) {
-      const targetRelativePath = toPosixPath(sourcePath.slice(resolvedSourceRoot.length + 1));
-      entries.set(targetRelativePath, {
-        sourcePath,
-        targetRelativePath,
-        transform: null,
-      });
-    }
-  }
-
-  for (const tool of normalizeTools(tools)) {
-    const scaffold = TOOL_SCAFFOLD[tool];
-    for (const relativeFile of scaffold.files) {
-      if (await pathExists(join(resolvedSourceRoot, relativeFile))) {
-        const transform =
-          relativeFile === '.github/copilot-instructions.md' ? 'copilot-initiation-runner' : null;
-        entries.set(relativeFile, scaffoldEntry(resolvedSourceRoot, relativeFile, transform));
-      }
-    }
-    for (const relativeDir of scaffold.dirs) {
-      for (const sourcePath of await collectFiles(resolvedSourceRoot, relativeDir)) {
-        const targetRelativePath = toPosixPath(sourcePath.slice(resolvedSourceRoot.length + 1));
-        entries.set(targetRelativePath, {
-          sourcePath,
-          targetRelativePath,
-          transform: null,
-        });
-      }
-    }
-  }
-
-  return [...entries.values()].sort((left, right) =>
-    left.targetRelativePath.localeCompare(right.targetRelativePath),
-  );
-}
-
-export function extractCopilotInitiationRunnerBlock(content) {
-  const startIndex = content.indexOf(COPILOT_START);
-  const endIndex = content.indexOf(COPILOT_END);
-  if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
-    throw new Error('Could not find the INITIATION-RUNNER block in .github/copilot-instructions.md.');
-  }
-  return `${content.slice(startIndex, endIndex + COPILOT_END.length).trimEnd()}\n`;
-}
-
-async function renderEntry(entry) {
-  const content = await readFile(entry.sourcePath, 'utf8');
-  if (entry.transform === 'copilot-initiation-runner') {
-    return extractCopilotInitiationRunnerBlock(content);
-  }
-  return content;
-}
-
-async function findConflicts(entries, targetRoot, overwrite) {
-  if (overwrite) return [];
-
-  const conflicts = [];
-  for (const entry of entries) {
-    const targetPath = join(targetRoot, entry.targetRelativePath);
-    if (!(await pathExists(targetPath))) continue;
-
-    const currentStat = await stat(targetPath);
-    if (currentStat.isDirectory()) {
-      conflicts.push(entry.targetRelativePath);
-      continue;
-    }
-
-    const desired = await renderEntry(entry);
-    const current = await readFile(targetPath, 'utf8');
-    if (current !== desired) conflicts.push(entry.targetRelativePath);
-  }
-  return conflicts;
-}
-
-async function writeEntries(entries, targetRoot) {
-  const written = [];
-  for (const entry of entries) {
-    const targetPath = join(targetRoot, entry.targetRelativePath);
-    await mkdir(dirname(targetPath), { recursive: true });
-    await writeFile(targetPath, await renderEntry(entry), 'utf8');
-    written.push(entry.targetRelativePath);
-  }
-  return written;
-}
-
-function runGit(targetRoot, args) {
-  const result = spawnSync('git', ['-C', targetRoot, ...args], {
+function runGit(args, cwd = null) {
+  const result = spawnSync('git', args, {
     encoding: 'utf8',
     shell: false,
+    cwd: cwd ?? undefined,
   });
   return {
     ok: result.status === 0,
-    stdout: result.stdout.trim(),
-    stderr: result.stderr.trim(),
+    stdout: (result.stdout || '').trim(),
+    stderr: (result.stderr || '').trim(),
     status: result.status,
   };
 }
 
-async function ensureGit({ targetRoot, remote, skipGit }) {
-  if (skipGit) return [];
-
-  const actions = [];
-  const insideWorkTree = runGit(targetRoot, ['rev-parse', '--is-inside-work-tree']);
-  if (!insideWorkTree.ok) {
-    const init = spawnSync('git', ['init', '-b', 'main', targetRoot], {
-      encoding: 'utf8',
-      shell: false,
-    });
-    if (init.status !== 0) {
-      const fallback = spawnSync('git', ['init', targetRoot], { encoding: 'utf8', shell: false });
-      if (fallback.status !== 0) {
-        throw new Error(`git init failed: ${(init.stderr || fallback.stderr).trim()}`);
-      }
-      const setBranch = runGit(targetRoot, ['symbolic-ref', 'HEAD', 'refs/heads/main']);
-      if (!setBranch.ok) throw new Error(`git symbolic-ref HEAD refs/heads/main failed: ${setBranch.stderr}`);
-    }
-    actions.push('git init -b main');
-  }
-
-  if (!remote) return actions;
-
-  const existingOrigin = runGit(targetRoot, ['remote', 'get-url', 'origin']);
-  if (existingOrigin.ok) {
-    if (existingOrigin.stdout !== remote) {
-      throw new Error(
-        `origin already points to ${existingOrigin.stdout}. Remove or update it before bootstrapping ${remote}.`,
-      );
-    }
-    actions.push('origin already configured');
-    return actions;
-  }
-
-  const addOrigin = runGit(targetRoot, ['remote', 'add', 'origin', remote]);
-  if (!addOrigin.ok) throw new Error(`git remote add origin failed: ${addOrigin.stderr}`);
-  actions.push('git remote add origin');
-  return actions;
-}
-
 export async function runBootstrap({
-  sourceRoot,
+  kitRoot,
   targetRoot,
-  tools = 'all',
+  gitUrl,
   apply = false,
-  overwrite = false,
-  remote = null,
-  skipGit = false,
+  force = false,
 }) {
-  if (!sourceRoot) throw new Error('sourceRoot is required.');
-  if (!targetRoot) throw new Error('targetRoot is required.');
+  if (!kitRoot) throw new Error('kitRoot is required.');
+  if (!targetRoot) throw new Error('targetRoot is required. Pass --target <folder>.');
+  if (!gitUrl) throw new Error('gitUrl is required. Pass --url <git-remote-url>.');
 
-  const resolvedSourceRoot = resolve(sourceRoot);
+  const resolvedKitRoot = resolve(kitRoot);
   const resolvedTargetRoot = resolve(targetRoot);
-  const entries = await collectScaffoldEntries({ sourceRoot: resolvedSourceRoot, tools });
-  const conflicts = await findConflicts(entries, resolvedTargetRoot, overwrite);
-  if (conflicts.length) {
+
+  const existing = await readState(resolvedKitRoot);
+  if (existing && !force) {
     throw new Error(
-      `Target has conflicting files: ${conflicts.join(', ')}. Re-run with --overwrite only if replacing them is intended.`,
+      `An initiation workspace is already registered (target: ${existing.targetFolder}). ` +
+        `Run /proj-init-cleanup (or this script with --clear) to finish it, or re-run with --force to replace it.`,
     );
   }
 
   if (!apply) {
     return {
       mode: 'dry-run',
-      sourceRoot: resolvedSourceRoot,
-      targetRoot: resolvedTargetRoot,
-      entries,
-      written: [],
-      git: [],
+      kitRoot: resolvedKitRoot,
+      targetFolder: resolvedTargetRoot,
+      gitUrl,
+      statePath: statePath(resolvedKitRoot),
+      cloned: false,
     };
   }
 
-  await mkdir(resolvedTargetRoot, { recursive: true });
-  const written = await writeEntries(entries, resolvedTargetRoot);
-  const git = await ensureGit({ targetRoot: resolvedTargetRoot, remote, skipGit });
+  // git clone requires an absent or empty target folder.
+  if (!(await isEmptyDir(resolvedTargetRoot))) {
+    throw new Error(
+      `Target folder ${resolvedTargetRoot} is not empty. Choose an empty or non-existent folder to clone into.`,
+    );
+  }
+
+  const clone = runGit(['clone', gitUrl, resolvedTargetRoot]);
+  if (!clone.ok) throw new Error(`git clone failed: ${clone.stderr}`);
+
+  const state = {
+    targetFolder: resolvedTargetRoot,
+    gitUrl,
+    createdAt: new Date().toISOString(),
+  };
+  const writtenStatePath = await writeState(resolvedKitRoot, state);
 
   return {
     mode: 'apply',
-    sourceRoot: resolvedSourceRoot,
-    targetRoot: resolvedTargetRoot,
-    entries,
-    written,
-    git,
+    kitRoot: resolvedKitRoot,
+    targetFolder: resolvedTargetRoot,
+    gitUrl,
+    statePath: writtenStatePath,
+    cloned: true,
   };
 }
 
 function printUsage() {
   console.log(`Usage:
-  node scripts/bootstrap-target-repo.mjs --target <path> [options]
+  node scripts/bootstrap-target-repo.mjs --target <folder> --url <git-url> [--apply] [--force]
+  node scripts/bootstrap-target-repo.mjs --status
+  node scripts/bootstrap-target-repo.mjs --clear
+
+Step 0 clones the target project repo into <folder> and registers it in
+.proj-init/state.json. Every later /proj-init-* step reads that state and
+operates on the clone. No scaffold is copied into the target.
 
 Options:
-  --target <path>       Target repository or local folder. Required unless passed as the first positional argument.
-  --remote <url>        Optional git remote URL to add as origin.
-  --tools <list>        all, claude, copilot, none. Default: all.
-  --apply               Write files and initialize/connect git. Omit for dry-run.
-  --overwrite           Replace conflicting target files. Default: fail on conflicts.
-  --skip-git            Copy scaffold only; do not run git init or configure origin.
-  --help                Show this help.
+  --target <folder>   Local folder to clone the target repo into. Must be empty or non-existent.
+  --url <git-url>     Git remote URL of the target repo to clone.
+  --apply             Perform the clone and write state. Omit for a dry-run preview.
+  --force             Replace an already-registered workspace.
+  --status            Print the currently registered workspace and exit.
+  --clear             Remove the registered workspace state (cleanup) and exit.
+  --help              Show this help.
 
 Examples:
-  node scripts/bootstrap-target-repo.mjs --target ../my-project
-  node scripts/bootstrap-target-repo.mjs --target ../my-project --remote https://github.com/org/repo.git --apply
-  node scripts/bootstrap-target-repo.mjs ../my-project --tools copilot --apply --skip-git`);
+  node scripts/bootstrap-target-repo.mjs --target ../acme-app --url https://github.com/acme/app.git
+  node scripts/bootstrap-target-repo.mjs --target ../acme-app --url https://github.com/acme/app.git --apply
+  node scripts/bootstrap-target-repo.mjs --clear`);
 }
 
 function readArgValue(argv, index, name) {
@@ -306,11 +157,12 @@ function readArgValue(argv, index, name) {
 function parseArgs(argv) {
   const options = {
     apply: false,
-    overwrite: false,
-    skipGit: false,
-    tools: 'all',
-    remote: null,
+    force: false,
+    clear: false,
+    status: false,
+    help: false,
     targetRoot: null,
+    gitUrl: null,
   };
 
   for (let index = 0; index < argv.length; index++) {
@@ -323,12 +175,16 @@ function parseArgs(argv) {
       options.apply = true;
       continue;
     }
-    if (arg === '--overwrite') {
-      options.overwrite = true;
+    if (arg === '--force') {
+      options.force = true;
       continue;
     }
-    if (arg === '--skip-git') {
-      options.skipGit = true;
+    if (arg === '--clear') {
+      options.clear = true;
+      continue;
+    }
+    if (arg === '--status') {
+      options.status = true;
       continue;
     }
     if (arg === '--target') {
@@ -340,22 +196,13 @@ function parseArgs(argv) {
       options.targetRoot = arg.slice('--target='.length);
       continue;
     }
-    if (arg === '--remote') {
-      options.remote = readArgValue(argv, index, '--remote');
+    if (arg === '--url') {
+      options.gitUrl = readArgValue(argv, index, '--url');
       index++;
       continue;
     }
-    if (arg.startsWith('--remote=')) {
-      options.remote = arg.slice('--remote='.length);
-      continue;
-    }
-    if (arg === '--tools') {
-      options.tools = readArgValue(argv, index, '--tools');
-      index++;
-      continue;
-    }
-    if (arg.startsWith('--tools=')) {
-      options.tools = arg.slice('--tools='.length);
+    if (arg.startsWith('--url=')) {
+      options.gitUrl = arg.slice('--url='.length);
       continue;
     }
     if (!arg.startsWith('--') && !options.targetRoot) {
@@ -369,42 +216,67 @@ function parseArgs(argv) {
 }
 
 function printResult(result) {
-  const action = result.mode === 'dry-run' ? 'Would copy' : 'Copied';
   console.log(`Mode: ${result.mode}`);
-  console.log(`Source: ${result.sourceRoot}`);
-  console.log(`Target: ${result.targetRoot}`);
-  console.log(`${action} ${result.entries.length} scaffold file(s):`);
-  for (const entry of result.entries) {
-    console.log(`  - ${entry.targetRelativePath}`);
-  }
-
-  if (result.git.length) {
-    console.log('\nGit actions:');
-    for (const actionText of result.git) console.log(`  - ${actionText}`);
-  }
+  console.log(`Target folder: ${result.targetFolder}`);
+  console.log(`Git URL: ${result.gitUrl}`);
+  console.log(`State file: ${result.statePath}`);
 
   if (result.mode === 'dry-run') {
-    console.log('\nDry-run only. Re-run with --apply to write files.');
+    console.log('\nDry-run only. Re-run with --apply to clone and register the workspace.');
     return;
   }
 
-  console.log('\nNext: commit and push the bootstrap scaffold, then complete Step 1 repo governance.');
+  console.log(
+    '\nCloned and registered. Next: complete Step 1 (repo governance) against the target, ' +
+      'then run Steps 2–8 from this kit. Run /proj-init-cleanup after Step 8 merges.',
+  );
 }
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
+  const kitRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+
   if (options.help) {
     printUsage();
     return;
   }
-  if (!options.targetRoot) {
+
+  if (options.clear) {
+    const existing = await readState(kitRoot);
+    if (!existing) {
+      console.log('No initiation workspace registered. Nothing to clear.');
+      return;
+    }
+    await clearState(kitRoot);
+    console.log(`Cleared initiation workspace state for target: ${existing.targetFolder}`);
+    return;
+  }
+
+  if (options.status) {
+    const existing = await readState(kitRoot);
+    if (!existing) {
+      console.log('No initiation workspace registered. Run Step 0 to create one.');
+      return;
+    }
+    console.log(`Target folder: ${existing.targetFolder}`);
+    console.log(`Git URL: ${existing.gitUrl}`);
+    console.log(`Created: ${existing.createdAt}`);
+    return;
+  }
+
+  if (!options.targetRoot || !options.gitUrl) {
     printUsage();
     process.exitCode = 1;
     return;
   }
 
-  const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-  const result = await runBootstrap({ sourceRoot, ...options });
+  const result = await runBootstrap({
+    kitRoot,
+    targetRoot: options.targetRoot,
+    gitUrl: options.gitUrl,
+    apply: options.apply,
+    force: options.force,
+  });
   printResult(result);
 }
 

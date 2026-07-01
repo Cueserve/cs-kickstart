@@ -1,4 +1,4 @@
-# Step 5: Tech Stack
+# Step-05: Tech Stack
 
 **Output file:** `TECH-STACK.md`
 **Depends on:** `PRD.md` (Step 3), `ARCHITECTURE.md` (Step 4)

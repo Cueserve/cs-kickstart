@@ -1,4 +1,4 @@
-# Step 2: Product Concept
+# Step-02: Product Concept
 
 **Output file:** `PRODUCT.md`
 **Depends on:** nothing — this is the starting point

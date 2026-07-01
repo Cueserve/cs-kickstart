@@ -1,4 +1,4 @@
-# Step 6: AI Tool Guide
+# Step-06: AI Tool Guide
 
 **Output file:** `AI-TOOL-GUIDE.md` + one adapter file per AI tool in use on this project
 **Depends on:** `ARCHITECTURE.md` (Step 4), `TECH-STACK.md` (Step 5)

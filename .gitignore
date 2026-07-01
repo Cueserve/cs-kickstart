@@ -37,3 +37,6 @@ next-env.d.ts
 
 # graphify generated knowledge graph
 /graphify-out/
+
+# project-initiation control-plane state (operator-local target path)
+/.proj-init/

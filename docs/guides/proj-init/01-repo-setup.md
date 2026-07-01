@@ -1,10 +1,16 @@
-# Step 1: Repo Setup (Prerequisite)
+# Step-01: Repo Setup (Prerequisite)
 
 **Output:** `CONTRIBUTING.md` (governance layer) + branch protection (required on all plans) + required-reviewer policy (if your host and plan support it)
 **Depends on:** nothing — this runs before everything else
 **Required before:** Step 2 (Product Concept) — the approval gate must exist before the first PR/MR is opened
 
 ---
+
+## Target repository
+
+This step configures the **target repository** registered in Step 0, not this kit. Read `.proj-init/state.json` from this kit root and set `TARGET` to its `targetFolder`. If it is missing, stop and direct the operator to run Step 0 first.
+
+Everything this step produces — `CONTRIBUTING.md`, `CODEOWNERS`, branch protection, preflight evidence — is created in `$TARGET`. Run every git command as `git -C "$TARGET" …`, run every host CLI (`gh`, `az repos`, `glab`) from within `$TARGET`, and write every file under `$TARGET/`.
 
 ## Goal
 

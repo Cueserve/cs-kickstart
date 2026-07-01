@@ -2,6 +2,10 @@
 
 Use this any time reality diverges from one of the initiation documents. Pass the document name inline (e.g. `/proj-init-doc-update PRD.md`) or run `/proj-init-doc-update` and be asked.
 
+## Resolve the target
+
+Read `.proj-init/state.json` from this kit root and set `TARGET` to its `targetFolder`. If it is missing, print `No initiation workspace found. Run Step 0 (/proj-init-bootstrap) first.` and stop. Every git command, host CLI, and file path below is relative to `$TARGET` (run git as `git -C "$TARGET" …`, host CLIs from within `$TARGET`, and read/write documents under `$TARGET/`).
+
 ## Supported documents and their review gates
 
 | Document | Reviewer gate |
@@ -23,17 +27,17 @@ Then ask one question: *What changed?* (one or two sentences is enough.) Do not 
 
 ## 2. Preconditions — run before anything else
 
-1. **Document exists on `main`** — run `git show main:<DOCNAME>`.
+1. **Document exists on `main`** — run `git -C "$TARGET" show main:<DOCNAME>`.
    - Exit 0 → proceed.
    - Non-zero → **STOP.** Tell the user: "That document is not on `main` yet — complete initiation first."
 
-2. **Clean working tree** — run `git status --porcelain`.
+2. **Clean working tree** — run `git -C "$TARGET" status --porcelain`.
    - Empty output → proceed.
-   - Non-empty → **STOP.** Tell the user: "Uncommitted changes detected — commit or stash first."
+   - Non-empty → **STOP.** Tell the user: "Uncommitted changes detected in the target — commit or stash first."
 
 ## 3. Create the working branch
 
-Branch off `main`: `docs/update/<docname>` (e.g. `docs/update/prd`).
+In the target, branch off `main`: `git -C "$TARGET" checkout -b docs/update/<docname>` (e.g. `docs/update/prd`).
 
 If that branch already exists, ask the user whether to reuse it or create a new one. Do not reuse silently.
 
@@ -73,7 +77,7 @@ Dependency map:
 
 ### Create the reconciliation checklist file
 
-Write `.claude/reconciliation/<docname>-reconcile.md` with:
+Write `$TARGET/.claude/reconciliation/<docname>-reconcile.md` with:
 
 ```markdown
 # Reconciliation: <DOCNAME> — <date>
@@ -96,8 +100,8 @@ Include the checklist file in the same commit as the document update.
 
 ## 6. Commit
 
-Commit the updated file and the reconciliation checklist with:
-`docs: update <DOCNAME> — <one-line summary of what changed>`
+In the target, commit the updated file and the reconciliation checklist with:
+`git -C "$TARGET" commit` and message `docs: update <DOCNAME> — <one-line summary of what changed>`
 
 Never commit to `main`.
 
@@ -105,9 +109,9 @@ Never commit to `main`.
 
 Ask the user to confirm before pushing. On confirmation:
 
-- Push the branch and open a PR/MR targeting `main`.
+- Push the branch (`git -C "$TARGET" push -u origin docs/update/<docname>`) and open a PR/MR targeting `main` using the host CLI run from within `$TARGET`.
 - Title: `docs: update <DOCNAME> — <one-line summary>`
-- Body: what changed, why, which downstream documents are flagged, path to `.claude/reconciliation/<docname>-reconcile.md`, and the reviewer checklist from the document's step guide (`docs/guides/proj-init/`).
+- Body: what changed, why, which downstream documents are flagged, path to `$TARGET/.claude/reconciliation/<docname>-reconcile.md`, and the reviewer checklist from the document's step guide (`docs/guides/proj-init/` in this kit).
 - Reviewer: same gate as the original initiation step (see the table in Section 1).
 
 Remind the user: the document is only updated once the PR/MR is merged to `main`. Work through the reconciliation checklist afterward — one `/proj-init-doc-update <doc>` per flagged downstream document.

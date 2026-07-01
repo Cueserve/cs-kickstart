@@ -1,11 +1,11 @@
 # Project Initiation Guide — Overview
 
-This folder defines the sequence every new project follows before development begins. Step 0 bootstraps the initiation scaffold into the real target repository when needed. Steps 1–8 then run in order; do not skip or reorder them.
+This folder defines the sequence every new project follows before development begins. This kit is the control plane: Step 0 clones the target repository and registers it, and Steps 1–8 run from this kit against that clone. Run the steps in order; do not skip or reorder them.
 
 ## Workflow
 
 ```text
-Step 0: Bootstrap Target Repo (only when scaffold is not already present)
+Step 0: Register Target Repo (clone + .proj-init/state.json)
    │
    ▼
 Step 1: Repo Setup (the gate)
@@ -21,7 +21,7 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 
 | Step | Claude Code | GitHub Copilot | Output | Approved by (PR/MR gate) | Purpose |
 | ---- | ----------- | -------------- | ------ | ------------------------ | ------- |
-| 0 | `/proj-init-bootstrap` | `.github/prompts/proj-init-bootstrap.prompt.md` | initiation scaffold in target repo/folder | Operator review before commit | Copy the reusable initiation machinery into the real project repo without creating product code |
+| 0 | `/proj-init-bootstrap` | `.github/prompts/proj-init-bootstrap.prompt.md` | cloned target repo + `.proj-init/state.json` | Operator review before apply | Clone the target repo and register it so later steps operate on it |
 | 1 | manual — [01-repo-setup.md](01-repo-setup.md) | manual — [01-repo-setup.md](01-repo-setup.md) | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it | Architect | Stand up the approval gate before any doc is written |
 | 2 | `/proj-init-product` | `.github/prompts/proj-init-product.prompt.md` | `PRODUCT.md` | Product Owner | Define what we are building and why |
 | 3 | `/proj-init-prd` | `.github/prompts/proj-init-prd.prompt.md` | `PRD.md` | Product Owner | Translate concept into testable requirements |
@@ -30,24 +30,24 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 | 6 | `/proj-init-aitoolguide` | `.github/prompts/proj-init-aitoolguide.prompt.md` | `AI-TOOL-GUIDE.md` + adapter files | Architect | Define rules and constraints for all AI tools |
 | 7 | `/proj-init-readme` | `.github/prompts/proj-init-readme.prompt.md` | `README.md` | Architect | Entry point: setup, env config, and how to run |
 | 8 | `/proj-init-backlog` | `.github/prompts/proj-init-backlog.prompt.md` | `BACKLOG.md` + host issues/work items | Product Owner | Seed the issue tracker; bridge initiation to execution |
+| — | `/proj-init-cleanup` | `.github/prompts/proj-init-cleanup.prompt.md` | workspace unregistered | Operator confirm | Unregister the workspace after Step 8 merges |
 
-Step 0 is maintained in [00-bootstrap-target-repo.md](00-bootstrap-target-repo.md) and implemented by `scripts/bootstrap-target-repo.mjs`. The document-producing workflow for Steps 2–8 is maintained in one place: [_run-step.md](_run-step.md). Step metadata is maintained in [_steps.yml](_steps.yml). The output structure of each generated document is fixed by its template in [templates/](templates/), with shared writing rules in [templates/_writing-rules.md](templates/_writing-rules.md). Claude commands and Copilot prompts are adapters only. Post-init utility workflows live in [doc-status.md](doc-status.md) and [doc-update.md](doc-update.md).
+Step 0 is maintained in [00-bootstrap-target-repo.md](00-bootstrap-target-repo.md) and implemented by `scripts/bootstrap-target-repo.mjs`. The document-producing workflow for Steps 2–8 is maintained in one place: [_run-step.md](_run-step.md) — it resolves the registered target and runs every git operation and output write against it. Step metadata is maintained in [_steps.yml](_steps.yml). The output structure of each generated document is fixed by its template in [templates/](templates/), with shared writing rules in [templates/_writing-rules.md](templates/_writing-rules.md). Claude commands and Copilot prompts are adapters only. Post-init utility workflows live in [doc-status.md](doc-status.md), [doc-update.md](doc-update.md), and [cleanup.md](cleanup.md).
 
 ## Check where you are
 
 Run `/proj-init-doc-status` in Claude Code or `.github/prompts/proj-init-doc-status.prompt.md` in GitHub Copilot at any time to see which steps are merged, which PR is open, and what to run next. Read-only — nothing is written or pushed.
 
-## Bootstrap a target repo
+## Register a target repo
 
-Run Step 0 only when the target repository or local folder does not already contain the initiation scaffold.
+Run Step 0 once, before Step 1, to clone the target repo and register it in `.proj-init/state.json`.
 
-1. **Dry-run first** — Claude Code: `/proj-init-bootstrap`; GitHub Copilot: `.github/prompts/proj-init-bootstrap.prompt.md`; any other tool: read [00-bootstrap-target-repo.md](00-bootstrap-target-repo.md). The underlying script is `node scripts/bootstrap-target-repo.mjs --target <path>`.
-2. **Review the copied-file list** — confirm it contains initiation scaffold only, not app source or stack-specific files.
-3. **Apply** — re-run with `--apply` after the operator approves the file list.
-4. **Commit the bootstrap baseline to `main`** in the target repo.
-5. **Start Step 1** — repo governance is still required before Step 2.
+1. **Dry-run first** — Claude Code: `/proj-init-bootstrap`; GitHub Copilot: `.github/prompts/proj-init-bootstrap.prompt.md`; any other tool: read [00-bootstrap-target-repo.md](00-bootstrap-target-repo.md). The underlying script is `node scripts/bootstrap-target-repo.mjs --target <folder> --url <git-url>`.
+2. **Confirm the target folder and git URL** — the folder must be empty or non-existent; the URL is the target repo's remote.
+3. **Apply** — re-run with `--apply` to clone the target and write `.proj-init/state.json`.
+4. **Start Step 1** — repo governance is set up in the target and is still required before Step 2.
 
-Step 0 does not create source-of-truth documents, choose technology, create product code, push branches, or open PRs.
+Step 0 does not copy kit files into the target, create source-of-truth documents, choose technology, create product code, commit, or push.
 
 ## How to run a step
 
@@ -83,13 +83,13 @@ To avoid approval bottlenecks, Step 1 must define a backup path in `CONTRIBUTING
 ## Key Rules
 
 - Follow the steps in order. Each document derives from the one before it.
-- Run Step 0 before Step 1 only when the scaffold is not already present in the target repo.
+- Run Step 0 before Step 1 to clone the target repo and register it. Every later step reads that registration and operates on the clone.
 - A document becomes final only by merging its PR/MR to `main` — past the required reviewer.
 - If a document changes, run `/proj-init-doc-update`. It now generates a reconciliation checklist automatically for all downstream documents that may be impacted.
 - Sandbox spikes are allowed only after Step 5 is merged, on isolated spike branches, and must not merge to `main`.
 - Production implementation work starts only after Step 6 is merged.
 - Step 7 is required before wider repository sharing.
-- Step 8 is required before sprint planning and development kickoff. Initiation is declared complete only when Step 8 is merged.
+- Step 8 is required before sprint planning and development kickoff. Initiation is declared complete only when Step 8 is merged. Run `/proj-init-cleanup` afterward to unregister the workspace from this kit.
 - These documents are the single source of truth for their respective areas. Always refer back to them when making decisions or writing code.
 
 ---

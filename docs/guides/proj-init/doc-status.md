@@ -2,18 +2,22 @@
 
 Read-only. No files written, no branches created. Run this any time to see where initiation stands.
 
+## Resolve the target
+
+Read `.proj-init/state.json` from this kit root and set `TARGET` to its `targetFolder`. If it is missing, print `No initiation workspace found. Run Step 0 (/proj-init-bootstrap) first.` and stop. All git and host-CLI checks below run against `$TARGET`.
+
 ## What to check
 
 Run all checks silently first, then render the status table once. Do not print intermediate command output.
 
 ### Step 1 — Repo governance
 
-- Run `git show main:CONTRIBUTING.md` — exit 0 = governance in place.
+- Run `git -C "$TARGET" show main:CONTRIBUTING.md` — exit 0 = governance in place.
 - If exit 0, also check that `CONTRIBUTING.md` contains branch protection evidence (look for the preflight block written by Step 1). If the file exists but the evidence block is missing, mark as `partial`.
 
 ### Steps 2–8 — Documents on `main`
 
-For each document, run `git show main:<doc>` and capture the exit code:
+For each document, run `git -C "$TARGET" show main:<doc>` and capture the exit code:
 
 | Step | Document |
 | ---- | -------- |
@@ -29,11 +33,11 @@ Exit 0 = merged. Non-zero = not on `main`.
 
 ### In-progress branches
 
-Run `git fetch --prune` then `git branch -r` and collect any branch matching `init/*` (e.g. `origin/init/prd`).
+Run `git -C "$TARGET" fetch --prune` then `git -C "$TARGET" branch -r` and collect any branch matching `init/*` (e.g. `origin/init/prd`).
 
 ### Open PRs
 
-Try each host CLI in order and use the first that succeeds:
+Try each host CLI in order, run from within `$TARGET`, and use the first that succeeds:
 
 - **GitHub**: `gh pr list --base main --state open --json number,title,headRefName,author` — filter results to entries where `headRefName` starts with `init/`.
 - **ADO**: `az repos pr list --status active` — filter to PRs where the source branch starts with `init/`.
@@ -76,7 +80,7 @@ Example output format:
 After the table, always print one `**Next:**` line:
 
 - If any step before the first gap is `PR open` or `branch open` → state that it must be merged before the next step can start, and name the blocked step.
-- If all steps are merged → print "Initiation complete. Run `/proj-init-doc-update <docname>` if any document diverges from reality."
+- If all steps are merged → print "Initiation complete. Run `/proj-init-cleanup` to unregister the workspace, and `/proj-init-doc-update <docname>` if any document diverges from reality."
 - Otherwise → name the lowest-numbered step that is `not started` and the command to run it.
 
 ## Nothing else
