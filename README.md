@@ -40,7 +40,7 @@ Two one-time setup steps come first, then every document-producing step repeats 
 1. **Branch** off `main` (`init/<step>`).
 2. **Produce the document** — run the step's `/proj-init-*` command. Any other AI tool: open `docs/guides/proj-init/_run-step.md`, the step entry in `docs/guides/proj-init/_steps.yml`, and the step guide in your AI chat.
 3. **Open a PR.**
-4. **The CODEOWNER reviews and merges** — merge = finalized.
+4. **Complete the self-review checklist, then merge** — merge = finalized.
 5. **The next step branches off the updated `main`** — command adapters can verify this automatically; otherwise check manually that the upstream document is merged before starting.
 
 No draft files, no status flags: a doc on a branch is a draft, a doc on `main` is final.
@@ -50,7 +50,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 | Step | Run | Produces |
 | ---- | --- | -------- |
 | 0 | `/proj-init-bootstrap` | cloned target repo + `.proj-init/state.json` registration |
-| 1 | `/proj-init-repo-setup` | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it |
+| 1 | `/proj-init-repo-setup` | `CONTRIBUTING.md` (governance) + branch protection if plan supports it |
 | 2 | `/proj-init-product` | `PRODUCT.md` |
 | 3 | `/proj-init-prd` | `PRD.md` |
 | 4 | `/proj-init-architecture` | `ARCHITECTURE.md` |
@@ -75,8 +75,6 @@ This kit (the control plane):
 docs/guides/proj-init/           ← shared runner, utility workflows, step registry, and step-by-step guides
 docs/guides/proj-init/templates/ ← output templates per generated doc + shared writing rules and references
 scripts/check-template-drift.mjs ← guard: template headings must match each guide's section map
-scripts/check-branch-policy-enforcement.mjs    ← guard: recorded Step-01 enforcement mode must match what the host actually enforces
-scripts/branch-policy-enforcement/ ← per-host approval-gate capability probes (github, azure-devops, gitlab, bitbucket) + shared util
 scripts/bootstrap-target-repo.mjs ← Step-00 script: clone the target repo and register it in .proj-init/state.json
 .claude/commands/                ← thin /proj-init-* adapters + /proj-init-doc-update, /proj-init-doc-status, /proj-init-cleanup
 .github/prompts/                 ← thin Copilot prompt adapters for /proj-init-* steps and doc utilities

@@ -58,7 +58,7 @@ Each check → `PASS` / `GAP` / `FAIL` with a `file:line` or `file:section` anch
 - No step depends on in-memory carry from a prior session; all resume signal is on disk (state.json + git).
 - **Named risk checks (mark GAP unless enforcement found):**
   - `state.json` gitignored + operator-local — resume breaks across machines/operators. Is single-box/single-operator stated as a precondition anywhere?
-  - Free-plan hosts can't enforce required-reviewer — "PR merge = final" is unenforced — the state signal can lie. Does Step-01 detect plan capability and warn, or silently assume enforcement?
+  - This kit is solo / process-enforced by design — "PR merge = final" means the author completed the self-review checklist, not that a host blocked an unapproved merge. Is Step-01 honest about this (documents the checklist as the gate, no false host-enforced/required-reviewer claim), rather than implying enforcement it does not have?
   - Idempotency: re-running a step whose PR is already open or already merged — is the behavior specified, or undefined?
 
 ### D5 — Token optimization

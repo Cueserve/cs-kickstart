@@ -22,7 +22,7 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 | Step | Run | Output | Approved by (PR/MR gate) | Purpose |
 | ---- | --- | ------ | ------------------------ | ------- |
 | 0 | `/proj-init-bootstrap` | cloned target repo + `.proj-init/state.json` | Operator review before apply | Clone the target repo and register it so later steps operate on it |
-| 1 | `/proj-init-repo-setup` | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it | Architect | Stand up the approval gate before any doc is written |
+| 1 | `/proj-init-repo-setup` | `CONTRIBUTING.md` (governance) + branch protection if plan supports it | Architect | Stand up the branching convention and self-review gate before any doc is written |
 | 2 | `/proj-init-product` | `PRODUCT.md` | Product Owner | Define what we are building and why |
 | 3 | `/proj-init-prd` | `PRD.md` | Product Owner | Translate concept into testable requirements |
 | 4 | `/proj-init-architecture` | `ARCHITECTURE.md` | Architect + PO | Define system structure and design decisions |
@@ -60,26 +60,16 @@ Run exactly one step per session. Before running any step command, run `/proj-in
 1. **Branch** off `main`: `init/<step>` (e.g. `init/product`).
 2. **Produce the document** — run the step's `/proj-init-*` command. Any other AI tool: open `_run-step.md`, the step entry in `_steps.yml`, and the step guide in your AI chat.
 3. **Open a PR/MR.**
-4. **The required reviewer reviews and merges** — merge = finalized. Product docs are gated by the product owner; engineering docs by the architect.
+4. **Complete the self-review checklist, then merge** — merge = finalized. Solo / process-enforced: the author is both product owner and architect and self-certifies before merging.
 5. **The next step branches off the updated `main`.** Command adapters can verify this automatically; otherwise confirm the upstream document is merged before starting.
 
 No draft files, no status flags: a doc on a branch is a draft, a doc on `main` is final.
 
 ## Who does what
 
-- **Product Owner** — runs and owns Step-02 through Step-03 and Step-08, co-reviews Step-04, and approves every product-document PR/MR.
-- **Architect / Tech Lead** — runs Step-01 and Step-04 through Step-07, and approves every engineering-document PR/MR.
-- **Small teams and solo projects** — one person may hold both roles. The same person who wrote the document should still not merge it immediately: use the process-enforced self-review checklist in [01-repo-setup.md](01-repo-setup.md) as the gate substitute.
-- **No self-finalizing (preferred)** — when a second reviewer is available, they must approve before merge. When they are not, the self-review checklist is the fallback — never a direct push.
-
-## Approval continuity (required in Step-01)
-
-To avoid approval bottlenecks, Step-01 must define a backup path in `CONTRIBUTING.md`:
-
-- Name one primary and one backup approver for the Product Owner gate.
-- Name one primary and one backup approver for the Architect gate.
-- Set a review SLA: first response within one business day.
-- Escalation rule: if the primary approver misses SLA, assign the backup approver. If both are unavailable for one more business day, escalate to the repo admin/project owner for temporary delegation.
+- **Product Owner hat** — owns Step-02, Step-03, and Step-08, and co-authors Step-04.
+- **Architect hat** — owns Step-01 and Step-04 through Step-07.
+- **Solo / process-enforced** — one person wears both hats. Adopt the hat the step calls for while authoring, then complete the self-review checklist in [01-repo-setup.md](01-repo-setup.md) before merging — never a direct push to `main`.
 
 ## Key Rules
 

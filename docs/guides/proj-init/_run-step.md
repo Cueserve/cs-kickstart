@@ -62,10 +62,9 @@ Run these checks against the target (`$TARGET`) before creating a branch or writ
    - Exit 0 (already on `main`): **STOP**. The step is already complete. Tell the operator the document is final and to run `/proj-init-doc-update <document>` to revise it instead of re-running the step. Do not branch or regenerate.
    - `replacesExisting: true` (e.g. Step-07, which overwrites the target's pre-existing README): skip this check — the file's presence on `main` is expected and is not proof the step ran. Rely on the §3 branch check and operator confirmation.
 
-4. **Step-01 gate** - verify Step-01 preflight evidence in `$TARGET/CONTRIBUTING.md`, then run `node scripts/check-branch-policy-enforcement.mjs --verify` (from this kit; it targets `$TARGET`). This re-probes the host — it does not just confirm branch protection exists.
-   - Exit 0 (recorded mode matches host capability): proceed. A recorded `process-enforced` mode passes here — the self-review checklist is the gate.
-   - Exit 1 (evidence missing, or recorded `host-enforced` but the host no longer enforces a required reviewer): **STOP**. The "final on `main`" signal cannot be trusted until the recorded mode and the host agree — send the operator back to Step-01 to reconcile it.
-   - Exit 2 (capability undetermined — CLI missing or not authenticated): **STOP**. Do not proceed on an undetermined probe; resolve the tooling/auth issue first.
+4. **Step-01 gate** - confirm the governance layer exists on the target's `main`: run `git -C "$TARGET" show main:CONTRIBUTING.md`.
+   - Exit 0: proceed. The self-review checklist in `CONTRIBUTING.md` is the gate.
+   - Non-zero: **STOP**. Send the operator back to Step-01 — the branching convention and self-review gate must be on `main` before any document is produced.
 
 5. **Additional step preconditions** - apply any `specialPreconditions` from `_steps.yml` and any preconditions in the step guide.
 
@@ -76,9 +75,7 @@ Present the precondition results as a checklist and wait for an explicit `yes` b
 The checklist must include:
 
 - Operator role matches the step's `owner`, and the corresponding role context file has been loaded.
-- Reviewer gate matches the step's `reviewer`.
-- Step-01 gate is in place and machine-validated.
-- Approval continuity is defined in `CONTRIBUTING.md`.
+- Step-01 governance (`CONTRIBUTING.md`) is on `main`.
 - Upstream documents are final on `main`.
 - This step's output is not already final on `main`, or the step is marked `replacesExisting: true`.
 - Working tree is clean and work will branch from an up-to-date `main`.

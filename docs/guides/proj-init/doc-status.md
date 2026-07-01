@@ -13,8 +13,7 @@ Run all checks silently first, then render the status table once. Do not print i
 ### Step-01 — Repo governance
 
 - Run `git -C "$TARGET" show main:CONTRIBUTING.md` — exit 0 = governance in place.
-- If exit 0, also check that `CONTRIBUTING.md` contains branch protection evidence (look for the preflight block written by Step-01). If the file exists but the evidence block is missing, mark as `partial`.
-- From the preflight block, read the recorded enforcement mode. If it is `process-enforced`, note `process-enforced` in the Step-01 detail cell: a later `✓ merged` then means the doc is on `main`, not that a second reviewer approved it — the mode qualifies how much the merge signal proves.
+- This kit is solo / process-enforced: a `✓ merged` Step-01 means the governance layer (branching convention + self-review checklist) is on `main`. There is no host-enforced reviewer to verify.
 
 ### Step-02 through Step-08 — Documents on `main`
 
@@ -55,7 +54,6 @@ Render a single Markdown table with one row per step. Use the status symbols bel
 | `⟳ PR open` | A PR/MR targeting `main` is open for this step's branch |
 | `⊙ branch open` | Branch exists but no open PR yet |
 | `— not started` | No branch, no document on `main` |
-| `⚠ partial` | Step-01 only: CONTRIBUTING.md exists but preflight evidence block is missing |
 
 Example output format:
 
@@ -64,7 +62,7 @@ Example output format:
 
 | Step | Document / Gate | Status | Detail |
 |------|-----------------|--------|--------|
-| 1    | Repo governance | ✓ merged | CONTRIBUTING.md with preflight evidence on `main` |
+| 1    | Repo governance | ✓ merged | CONTRIBUTING.md on `main` |
 | 2    | PRODUCT.md      | ✓ merged | |
 | 3    | PRD.md          | ✓ merged | |
 | 4    | ARCHITECTURE.md | ⟳ PR open | PR #14 — "docs: add ARCHITECTURE.md (Step-04)" |
