@@ -91,14 +91,38 @@ Bitbucket has no official PR CLI. Validate via REST API or web UI settings:
 - Merge checks require PR review.
 - In host-enforced mode, required/default reviewers are configured.
 
+### Capability probe — verify the mode you claim is the mode you have
+
+Branch protection existing does **not** prove a required reviewer is enforced. A doc landing on `main` is only proof of independent review when the host mechanically blocks an unapproved merge. This check is mechanical — do not eyeball it:
+
+```text
+node scripts/check-branch-policy-enforcement.mjs --probe
+```
+
+The script detects the host from the target's `origin` remote, asks the host what it actually enforces, and prints a `STEP-01-ENFORCEMENT` evidence block to paste into `CONTRIBUTING.md`. If you claim host-enforced but the host cannot enforce a required reviewer, it **refuses** (exit 1) and records nothing. Undetermined results — CLI missing, not authenticated — exit 2; never proceed on an undetermined probe. Pass `--mode process-enforced` to record process-enforced explicitly even where host-enforced is available.
+
+Under the hood it runs, per host, exactly the check below — the same probe you would run by hand as a fallback:
+
+- **GitHub** — from `gh api repos/<owner>/<repo>/branches/main/protection`, read `required_pull_request_reviews`. Host-enforced requires `required_approving_review_count >= 1` (and, for path gating, `require_code_owner_reviews: true`). On free-plan **private** repos the protection API is unavailable (`403`/`404`) — host-enforced is not possible; the true capability is process-enforced.
+- **Azure DevOps** — from `az repos policy list --branch main`, host-enforced requires a **blocking** minimum-approver policy (`isBlocking: true`, `minimumApproverCount >= 1`) on `main`.
+- **GitLab** — from `glab api projects/<project-id>/approval_rules`, host-enforced requires `approvals_required >= 1`; Code Owner approval additionally requires Premium.
+- **Bitbucket** — host-enforced requires configured required/default reviewers with a merge check (Standard/Premium). Basic branch restrictions alone are process-enforced only.
+
+Rule: the enforcement mode recorded in `CONTRIBUTING.md` MUST equal the probe result.
+
+- Probe shows a required reviewer is enforced → record `host-enforced`.
+- Probe shows it is not enforced (free plan, missing policy, API unavailable) → you may not record `host-enforced`. Record `process-enforced` and make the self-review checklist the gate.
+- If the operator asked for host-enforced but the probe shows it is unavailable, **STOP** and tell them: the plan cannot enforce a required reviewer, so either upgrade the plan / configure the policy, or proceed in process-enforced mode with the self-review checklist. Never record a mode the host does not back — a false `host-enforced` makes every later "doc on `main` = final" signal unverifiable.
+
 ### Evidence required
 
 - Save a short "Step-01 preflight evidence" block in `CONTRIBUTING.md` with:
   - host name,
   - check timestamp,
   - command(s) run,
-  - pass/fail result.
-- Every `/proj-init-*` run must verify this evidence still matches current host settings.
+  - pass/fail result,
+  - the `STEP-01-ENFORCEMENT` block emitted by `check-branch-policy-enforcement.mjs --probe` (records host, mode, capability, and timestamp) — the recorded mode and probed capability must agree.
+- Every `/proj-init-*` run must re-verify by running `node scripts/check-branch-policy-enforcement.mjs --verify` against the target — it re-probes the host and fails (exit 1) if the recorded mode no longer matches, so a stale `host-enforced` claim cannot slip through.
 
 ## Enforcement modes
 
@@ -180,7 +204,7 @@ The governance layer covers:
 - **Approval gate** — in host-enforced mode: a PR/MR cannot merge without the required reviewer (product owner for product docs, architect for governance docs). In process-enforced mode: the author completes the self-review checklist before merging.
 - **Approval continuity** — define primary and backup approvers for product and architect gates, review SLA (first response within one business day), and escalation/delegation path if approvers are unavailable.
 - **Step-01 preflight evidence** — record the host checks and latest validation timestamp.
-- **Enforcement mode** — state which mode this project uses (host-enforced or process-enforced) and why.
+- **Enforcement mode** — state which mode this project uses (host-enforced or process-enforced), why, and the capability probe result that backs it. The recorded mode must match the probe.
 - **Commit convention** — Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, …). Matches `06-ai-tool-guide.md`.
 - **Direct-push rule** — never push to `main`; no force-pushes to shared branches.
 

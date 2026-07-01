@@ -62,9 +62,10 @@ Run these checks against the target (`$TARGET`) before creating a branch or writ
    - Exit 0 (already on `main`): **STOP**. The step is already complete. Tell the operator the document is final and to run `/proj-init-doc-update <document>` to revise it instead of re-running the step. Do not branch or regenerate.
    - `replacesExisting: true` (e.g. Step-07, which overwrites the target's pre-existing README): skip this check — the file's presence on `main` is expected and is not proof the step ran. Rely on the §3 branch check and operator confirmation.
 
-4. **Step-01 gate** - verify Step-01 preflight evidence in `$TARGET/CONTRIBUTING.md` and re-run the relevant host checks from `docs/guides/proj-init/01-repo-setup.md`.
-   - Evidence present and host checks pass: proceed.
-   - Evidence missing, stale, or checks fail: **STOP** and direct the operator to complete Step-01.
+4. **Step-01 gate** - verify Step-01 preflight evidence in `$TARGET/CONTRIBUTING.md`, then run `node scripts/check-branch-policy-enforcement.mjs --verify` (from this kit; it targets `$TARGET`). This re-probes the host — it does not just confirm branch protection exists.
+   - Exit 0 (recorded mode matches host capability): proceed. A recorded `process-enforced` mode passes here — the self-review checklist is the gate.
+   - Exit 1 (evidence missing, or recorded `host-enforced` but the host no longer enforces a required reviewer): **STOP**. The "final on `main`" signal cannot be trusted until the recorded mode and the host agree — send the operator back to Step-01 to reconcile it.
+   - Exit 2 (capability undetermined — CLI missing or not authenticated): **STOP**. Do not proceed on an undetermined probe; resolve the tooling/auth issue first.
 
 5. **Additional step preconditions** - apply any `specialPreconditions` from `_steps.yml` and any preconditions in the step guide.
 

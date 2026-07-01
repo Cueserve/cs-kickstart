@@ -35,6 +35,8 @@ steps:
     commitMessage: "docs: add repo governance baseline (Step-01)"
     prSummary: "Summarize governance mode, branch protection validation, and include the Step-01 checklist evidence."
     finalReminder: "Repo governance becomes final only when the Architect approves and merges the PR/MR."
+    specialActions:
+      - Run `node scripts/check-branch-policy-enforcement.mjs --probe` to determine the host's true enforcement capability, and paste the emitted STEP-01-ENFORCEMENT block into CONTRIBUTING.md. Never record host-enforced if the probe refuses it (exit 1) or cannot determine capability (exit 2).
 
   - id: 2
     command: proj-init-product

@@ -1,6 +1,6 @@
 # Product Owner Role Context
 
-> Loaded automatically by `_run-step.md` for Steps 2, 3, and 8.
+> Loaded automatically by `_run-step.md` for Step-02, Step-03, and Step-08.
 > Co-reviewer for Step-04 (ARCHITECTURE.md).
 
 ---

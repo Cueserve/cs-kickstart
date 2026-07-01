@@ -75,6 +75,8 @@ This kit (the control plane):
 docs/guides/proj-init/           ← shared runner, utility workflows, step registry, and step-by-step guides
 docs/guides/proj-init/templates/ ← output templates per generated doc + shared writing rules and references
 scripts/check-template-drift.mjs ← guard: template headings must match each guide's section map
+scripts/check-branch-policy-enforcement.mjs    ← guard: recorded Step-01 enforcement mode must match what the host actually enforces
+scripts/branch-policy-enforcement/ ← per-host approval-gate capability probes (github, azure-devops, gitlab, bitbucket) + shared util
 scripts/bootstrap-target-repo.mjs ← Step-00 script: clone the target repo and register it in .proj-init/state.json
 .claude/commands/                ← thin /proj-init-* adapters + /proj-init-doc-update, /proj-init-doc-status, /proj-init-cleanup
 .github/prompts/                 ← thin Copilot prompt adapters for /proj-init-* steps and doc utilities
@@ -87,7 +89,7 @@ PRODUCT.md                       ← product concept (Step-02)
 PRD.md                           ← requirements (Step-03)
 ARCHITECTURE.md                  ← system design (Step-04)
 TECH-STACK.md                    ← approved technologies (Step-05)
-CONTRIBUTING.md                  ← governance + tooling rules (Steps 1 and 5)
+CONTRIBUTING.md                  ← governance + tooling rules (Step-01 and Step-05)
 AI-TOOL-GUIDE.md                 ← AI tool rules shared across all tools (Step-06)
 CLAUDE.md                        ← Claude Code adapter, if in use (Step-06)
 .github/copilot-instructions.md  ← Copilot adapter, if in use (Step-06)
