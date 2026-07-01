@@ -12,17 +12,17 @@ Before writing any code, register your target repo (Step 0), then run the Projec
 
 **→ [Project Initiation Guide](docs/guides/proj-init/_overview.md)**
 
-Start with **Step 0**. It clones your target repository into a local folder and registers it in `.proj-init/state.json`, so every later step operates on that clone. It does not copy any kit files into the target, create product code, or choose a stack. **Claude Code users** run `/proj-init-bootstrap`. **GitHub Copilot users** run `.github/prompts/proj-init-bootstrap.prompt.md`. Other tools use [Step 0](docs/guides/proj-init/00-bootstrap.md) directly.
+Start with **Step 0**. It clones your target repository into a local folder and registers it in `.proj-init/state.json`, so every later step operates on that clone. It does not copy any kit files into the target, create product code, or choose a stack. Run `/proj-init-bootstrap` (or use [Step 0](docs/guides/proj-init/00-bootstrap.md) directly in another AI tool).
 
-After Step 0, the process walks through Steps 1–8. Steps 2–8 each produce one source-of-truth document, finalized by a pull request. **Claude Code users** run the `/proj-init-*` slash commands. **GitHub Copilot users** run the matching prompt files from `.github/prompts/`. Both tool paths load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
+After Step 0, the process walks through Steps 1–8. Steps 2–8 each produce one source-of-truth document, finalized by a pull request. Use the `/proj-init-*` commands as the primary interface. All adapters load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
 
-Run exactly one step per session. Start each step session by running `/proj-init-doc-status` (or `.github/prompts/proj-init-doc-status.prompt.md`) before executing the step command.
+Run exactly one step per session. Start each step session by running `/proj-init-doc-status` before executing the step command.
 
 ## Prerequisites
 
 - **Git** and a repository on a supported **Git host** — GitHub, Azure DevOps, Bitbucket, or GitLab. Step 1 configures branch governance to match your host, plan, and team size — see [Step 1](docs/guides/proj-init/01-repo-setup.md) for what's available on free vs. paid plans.
 - Your host's **PR/MR CLI** — `gh` (GitHub), `az repos` (Azure DevOps), `glab` (GitLab) — or the host's web UI. Bitbucket has no official CLI; use the web UI or the third-party `atlassian-cli`. Without a CLI, push the branch and open the PR/MR manually.
-- An AI coding assistant — Claude Code, GitHub Copilot Chat, or any tool your team or client uses. Claude Code users get `/proj-init-*` slash commands, Copilot users get `.github/prompts/proj-init-*.prompt.md` prompt adapters, and other tools use the shared runner, step registry, and step guides directly.
+- An AI coding assistant — Claude Code, GitHub Copilot Chat, or any tool your team or client uses. Use `/proj-init-*` as the primary interface; adapters point to the same shared workflow.
 
 ---
 
@@ -32,37 +32,39 @@ Two one-time setup steps come first, then every document-producing step repeats 
 
 **Once, up front:**
 
-- **Step 0 — Register the target repo**: run `/proj-init-bootstrap`, `.github/prompts/proj-init-bootstrap.prompt.md`, or `node scripts/bootstrap-target-repo.mjs --target <folder> --url <git-url> --apply` to clone the target repo and register it in `.proj-init/state.json`.
+- **Step 0 — Register the target repo**: run `/proj-init-bootstrap` or `node scripts/bootstrap-target-repo.mjs --target <folder> --url <git-url> --apply` to clone the target repo and register it in `.proj-init/state.json`.
 - **Step 1 — Set up governance** (in the target): branch protection and the approval gate, before any document is written.
 
 **Then, for each document-producing step (2–8):**
 
 1. **Branch** off `main` (`init/<step>`).
-2. **Produce the document** — Claude Code: run the step's `/proj-init-*` command. GitHub Copilot: run the matching `.github/prompts/proj-init-*.prompt.md` prompt. Any other AI tool: open `docs/guides/proj-init/_run-step.md`, the step entry in `docs/guides/proj-init/_steps.yml`, and the step guide in your AI chat.
+2. **Produce the document** — run the step's `/proj-init-*` command. Any other AI tool: open `docs/guides/proj-init/_run-step.md`, the step entry in `docs/guides/proj-init/_steps.yml`, and the step guide in your AI chat.
 3. **Open a PR.**
 4. **The CODEOWNER reviews and merges** — merge = finalized.
-5. **The next step branches off the updated `main`** — Claude Code commands verify this automatically; other tools check manually that the upstream document is merged before starting.
+5. **The next step branches off the updated `main`** — command adapters can verify this automatically; otherwise check manually that the upstream document is merged before starting.
 
 No draft files, no status flags: a doc on a branch is a draft, a doc on `main` is final.
 
 ## The Steps
 
-| Step | Claude Code | GitHub Copilot | Produces |
-| ---- | ----------- | -------------- | -------- |
-| 0 | `/proj-init-bootstrap` | `.github/prompts/proj-init-bootstrap.prompt.md` | cloned target repo + `.proj-init/state.json` registration |
-| 1 | `/proj-init-repo-setup` | `.github/prompts/proj-init-repo-setup.prompt.md` | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it |
-| 2 | `/proj-init-product` | `.github/prompts/proj-init-product.prompt.md` | `PRODUCT.md` |
-| 3 | `/proj-init-prd` | `.github/prompts/proj-init-prd.prompt.md` | `PRD.md` |
-| 4 | `/proj-init-architecture` | `.github/prompts/proj-init-architecture.prompt.md` | `ARCHITECTURE.md` |
-| 5 | `/proj-init-techstack` | `.github/prompts/proj-init-techstack.prompt.md` | `TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) |
-| 6 | `/proj-init-aitoolguide` | `.github/prompts/proj-init-aitoolguide.prompt.md` | `AI-TOOL-GUIDE.md` + one adapter per AI tool in use (e.g. `CLAUDE.md`, `.github/copilot-instructions.md`) |
-| 7 | `/proj-init-readme` | `.github/prompts/proj-init-readme.prompt.md` | the target's project `README.md` |
-| 8 | `/proj-init-backlog` | `.github/prompts/proj-init-backlog.prompt.md` | `BACKLOG.md` + host issues/work items |
-| — | `/proj-init-cleanup` | `.github/prompts/proj-init-cleanup.prompt.md` | unregisters the workspace after Step 8 merges |
+| Step | Run | Produces |
+| ---- | --- | -------- |
+| 0 | `/proj-init-bootstrap` | cloned target repo + `.proj-init/state.json` registration |
+| 1 | `/proj-init-repo-setup` | branch protection + `CONTRIBUTING.md` (governance); required-reviewer policy if plan supports it |
+| 2 | `/proj-init-product` | `PRODUCT.md` |
+| 3 | `/proj-init-prd` | `PRD.md` |
+| 4 | `/proj-init-architecture` | `ARCHITECTURE.md` |
+| 5 | `/proj-init-techstack` | `TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) |
+| 6 | `/proj-init-aitoolguide` | `AI-TOOL-GUIDE.md` + one adapter per AI tool in use (e.g. `CLAUDE.md`, `.github/copilot-instructions.md`) |
+| 7 | `/proj-init-readme` | the target's project `README.md` |
+| 8 | `/proj-init-backlog` | `BACKLOG.md` + host issues/work items |
+| — | `/proj-init-cleanup` | unregisters the workspace after Step 8 merges |
 
-Steps 2–8 write their output into the **registered target repo**, not this kit. Claude commands and Copilot prompts are thin adapters. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
+Steps 2–8 write their output into the **registered target repo**, not this kit. Adapters are thin wrappers over the same workflow. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
 
-Run `/proj-init-doc-status` in Claude Code or `.github/prompts/proj-init-doc-status.prompt.md` in GitHub Copilot at any time to see which steps are merged, which PR is open, and what's next.
+GitHub Copilot users can run the matching adapter prompts in `.github/prompts/proj-init-*.prompt.md` if preferred; they resolve to the same underlying steps.
+
+Run `/proj-init-doc-status` at any time to see which steps are merged, which PR is open, and what's next.
 
 See the [Project Initiation Guide](docs/guides/proj-init/_overview.md) for who owns each step, the PR gate, and the full rules.
 
@@ -99,4 +101,4 @@ Step 7 (`/proj-init-readme`) writes **the target's own README** — describing t
 
 ### Keeping docs current
 
-Run `/proj-init-doc-update <docname>` in Claude Code or `.github/prompts/proj-init-doc-update.prompt.md` in GitHub Copilot any time a source-of-truth document diverges from reality — a changed requirement, a new library, an architecture decision. It updates only the affected sections and opens a PR through the same review gate that originally finalized the document. See the [trigger table](docs/guides/proj-init/_overview.md#keeping-docs-current) for when to update which doc.
+Run `/proj-init-doc-update <docname>` any time a source-of-truth document diverges from reality — a changed requirement, a new library, an architecture decision. It updates only the affected sections and opens a PR through the same review gate that originally finalized the document. See the [trigger table](docs/guides/proj-init/_overview.md#keeping-docs-current) for when to update which doc.
