@@ -2,15 +2,15 @@
 
 Use this runner for document-producing Project Initiation steps. Tool-specific command and prompt files are adapters only; this file owns the shared workflow.
 
-Registry entries marked `runner: false` (e.g. Step 0, the bootstrap utility) are **not** governed by this runner. They have their own guide and script and do not branch, commit, or open a PR — skip them here.
+Registry entries marked `runner: false` (e.g. Step-00, the bootstrap utility) are **not** governed by this runner. They have their own guide and script and do not branch, commit, or open a PR — skip them here.
 
-This kit is the **control plane**: you run this command from *this* repo, but the produced document and every git operation land in the **target repository** registered in Step 0. Resolve the target first (§0), then treat every git command and output path below as target-relative.
+This kit is the **control plane**: you run this command from *this* repo, but the produced document and every git operation land in the **target repository** registered in Step-00. Resolve the target first (§0), then treat every git command and output path below as target-relative.
 
 ## 0. Resolve The Target Repository
 
 Before anything else, read `.proj-init/state.json` from this kit root.
 
-- Missing or unreadable: **STOP** and tell the operator: `No initiation workspace found. Run Step 0 (/proj-init-bootstrap) first.`
+- Missing or unreadable: **STOP** and tell the operator: `No initiation workspace found. Run Step-00 (/proj-init-bootstrap) first.`
 - Present: set `TARGET` to its `targetFolder`.
 
 Then, for the rest of this runner and the step guide:
@@ -40,7 +40,7 @@ Before starting, load:
    - `Product Owner` → `.claude/roles/product-owner.md`
    - `Architect` → `.claude/roles/solution-architect.md`
 
-Act as that role for the entire step — document creation, reviewer checklist, and PR/MR summary. If the step has multiple reviewers (e.g., Step 4: `Architect + Product Owner`), load both role files.
+Act as that role for the entire step — document creation, reviewer checklist, and PR/MR summary. If the step has multiple reviewers (e.g., Step-04: `Architect + Product Owner`), load both role files.
 
 The step guide is the content contract. The registry is the execution metadata. This runner is the workflow.
 
@@ -60,11 +60,11 @@ Run these checks against the target (`$TARGET`) before creating a branch or writ
 3. **Step not already finalized** - unless the step sets `replacesExisting: true` in `_steps.yml`, run `git -C "$TARGET" show main:<primary-output>` for the step's primary output document — the first entry in the step's `outputs` field (for Steps 2–8 this is the document its `template` produces).
    - Non-zero (not on `main`): proceed — the step has not been finalized.
    - Exit 0 (already on `main`): **STOP**. The step is already complete. Tell the operator the document is final and to run `/proj-init-doc-update <document>` to revise it instead of re-running the step. Do not branch or regenerate.
-   - `replacesExisting: true` (e.g. Step 7, which overwrites the target's pre-existing README): skip this check — the file's presence on `main` is expected and is not proof the step ran. Rely on the §3 branch check and operator confirmation.
+   - `replacesExisting: true` (e.g. Step-07, which overwrites the target's pre-existing README): skip this check — the file's presence on `main` is expected and is not proof the step ran. Rely on the §3 branch check and operator confirmation.
 
-4. **Step 1 gate** - verify Step 1 preflight evidence in `$TARGET/CONTRIBUTING.md` and re-run the relevant host checks from `docs/guides/proj-init/01-repo-setup.md`.
+4. **Step-01 gate** - verify Step-01 preflight evidence in `$TARGET/CONTRIBUTING.md` and re-run the relevant host checks from `docs/guides/proj-init/01-repo-setup.md`.
    - Evidence present and host checks pass: proceed.
-   - Evidence missing, stale, or checks fail: **STOP** and direct the operator to complete Step 1.
+   - Evidence missing, stale, or checks fail: **STOP** and direct the operator to complete Step-01.
 
 5. **Additional step preconditions** - apply any `specialPreconditions` from `_steps.yml` and any preconditions in the step guide.
 
@@ -76,7 +76,7 @@ The checklist must include:
 
 - Operator role matches the step's `owner`, and the corresponding role context file has been loaded.
 - Reviewer gate matches the step's `reviewer`.
-- Step 1 gate is in place and machine-validated.
+- Step-01 gate is in place and machine-validated.
 - Approval continuity is defined in `CONTRIBUTING.md`.
 - Upstream documents are final on `main`.
 - This step's output is not already final on `main`, or the step is marked `replacesExisting: true`.

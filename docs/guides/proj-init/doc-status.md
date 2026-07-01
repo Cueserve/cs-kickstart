@@ -4,16 +4,16 @@ Read-only. No files written, no branches created. Run this any time to see where
 
 ## Resolve the target
 
-Read `.proj-init/state.json` from this kit root and set `TARGET` to its `targetFolder`. If it is missing, print `No initiation workspace found. Run Step 0 (/proj-init-bootstrap) first.` and stop. All git and host-CLI checks below run against `$TARGET`.
+Read `.proj-init/state.json` from this kit root and set `TARGET` to its `targetFolder`. If it is missing, print `No initiation workspace found. Run Step-00 (/proj-init-bootstrap) first.` and stop. All git and host-CLI checks below run against `$TARGET`.
 
 ## What to check
 
 Run all checks silently first, then render the status table once. Do not print intermediate command output.
 
-### Step 1 — Repo governance
+### Step-01 — Repo governance
 
 - Run `git -C "$TARGET" show main:CONTRIBUTING.md` — exit 0 = governance in place.
-- If exit 0, also check that `CONTRIBUTING.md` contains branch protection evidence (look for the preflight block written by Step 1). If the file exists but the evidence block is missing, mark as `partial`.
+- If exit 0, also check that `CONTRIBUTING.md` contains branch protection evidence (look for the preflight block written by Step-01). If the file exists but the evidence block is missing, mark as `partial`.
 
 ### Steps 2–8 — Documents on `main`
 
@@ -54,7 +54,7 @@ Render a single Markdown table with one row per step. Use the status symbols bel
 | `⟳ PR open` | A PR/MR targeting `main` is open for this step's branch |
 | `⊙ branch open` | Branch exists but no open PR yet |
 | `— not started` | No branch, no document on `main` |
-| `⚠ partial` | Step 1 only: CONTRIBUTING.md exists but preflight evidence block is missing |
+| `⚠ partial` | Step-01 only: CONTRIBUTING.md exists but preflight evidence block is missing |
 
 Example output format:
 
@@ -66,13 +66,13 @@ Example output format:
 | 1    | Repo governance | ✓ merged | CONTRIBUTING.md with preflight evidence on `main` |
 | 2    | PRODUCT.md      | ✓ merged | |
 | 3    | PRD.md          | ✓ merged | |
-| 4    | ARCHITECTURE.md | ⟳ PR open | PR #14 — "docs: add ARCHITECTURE.md (Step 4)" |
+| 4    | ARCHITECTURE.md | ⟳ PR open | PR #14 — "docs: add ARCHITECTURE.md (Step-04)" |
 | 5    | TECH-STACK.md   | — not started | |
 | 6    | AI-TOOL-GUIDE.md | — not started | |
 | 7    | README.md       | — not started | |
 | 8    | BACKLOG.md      | — not started | |
 
-**Next:** Step 5 — `/proj-init-techstack` (blocked until Step 4 PR is merged)
+**Next:** Step-05 — `/proj-init-techstack` (blocked until Step-04 PR is merged)
 ```
 
 ## "Next" callout rules

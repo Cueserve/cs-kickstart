@@ -2,7 +2,7 @@
 
 **Output file:** `BACKLOG.md` (manifest of created work items)
 **Creates in host:** GitHub Issues or Azure DevOps work items
-**Depends on:** `PRODUCT.md` (Step 2), `PRD.md` (Step 3), `ARCHITECTURE.md` (Step 4), `TECH-STACK.md` (Step 5), `README.md` (Step 7)
+**Depends on:** `PRODUCT.md` (Step-02), `PRD.md` (Step-03), `ARCHITECTURE.md` (Step-04), `TECH-STACK.md` (Step-05), `README.md` (Step-07)
 **Required before:** first sprint planning, development kickoff
 
 ---
@@ -26,7 +26,7 @@ This step closes the gap between project definition and execution. By the end, t
 
 ## Why This Matters
 
-- `README.md` ends initiation. Without Step 8, the first action after initiation is "where do we start?" — this step answers that.
+- `README.md` ends initiation. Without Step-08, the first action after initiation is "where do we start?" — this step answers that.
 - Work items in the tracker are the team's daily operating surface; a doc nobody reads is not a backlog.
 - Traceability from code → story → PRD requirement → product goal closes the loop on the entire initiation chain.
 

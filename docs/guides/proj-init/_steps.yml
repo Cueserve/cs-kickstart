@@ -4,7 +4,7 @@ steps:
     title: Register Target Repository
     kind: utility            # not a document-producing _run-step.md step
     runner: false            # skip the _run-step.md branch/commit/PR flow
-    branch: null             # Step 0 runs on the kit; it does not branch the target
+    branch: null             # Step-00 runs on the kit; it does not branch the target
     outputs:
       - .proj-init/state.json   # gitignored, operator-local; not a source-of-truth doc
     guide: docs/guides/proj-init/00-bootstrap.md
@@ -12,9 +12,9 @@ steps:
     upstream: []
     owner: Operator
     reviewer: Operator
-    commitMessage: null      # Step 0 commits nothing
-    prSummary: null          # Step 0 opens no PR/MR
-    finalReminder: "Step 0 is complete when the clone exists and .proj-init/state.json points at it. Nothing is committed, reviewed, or merged; it is not governed by _run-step.md."
+    commitMessage: null      # Step-00 commits nothing
+    prSummary: null          # Step-00 opens no PR/MR
+    finalReminder: "Step-00 is complete when the clone exists and .proj-init/state.json points at it. Nothing is committed, reviewed, or merged; it is not governed by _run-step.md."
     specialActions:
       - Dry-run scripts/bootstrap-target-repo.mjs first; apply only after the operator confirms the target folder and git URL.
       - Clone into an empty or non-existent folder; never write over an existing working tree.
@@ -32,8 +32,8 @@ steps:
     upstream: []
     owner: Architect
     reviewer: Architect
-    commitMessage: "docs: add repo governance baseline (Step 1)"
-    prSummary: "Summarize governance mode, branch protection validation, and include the Step 1 checklist evidence."
+    commitMessage: "docs: add repo governance baseline (Step-01)"
+    prSummary: "Summarize governance mode, branch protection validation, and include the Step-01 checklist evidence."
     finalReminder: "Repo governance becomes final only when the Architect approves and merges the PR/MR."
 
   - id: 2
@@ -47,8 +47,8 @@ steps:
     upstream: []
     owner: Product Owner
     reviewer: Product Owner
-    commitMessage: "docs: add PRODUCT.md (Step 2)"
-    prSummary: "Summarize the product concept decisions and include the Step 2 reviewer checklist."
+    commitMessage: "docs: add PRODUCT.md (Step-02)"
+    prSummary: "Summarize the product concept decisions and include the Step-02 reviewer checklist."
     finalReminder: "PRODUCT.md becomes final only when the Product Owner approves and merges the PR/MR."
 
   - id: 3
@@ -63,8 +63,8 @@ steps:
       - PRODUCT.md
     owner: Product Owner
     reviewer: Product Owner
-    commitMessage: "docs: add PRD.md (Step 3)"
-    prSummary: "Summarize the requirements and include the Step 3 reviewer checklist."
+    commitMessage: "docs: add PRD.md (Step-03)"
+    prSummary: "Summarize the requirements and include the Step-03 reviewer checklist."
     finalReminder: "PRD.md becomes final only when the Product Owner approves and merges the PR/MR."
 
   - id: 4
@@ -79,8 +79,8 @@ steps:
       - PRD.md
     owner: Architect
     reviewer: Architect + Product Owner
-    commitMessage: "docs: add ARCHITECTURE.md (Step 4)"
-    prSummary: "Summarize the design decisions and include the Step 4 reviewer checklist."
+    commitMessage: "docs: add ARCHITECTURE.md (Step-04)"
+    prSummary: "Summarize the design decisions and include the Step-04 reviewer checklist."
     finalReminder: "ARCHITECTURE.md becomes final only when the Architect and Product Owner approve and merge the PR/MR."
 
   - id: 5
@@ -97,11 +97,11 @@ steps:
       - ARCHITECTURE.md
     owner: Architect
     reviewer: Architect
-    commitMessage: "docs: add TECH-STACK.md and CONTRIBUTING tooling layer (Step 5)"
-    prSummary: "Summarize the stack choices, the tooling commands added, and include the Step 5 reviewer checklist."
+    commitMessage: "docs: add TECH-STACK.md and CONTRIBUTING tooling layer (Step-05)"
+    prSummary: "Summarize the stack choices, the tooling commands added, and include the Step-05 reviewer checklist."
     finalReminder: "TECH-STACK.md and the CONTRIBUTING.md tooling layer become final only when the Architect approves and merges the PR/MR."
     specialActions:
-      - Append the tooling layer to CONTRIBUTING.md using only technologies approved in TECH-STACK.md. Preserve the Step 1 governance layer.
+      - Append the tooling layer to CONTRIBUTING.md using only technologies approved in TECH-STACK.md. Preserve the Step-01 governance layer.
 
   - id: 6
     command: proj-init-aitoolguide
@@ -119,8 +119,8 @@ steps:
       - TECH-STACK.md
     owner: Architect
     reviewer: Architect
-    commitMessage: "docs: add AI-TOOL-GUIDE.md and tool adapters (Step 6)"
-    prSummary: "Summarize the AI rules, list the generated adapter files, and include the Step 6 reviewer checklist."
+    commitMessage: "docs: add AI-TOOL-GUIDE.md and tool adapters (Step-06)"
+    prSummary: "Summarize the AI rules, list the generated adapter files, and include the Step-06 reviewer checklist."
     finalReminder: "AI-TOOL-GUIDE.md and generated adapter files become final only when the Architect approves and merges the PR/MR."
     specialActions:
       - Ask which AI tools the team will use before generating adapters.
@@ -146,9 +146,9 @@ steps:
       - AI-TOOL-GUIDE.md
     owner: Architect
     reviewer: Architect
-    commitMessage: "docs: replace boilerplate README with project README (Step 7)"
-    prSummary: "Note that the boilerplate README is replaced and include the Step 7 reviewer checklist."
-    finalReminder: "README.md becomes final only when the Architect approves and merges the PR/MR. Initiation is complete only after Step 8 is merged."
+    commitMessage: "docs: replace boilerplate README with project README (Step-07)"
+    prSummary: "Note that the boilerplate README is replaced and include the Step-07 reviewer checklist."
+    finalReminder: "README.md becomes final only when the Architect approves and merges the PR/MR. Initiation is complete only after Step-08 is merged."
     specialActions:
       - Replace the target repo's current README with the generated project README.
       - Remove any leftover placeholder or boilerplate content from README.md.
@@ -172,8 +172,8 @@ steps:
       - README.md
     owner: Product Owner
     reviewer: Product Owner
-    commitMessage: "docs: add BACKLOG.md - Step 8 initial backlog"
-    prSummary: "State the epic count, story count, priority breakdown, and include the Step 8 reviewer checklist."
+    commitMessage: "docs: add BACKLOG.md - Step-08 initial backlog"
+    prSummary: "State the epic count, story count, priority breakdown, and include the Step-08 reviewer checklist."
     finalReminder: "BACKLOG.md becomes final only when the Product Owner approves and merges the PR/MR. Once merged, initiation is complete."
     specialPreconditions:
       - Detect host issue tracker CLI availability before confirmation: GitHub gh, Azure DevOps az boards, or PENDING manual creation.

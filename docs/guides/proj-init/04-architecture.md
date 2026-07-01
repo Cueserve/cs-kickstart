@@ -1,8 +1,8 @@
 # Step-04: Architecture
 
 **Output file:** `ARCHITECTURE.md`
-**Depends on:** `PRD.md` (Step 3)
-**Required before:** Step 5 (Tech Stack)
+**Depends on:** `PRD.md` (Step-03)
+**Required before:** Step-05 (Tech Stack)
 
 ---
 

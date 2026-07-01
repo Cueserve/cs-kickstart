@@ -1,7 +1,7 @@
 # Step-07: README
 
 **Output file:** `README.md`
-**Depends on:** `PRODUCT.md` (Step 2), `PRD.md` (Step 3), `ARCHITECTURE.md` (Step 4), `TECH-STACK.md` (Step 5), `AI-TOOL-GUIDE.md` (Step 6)
+**Depends on:** `PRODUCT.md` (Step-02), `PRD.md` (Step-03), `ARCHITECTURE.md` (Step-04), `TECH-STACK.md` (Step-05), `AI-TOOL-GUIDE.md` (Step-06)
 **Required before:** wider repository sharing, onboarding, and declaring initiation complete
 
 ---
@@ -35,8 +35,8 @@ Structure is fixed by the template — `docs/guides/proj-init/templates/README.t
 
 ## Rules
 
-- This step **writes the target repo's project README**, replacing whatever README the cloned repo currently has (a placeholder, template boilerplate, or an earlier draft). By Step 7, the project is handoff-ready for sharing. Initiation is declared complete only after Step 8 is merged. The Project Initiation guides live in this kit under `docs/guides/proj-init/` and remain as the durable reference — they are not part of the target repo.
-- Production implementation may already be in progress after Step 6; Step 7 is the handoff and sharing gate.
+- This step **writes the target repo's project README**, replacing whatever README the cloned repo currently has (a placeholder, template boilerplate, or an earlier draft). By Step-07, the project is handoff-ready for sharing. Initiation is declared complete only after Step-08 is merged. The Project Initiation guides live in this kit under `docs/guides/proj-init/` and remain as the durable reference — they are not part of the target repo.
+- Production implementation may already be in progress after Step-06; Step-07 is the handoff and sharing gate.
 - Write README last. It documents what exists, not what you plan to build.
 - Every command in README must be tested and working before it is committed.
 - `.env.example` must list every environment variable the app reads — no undocumented keys.

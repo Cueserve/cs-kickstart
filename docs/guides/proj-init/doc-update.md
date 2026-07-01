@@ -4,7 +4,7 @@ Use this any time reality diverges from one of the initiation documents. Pass th
 
 ## Resolve the target
 
-Read `.proj-init/state.json` from this kit root and set `TARGET` to its `targetFolder`. If it is missing, print `No initiation workspace found. Run Step 0 (/proj-init-bootstrap) first.` and stop. Every git command, host CLI, and file path below is relative to `$TARGET` (run git as `git -C "$TARGET" …`, host CLIs from within `$TARGET`, and read/write documents under `$TARGET/`).
+Read `.proj-init/state.json` from this kit root and set `TARGET` to its `targetFolder`. If it is missing, print `No initiation workspace found. Run Step-00 (/proj-init-bootstrap) first.` and stop. Every git command, host CLI, and file path below is relative to `$TARGET` (run git as `git -C "$TARGET" …`, host CLIs from within `$TARGET`, and read/write documents under `$TARGET/`).
 
 ## Supported documents and their review gates
 

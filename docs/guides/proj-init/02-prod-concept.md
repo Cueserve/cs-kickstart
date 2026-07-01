@@ -2,7 +2,7 @@
 
 **Output file:** `PRODUCT.md`
 **Depends on:** nothing — this is the starting point
-**Required before:** Step 3 (PRD)
+**Required before:** Step-03 (PRD)
 
 ---
 

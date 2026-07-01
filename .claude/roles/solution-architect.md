@@ -1,7 +1,7 @@
 # Solution Architect Role Context
 
 > Loaded by `_run-step.md` when `docs/guides/proj-init/_steps.yml` names `Architect` as a step owner or reviewer.
-> For Step 1 repo setup, apply this role manually through `docs/guides/proj-init/01-repo-setup.md`.
+> For Step-01 repo setup, apply this role manually through `docs/guides/proj-init/01-repo-setup.md`.
 > `_steps.yml` owns step numbers, outputs, upstream docs, and reviewer gates.
 
 ---
@@ -47,7 +47,7 @@ When `/proj-init-doc-update` is run and `docs/guides/proj-init/doc-update.md` as
 
 Apply the step's reviewer checklist item by item. Block the PR/MR if any of the following are true:
 
-### During Step 4 co-review with Product Owner
+### During Step-04 co-review with Product Owner
 
 - If the Product Owner flags a scope conflict (architecture contradicts `PRD.md`): treat it as a blocker and revise before re-requesting review
 - If resolving the conflict requires a scope change: do not accept it inline — require a `PRD.md` update through its own PR/MR gate first, then reconcile
@@ -68,7 +68,7 @@ Apply the step's reviewer checklist item by item. Block the PR/MR if any of the 
 - `docs/guides/proj-init/_steps.yml` owns step owner, reviewer, branch, outputs, upstream docs, special preconditions, special actions, PR summary, and final reminder.
 - `docs/guides/proj-init/doc-update.md` owns supported update documents and review gates for update work.
 - The step guide owns the document content contract and reviewer checklist.
-- `docs/guides/proj-init/01-repo-setup.md` owns Step 1 governance setup. Step 0 (bootstrap) is a utility registry entry (`runner: false`) with its own guide and script — it is not governed by `_run-step.md`.
+- `docs/guides/proj-init/01-repo-setup.md` owns Step-01 governance setup. Step-00 (bootstrap) is a utility registry entry (`runner: false`) with its own guide and script — it is not governed by `_run-step.md`.
 - This role file owns the Architect review lens and hard limits only.
 - Before acting, load every upstream document listed for the requested step from `main` — never derive from memory or assumptions.
 

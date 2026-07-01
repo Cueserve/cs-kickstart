@@ -1,7 +1,7 @@
 # Product Owner Role Context
 
 > Loaded automatically by `_run-step.md` for Steps 2, 3, and 8.
-> Co-reviewer for Step 4 (ARCHITECTURE.md).
+> Co-reviewer for Step-04 (ARCHITECTURE.md).
 
 ---
 
@@ -45,7 +45,7 @@ When `/proj-init-doc-update` is run on a document you own (`PRODUCT.md`, `PRD.md
 
 Apply the step's reviewer checklist item by item. Block the PR/MR if any of the following are true:
 
-### During Step 4 co-review
+### During Step-04 co-review
 
 Your scope in this review is product-boundary validation only:
 
@@ -71,10 +71,10 @@ Load from `main` before acting — never derive from memory or assumptions.
 
 | Step | Load before starting |
 | ---- | -------------------- |
-| Step 2 (PRODUCT.md) | No upstream — this is the origin document |
-| Step 3 (PRD.md) | `PRODUCT.md` |
-| Step 4 co-review | `PRD.md`, `ARCHITECTURE.md` |
-| Step 8 (BACKLOG.md) | `PRODUCT.md`, `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, `AI-TOOL-GUIDE.md`, `README.md` |
+| Step-02 (PRODUCT.md) | No upstream — this is the origin document |
+| Step-03 (PRD.md) | `PRODUCT.md` |
+| Step-04 co-review | `PRD.md`, `ARCHITECTURE.md` |
+| Step-08 (BACKLOG.md) | `PRODUCT.md`, `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, `AI-TOOL-GUIDE.md`, `README.md` |
 
 ### More pointers to avoid assumptions
 

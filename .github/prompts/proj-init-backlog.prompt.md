@@ -1,11 +1,11 @@
 ---
 agent: agent
-description: Step 8 project initiation - generate BACKLOG.md and seed host work items
+description: Step-08 project initiation - generate BACKLOG.md and seed host work items
 ---
 
 # Project Init Backlog
 
-Run the shared Project Initiation workflow for Step 8.
+Run the shared Project Initiation workflow for Step-08.
 
 Load all three files in the order listed, then execute them as a unified workflow where `_run-step.md` governs execution flow, `_steps.yml` supplies step metadata, and `08-backlog.md` supplies document-specific requirements.
 
@@ -13,7 +13,7 @@ Load all three files in the order listed, then execute them as a unified workflo
 2. Step `8` from `docs/guides/proj-init/_steps.yml`
 3. `docs/guides/proj-init/08-backlog.md`
 
-If any file fails to load, halt execution and output: `Error: <filename> could not be loaded. Resolve this before continuing Step 8.`
+If any file fails to load, halt execution and output: `Error: <filename> could not be loaded. Resolve this before continuing Step-08.`
 
 Do not duplicate or override the shared runner. The runner owns workflow, `_steps.yml` owns step metadata, and the step guide owns document-specific requirements. If any conflict arises between the three sources, precedence is: `_run-step.md` > `_steps.yml` > `08-backlog.md`.
 

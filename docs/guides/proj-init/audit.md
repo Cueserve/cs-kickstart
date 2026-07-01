@@ -25,7 +25,7 @@ If not, STOP with: `Not at cs-kickstart root — aborting.` Do not interrogate t
 Read in phases. Stop-report early only on a structural FAIL that makes later phases meaningless (e.g. `_steps.yml` missing/unparseable).
 
 - **Phase 0 — Contract.** Read `README.md` + `docs/guides/proj-init/_overview.md`. Extract the *claimed* contract: step list, per-step output doc, ownership, PR-merge-as-final gate, "one step per session" rule.
-- **Phase 1 — Registry (the spine).** Read `docs/guides/proj-init/_steps.yml` + `_run-step.md`. Derive the **expected artifact set**: for each step → {guide file, claude command, template, output doc name, upstream dependency}. Skip entries marked `runner: false` / `kind: utility` (e.g. Step 0) when deriving the doc-step artifact set — they have no template or output doc; for them verify only {guide, claude command, script}.
+- **Phase 1 — Registry (the spine).** Read `docs/guides/proj-init/_steps.yml` + `_run-step.md`. Derive the **expected artifact set**: for each step → {guide file, claude command, template, output doc name, upstream dependency}. Skip entries marked `runner: false` / `kind: utility` (e.g. Step-00) when deriving the doc-step artifact set — they have no template or output doc; for them verify only {guide, claude command, script}.
 - **Phase 2 — Wiring (cheap, list/glob — do not open contents yet).** For every registry entry verify existence of: step guide `NN-*.md`, `.claude/commands/proj-init-*.md`, and (where the step emits a doc) a template under `templates/`. List orphans on both sides: guides/commands/templates with no registry entry, and registry entries with no file.
 - **Phase 3 — Content (open only what a check names).** Deep-read only the files a specific check below requires. Do not read every guide in full unless a check demands it.
 - **Phase 4 — Score + report.** Emit the report format below.
@@ -58,7 +58,7 @@ Each check → `PASS` / `GAP` / `FAIL` with a `file:line` or `file:section` anch
 - No step depends on in-memory carry from a prior session; all resume signal is on disk (state.json + git).
 - **Named risk checks (mark GAP unless enforcement found):**
   - `state.json` gitignored + operator-local — resume breaks across machines/operators. Is single-box/single-operator stated as a precondition anywhere?
-  - Free-plan hosts can't enforce required-reviewer — "PR merge = final" is unenforced — the state signal can lie. Does Step 1 detect plan capability and warn, or silently assume enforcement?
+  - Free-plan hosts can't enforce required-reviewer — "PR merge = final" is unenforced — the state signal can lie. Does Step-01 detect plan capability and warn, or silently assume enforcement?
   - Idempotency: re-running a step whose PR is already open or already merged — is the behavior specified, or undefined?
 
 ### D5 — Token optimization
@@ -108,7 +108,7 @@ For each:
 - Template ↔ guide heading mismatches (D2)
 
 ## What static audit can't prove
-- Runtime loop (Step 0 clone → doc write → PR → merge gate) is UNVERIFIED here; requires a dry-run (depth B/C).
+- Runtime loop (Step-00 clone → doc write → PR → merge gate) is UNVERIFIED here; requires a dry-run (depth B/C).
 - Any check marked UNPROVABLE (static) above.
 ```
 

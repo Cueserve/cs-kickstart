@@ -1,8 +1,8 @@
 # Step-05: Tech Stack
 
 **Output file:** `TECH-STACK.md`
-**Depends on:** `PRD.md` (Step 3), `ARCHITECTURE.md` (Step 4)
-**Required before:** Step 6 (AI Tool Guide) and any sandbox spike work
+**Depends on:** `PRD.md` (Step-03), `ARCHITECTURE.md` (Step-04)
+**Required before:** Step-06 (AI Tool Guide) and any sandbox spike work
 
 ---
 
@@ -39,7 +39,7 @@ Structure is fixed by the template — `docs/guides/proj-init/templates/TECH-STA
 - **Pre-commit / hooks** — formatter, linter, and any commit-time checks tied to the stack.
 - **Versions** — language/runtime versions contributors must use, matching this file.
 
-These reference approved tools only — never introduce a command for a tool not listed in `TECH-STACK.md`. `README.md` (Step 7) reuses these commands, so they must exist before Step 7.
+These reference approved tools only — never introduce a command for a tool not listed in `TECH-STACK.md`. `README.md` (Step-07) reuses these commands, so they must exist before Step-07.
 
 ## Rules
 

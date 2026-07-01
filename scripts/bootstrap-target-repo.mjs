@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // bootstrap-target-repo.mjs
 //
-// Control-plane Step 0. Clones the target project repository into a local folder
+// Control-plane Step-00. Clones the target project repository into a local folder
 // and registers it in .proj-init/state.json so every later /proj-init-* step
 // operates on that external clone. No scaffold is copied into the target: the
 // initiation machinery (guides, runner, adapters) stays in this kit, which acts
@@ -135,7 +135,7 @@ function printUsage() {
   node scripts/bootstrap-target-repo.mjs --status
   node scripts/bootstrap-target-repo.mjs --clear
 
-Step 0 clones the target project repo into <folder> and registers it in
+Step-00 clones the target project repo into <folder> and registers it in
 .proj-init/state.json. Every later /proj-init-* step reads that state and
 operates on the clone. No scaffold is copied into the target.
 
@@ -239,8 +239,8 @@ function printResult(result) {
   }
 
   console.log(
-    '\nCloned and registered. Next: complete Step 1 (repo governance) against the target, ' +
-      'then run Steps 2–8 from this kit. Run /proj-init-cleanup after Step 8 merges.',
+    '\nCloned and registered. Next: complete Step-01 (repo governance) against the target, ' +
+      'then run Steps 2–8 from this kit. Run /proj-init-cleanup after Step-08 merges.',
   );
 }
 
@@ -267,7 +267,7 @@ async function main() {
   if (options.status) {
     const existing = await readState(kitRoot);
     if (!existing) {
-      console.log('No initiation workspace registered. Run Step 0 to create one.');
+      console.log('No initiation workspace registered. Run Step-00 to create one.');
       return;
     }
     console.log(`Target folder: ${existing.targetFolder}`);
