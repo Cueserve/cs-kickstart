@@ -86,6 +86,11 @@ export async function runBootstrap({
   }
 
   if (!apply) {
+    // Preview the same precondition --apply enforces, so the operator learns
+    // the folder is unusable now rather than at clone time. isEmptyDir treats a
+    // missing folder as empty (git clone creates it), so this only flags a
+    // populated existing folder.
+    const targetFolderEmpty = await isEmptyDir(resolvedTargetRoot);
     return {
       mode: 'dry-run',
       kitRoot: resolvedKitRoot,
@@ -93,6 +98,7 @@ export async function runBootstrap({
       gitUrl,
       statePath: statePath(resolvedKitRoot),
       cloned: false,
+      targetFolderEmpty,
     };
   }
 
@@ -222,6 +228,12 @@ function printResult(result) {
   console.log(`State file: ${result.statePath}`);
 
   if (result.mode === 'dry-run') {
+    if (result.targetFolderEmpty === false) {
+      console.log(
+        '\nWarning: target folder is not empty — --apply will fail. ' +
+          'Choose an empty or non-existent folder to clone into.',
+      );
+    }
     console.log('\nDry-run only. Re-run with --apply to clone and register the workspace.');
     return;
   }

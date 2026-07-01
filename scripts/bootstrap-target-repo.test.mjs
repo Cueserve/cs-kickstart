@@ -64,6 +64,38 @@ test('runBootstrap dry-run neither clones nor writes state', async () => {
   }
 });
 
+test('runBootstrap dry-run flags a non-empty target folder without failing', async () => {
+  const kitRoot = await makeKitRoot();
+  const gitUrl = await makeSourceRepo();
+  const targetRoot = await targetSlot();
+  try {
+    await mkdir(targetRoot, { recursive: true });
+    await writeFile(join(targetRoot, 'keep.txt'), 'x', 'utf8');
+
+    const result = await runBootstrap({ kitRoot, targetRoot, gitUrl, apply: false });
+
+    assert.equal(result.mode, 'dry-run');
+    assert.equal(result.targetFolderEmpty, false);
+    assert.equal(await readState(kitRoot), null);
+  } finally {
+    await rm(kitRoot, { recursive: true, force: true });
+  }
+});
+
+test('runBootstrap dry-run reports an empty/absent target folder as usable', async () => {
+  const kitRoot = await makeKitRoot();
+  const gitUrl = await makeSourceRepo();
+  const targetRoot = await targetSlot();
+  try {
+    const result = await runBootstrap({ kitRoot, targetRoot, gitUrl, apply: false });
+
+    assert.equal(result.mode, 'dry-run');
+    assert.equal(result.targetFolderEmpty, true);
+  } finally {
+    await rm(kitRoot, { recursive: true, force: true });
+  }
+});
+
 test('runBootstrap apply clones the target and registers state', async () => {
   const kitRoot = await makeKitRoot();
   const gitUrl = await makeSourceRepo();
