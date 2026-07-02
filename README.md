@@ -58,7 +58,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 | 6 | `/proj-init-aitoolguide` | `AI-TOOL-GUIDE.md` + one adapter per AI tool in use (e.g. `CLAUDE.md`, `.github/copilot-instructions.md`) |
 | 7 | `/proj-init-readme` | the target's project `README.md` |
 | 8 | `/proj-init-backlog` | `BACKLOG.md` + host issues/work items |
-| 9 | `/proj-init-finalize-governance` | `CONTRIBUTING.md` with initiation-only governance removed + permanent core retained |
+| 9 | `/proj-init-finalize` | `CONTRIBUTING.md` with initiation-only governance removed + permanent core retained |
 | — | `/proj-init-cleanup` | unregisters the workspace after Step-09 merges |
 
 Step-02 through Step-09 write their output into the **registered target repo**, not this kit. Adapters are thin wrappers over the same workflow. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
@@ -98,7 +98,7 @@ BACKLOG.md                       ← initial backlog manifest + host issue IDs (
 
 ## After Initiation
 
-Step-07 (`/proj-init-readme`) writes **the target's own README** — describing the actual product, its setup, and how to run it. Step-08 (`/proj-init-backlog`) seeds the issue tracker. Step-09 (`/proj-init-finalize-governance`) removes the initiation-only branching and self-review rules from `CONTRIBUTING.md`, leaving the permanent contribution core plus a stub the team fills in for the development phase. Once Step-09 is merged, run `/proj-init-cleanup` to unregister the workspace from this kit. The guides in `docs/guides/proj-init/` stay as the durable reference for the process, and this kit's own README is never overwritten.
+Step-07 (`/proj-init-readme`) writes **the target's own README** — describing the actual product, its setup, and how to run it. Step-08 (`/proj-init-backlog`) seeds the issue tracker. Step-09 (`/proj-init-finalize`) removes the initiation-only branching and self-review rules from `CONTRIBUTING.md`, leaving the permanent contribution core plus a stub the team fills in for the development phase. Once Step-09 is merged, run `/proj-init-cleanup` to unregister the workspace from this kit. The guides in `docs/guides/proj-init/` stay as the durable reference for the process, and this kit's own README is never overwritten.
 
 ### Keeping docs current
 

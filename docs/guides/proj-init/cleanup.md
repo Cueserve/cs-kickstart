@@ -11,13 +11,13 @@ Read `.proj-init/state.json` from this kit root.
 
 ## 1. Confirm initiation is complete
 
-Step-09 (`/proj-init-finalize-governance`) is the terminal step. It is done when the `INITIATION-ONLY` fence has been stripped from `CONTRIBUTING.md` on `main`. Confirm that before clearing state — otherwise the operator loses the registered target mid-process.
+Step-09 (`/proj-init-finalize`) is the terminal step. It is done when the `INITIATION-ONLY` fence has been stripped from `CONTRIBUTING.md` on `main`. Confirm that before clearing state — otherwise the operator loses the registered target mid-process.
 
 - Run `git -C "$TARGET" show main:BACKLOG.md`.
   - Non-zero → **STOP** and tell the operator: `BACKLOG.md is not on main yet — finish Step-08 (then Step-09) before cleanup. Re-run with an explicit override only if you intend to abandon this workspace.`
 - Run `git -C "$TARGET" show main:CONTRIBUTING.md` and check for the string `INITIATION-ONLY`.
   - Not present → Step-09 is merged; proceed.
-  - Present → **STOP** and tell the operator: `CONTRIBUTING.md still carries the initiation-only governance block — run Step-09 (/proj-init-finalize-governance) before cleanup. Re-run with an explicit override only if you intend to abandon this workspace.`
+  - Present → **STOP** and tell the operator: `CONTRIBUTING.md still carries the initiation-only governance block — run Step-09 (/proj-init-finalize) before cleanup. Re-run with an explicit override only if you intend to abandon this workspace.`
 
 If the operator explicitly chooses to abandon an incomplete workspace, allow cleanup after they confirm.
 

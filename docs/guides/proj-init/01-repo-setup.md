@@ -91,7 +91,7 @@ Wrap the initiation-only content in HTML-comment markers so its removal in Step-
 <!-- END INITIATION-ONLY -->
 ```
 
-Keep the markers verbatim (this mirrors the protected-block convention used elsewhere in the kit). Step-09 (`/proj-init-finalize-governance`) deletes everything between them, markers included, once Step-08 is merged.
+Keep the markers verbatim (this mirrors the protected-block convention used elsewhere in the kit). Step-09 (`/proj-init-finalize`) deletes everything between them, markers included, once Step-08 is merged.
 
 ## Why This Matters
 

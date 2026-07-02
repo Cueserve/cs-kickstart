@@ -33,7 +33,7 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 | 6 | `/proj-init-aitoolguide` | `AI-TOOL-GUIDE.md` + adapter files | Architect | Define rules and constraints for all AI tools |
 | 7 | `/proj-init-readme` | `README.md` | Architect | Entry point: setup, env config, and how to run |
 | 8 | `/proj-init-backlog` | `BACKLOG.md` + host issues/work items | Product Owner | Seed the issue tracker; bridge initiation to execution |
-| 9 | `/proj-init-finalize-governance` | `CONTRIBUTING.md` (init-only material stripped) | Architect | Remove initiation-only governance; hand off a permanent contribution core |
+| 9 | `/proj-init-finalize` | `CONTRIBUTING.md` (init-only material stripped) | Architect | Remove initiation-only governance; hand off a permanent contribution core |
 | — | `/proj-init-cleanup` | workspace unregistered | Operator confirm | Unregister the workspace after Step-09 merges |
 
 GitHub Copilot users can run matching prompt adapters in `.github/prompts/proj-init-*.prompt.md`; they resolve to the same underlying workflow.

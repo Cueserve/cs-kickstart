@@ -87,7 +87,7 @@ Example output format:
 After the table, always print one `**Next:**` line:
 
 - If any step before the first gap is `PR open` or `branch open` → state that it must be merged before the next step can start, and name the blocked step.
-- If Step-09 is the only step not yet merged → name it: "Step-09 — `/proj-init-finalize-governance` (strips the initiation-only block from CONTRIBUTING.md; last step before cleanup)."
+- If Step-09 is the only step not yet merged → name it: "Step-09 — `/proj-init-finalize` (strips the initiation-only block from CONTRIBUTING.md; last step before cleanup)."
 - If all steps through Step-09 are merged → print "Initiation complete. Run `/proj-init-cleanup` to unregister the workspace, and `/proj-init-doc-update <docname>` if any document diverges from reality."
 - Otherwise → name the lowest-numbered step that is `not started` and the command to run it.
 
