@@ -1,7 +1,7 @@
 # Step-06: AI Tool Guide
 
-**Output file:** `AI-TOOL-GUIDE.md` + one adapter file per AI tool in use on this project
-**Depends on:** `ARCHITECTURE.md` (Step-04), `TECH-STACK.md` (Step-05)
+**Output file:** `docs/AI-TOOL-GUIDE.md` + one adapter file per AI tool in use on this project
+**Depends on:** `docs/ARCHITECTURE.md` (Step-04), `docs/TECH-STACK.md` (Step-05)
 **Required before:** production implementation and any AI-assisted source-code changes begin
 
 ---
@@ -81,7 +81,7 @@ AI tools must never touch the following without explicit human instruction:
 ## Rules
 
 - `AI-TOOL-GUIDE.md` derives from `ARCHITECTURE.md` and `TECH-STACK.md` — structural boundaries and only approved technologies apply.
-- Adapter files have two layers: (1) a reference to `AI-TOOL-GUIDE.md` for shared project rules, and (2) tool-specific config that has no cross-tool equivalent (e.g., Claude's tone/memory behavior, Copilot's suggestion filters). Only layer 2 lives in the adapter — never duplicate layer 1 rules there.
+- Adapter files have two layers: (1) a reference to `docs/AI-TOOL-GUIDE.md` for shared project rules — adapters live at the repo root (`CLAUDE.md`) or `.github/`, so link to the guide by its repo-root path — and (2) tool-specific config that has no cross-tool equivalent (e.g., Claude's tone/memory behavior, Copilot's suggestion filters). Only layer 2 lives in the adapter — never duplicate layer 1 rules there.
 - If a rule changes, update `AI-TOOL-GUIDE.md` first, then sync all adapter files in use.
 - Adding a new AI tool to the project requires a new adapter file — run `/proj-init-doc-update AI-TOOL-GUIDE.md` to add the tool and generate its adapter.
 

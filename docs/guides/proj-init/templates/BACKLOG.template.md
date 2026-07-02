@@ -4,7 +4,7 @@
 **Last updated:** [YYYY-MM-DD]
 **Source of truth for:** [one line — the epics/stories manifest and host item IDs]
 
-> Derived from: PRODUCT.md, PRD.md, ARCHITECTURE.md, TECH-STACK.md, AI-TOOL-GUIDE.md, README.md
+> Derived from: docs/PRODUCT.md, docs/PRD.md, docs/ARCHITECTURE.md, docs/TECH-STACK.md, docs/AI-TOOL-GUIDE.md, README.md
 > Downstream: (none — final initiation step)
 
 <!-- @inject: _doc-references.md -->

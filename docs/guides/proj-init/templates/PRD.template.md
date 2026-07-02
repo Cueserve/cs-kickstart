@@ -4,8 +4,8 @@
 **Last updated:** [YYYY-MM-DD]
 **Source of truth for:** [one line — the testable requirements for this release]
 
-> Derived from: PRODUCT.md
-> Downstream: ARCHITECTURE.md, TECH-STACK.md, README.md, BACKLOG.md
+> Derived from: docs/PRODUCT.md
+> Downstream: docs/ARCHITECTURE.md, docs/TECH-STACK.md, README.md, docs/BACKLOG.md
 
 <!-- @inject: _doc-references.md -->
 

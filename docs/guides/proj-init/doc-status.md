@@ -21,13 +21,13 @@ For each document, run `git -C "$TARGET" show main:<doc>` and capture the exit c
 
 | Step | Document |
 | ---- | -------- |
-| 2 | `PRODUCT.md` |
-| 3 | `PRD.md` |
-| 4 | `ARCHITECTURE.md` |
-| 5 | `TECH-STACK.md` |
-| 6 | `AI-TOOL-GUIDE.md` |
+| 2 | `docs/PRODUCT.md` |
+| 3 | `docs/PRD.md` |
+| 4 | `docs/ARCHITECTURE.md` |
+| 5 | `docs/TECH-STACK.md` |
+| 6 | `docs/AI-TOOL-GUIDE.md` |
 | 7 | `README.md` |
-| 8 | `BACKLOG.md` |
+| 8 | `docs/BACKLOG.md` |
 
 Exit 0 = merged. Non-zero = not on `main`.
 
@@ -70,13 +70,13 @@ Example output format:
 | Step | Document / Gate | Status | Detail |
 |------|-----------------|--------|--------|
 | 1    | Repo governance | ✓ merged | CONTRIBUTING.md on `main` |
-| 2    | PRODUCT.md      | ✓ merged | |
-| 3    | PRD.md          | ✓ merged | |
-| 4    | ARCHITECTURE.md | ⟳ PR open | PR #14 — "docs: add ARCHITECTURE.md (Step-04)" |
-| 5    | TECH-STACK.md   | — not started | |
-| 6    | AI-TOOL-GUIDE.md | — not started | |
+| 2    | docs/PRODUCT.md      | ✓ merged | |
+| 3    | docs/PRD.md          | ✓ merged | |
+| 4    | docs/ARCHITECTURE.md | ⟳ PR open | PR #14 — "docs: add ARCHITECTURE.md (Step-04)" |
+| 5    | docs/TECH-STACK.md   | — not started | |
+| 6    | docs/AI-TOOL-GUIDE.md | — not started | |
 | 7    | README.md       | — not started | |
-| 8    | BACKLOG.md      | — not started | |
+| 8    | docs/BACKLOG.md      | — not started | |
 | 9    | Governance finalized | — not started | init-only block still in CONTRIBUTING.md |
 
 **Next:** Step-05 — `/proj-init-techstack` (blocked until Step-04 PR is merged)

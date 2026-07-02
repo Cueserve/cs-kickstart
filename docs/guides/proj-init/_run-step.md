@@ -17,7 +17,7 @@ Then, for the rest of this runner and the step guide:
 
 - Run every `git` command against the target: `git -C "$TARGET" <args>`.
 - Run every host CLI (`gh`, `az repos`, `glab`) with `$TARGET` as the working directory.
-- Read and write every produced document under `$TARGET/` (e.g. `$TARGET/PRODUCT.md`).
+- Read and write every produced document under `$TARGET/` at the path given in the step's `outputs` field (e.g. `$TARGET/docs/PRODUCT.md`).
 - Keep loading guides, templates, role files, and `_steps.yml` from **this kit** (they are not in the target).
 
 ## 0.5 Session Boundary (Required)

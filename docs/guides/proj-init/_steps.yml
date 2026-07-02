@@ -39,7 +39,7 @@ steps:
     title: Product Concept
     branch: init/product
     outputs:
-      - PRODUCT.md
+      - docs/PRODUCT.md
     guide: docs/guides/proj-init/02-prod-concept.md
     template: docs/guides/proj-init/templates/PRODUCT.template.md
     upstream: []
@@ -54,11 +54,11 @@ steps:
     title: Product Requirements Document
     branch: init/prd
     outputs:
-      - PRD.md
+      - docs/PRD.md
     guide: docs/guides/proj-init/03-prod-requirements.md
     template: docs/guides/proj-init/templates/PRD.template.md
     upstream:
-      - PRODUCT.md
+      - docs/PRODUCT.md
     owner: Product Owner
     reviewer: Product Owner
     commitMessage: "docs: add PRD.md (Step-03)"
@@ -70,11 +70,11 @@ steps:
     title: Architecture
     branch: init/architecture
     outputs:
-      - ARCHITECTURE.md
+      - docs/ARCHITECTURE.md
     guide: docs/guides/proj-init/04-architecture.md
     template: docs/guides/proj-init/templates/ARCHITECTURE.template.md
     upstream:
-      - PRD.md
+      - docs/PRD.md
     owner: Architect
     reviewer: Architect + Product Owner
     commitMessage: "docs: add ARCHITECTURE.md (Step-04)"
@@ -86,13 +86,13 @@ steps:
     title: Tech Stack
     branch: init/techstack
     outputs:
-      - TECH-STACK.md
+      - docs/TECH-STACK.md
       - CONTRIBUTING.md
     guide: docs/guides/proj-init/05-tech-stack.md
     template: docs/guides/proj-init/templates/TECH-STACK.template.md
     upstream:
-      - PRD.md
-      - ARCHITECTURE.md
+      - docs/PRD.md
+      - docs/ARCHITECTURE.md
     owner: Architect
     reviewer: Architect
     commitMessage: "docs: add TECH-STACK.md and CONTRIBUTING tooling layer (Step-05)"
@@ -106,15 +106,15 @@ steps:
     title: AI Tool Guide
     branch: init/aitoolguide
     outputs:
-      - AI-TOOL-GUIDE.md
+      - docs/AI-TOOL-GUIDE.md
       - CLAUDE.md
       - .github/copilot-instructions.md
     conditionalOutputs: true
     guide: docs/guides/proj-init/06-ai-tool-guide.md
     template: docs/guides/proj-init/templates/AI-TOOL-GUIDE.template.md
     upstream:
-      - ARCHITECTURE.md
-      - TECH-STACK.md
+      - docs/ARCHITECTURE.md
+      - docs/TECH-STACK.md
     owner: Architect
     reviewer: Architect
     commitMessage: "docs: add AI-TOOL-GUIDE.md and tool adapters (Step-06)"
@@ -137,11 +137,11 @@ steps:
     guide: docs/guides/proj-init/07-readme.md
     template: docs/guides/proj-init/templates/README.template.md
     upstream:
-      - PRODUCT.md
-      - PRD.md
-      - ARCHITECTURE.md
-      - TECH-STACK.md
-      - AI-TOOL-GUIDE.md
+      - docs/PRODUCT.md
+      - docs/PRD.md
+      - docs/ARCHITECTURE.md
+      - docs/TECH-STACK.md
+      - docs/AI-TOOL-GUIDE.md
     owner: Architect
     reviewer: Architect
     commitMessage: "docs: replace boilerplate README with project README (Step-07)"
@@ -157,16 +157,16 @@ steps:
     title: Initial Backlog
     branch: init/backlog
     outputs:
-      - BACKLOG.md
+      - docs/BACKLOG.md
     conditionalOutputs: true
     guide: docs/guides/proj-init/08-backlog.md
     template: docs/guides/proj-init/templates/BACKLOG.template.md
     upstream:
-      - PRODUCT.md
-      - PRD.md
-      - ARCHITECTURE.md
-      - TECH-STACK.md
-      - AI-TOOL-GUIDE.md
+      - docs/PRODUCT.md
+      - docs/PRD.md
+      - docs/ARCHITECTURE.md
+      - docs/TECH-STACK.md
+      - docs/AI-TOOL-GUIDE.md
       - README.md
     owner: Product Owner
     reviewer: Product Owner
@@ -190,7 +190,7 @@ steps:
     replacesExisting: true    # CONTRIBUTING.md is already on main; this transforms it, so skip the "already finalized" precondition
     guide: docs/guides/proj-init/09-finalize.md
     upstream:
-      - BACKLOG.md             # gate: cannot run until Step-08 is merged, making this the terminal step
+      - docs/BACKLOG.md        # gate: cannot run until Step-08 is merged, making this the terminal step
     owner: Architect
     reviewer: Architect
     commitMessage: "docs: finalize CONTRIBUTING.md for the development phase (Step-09)"

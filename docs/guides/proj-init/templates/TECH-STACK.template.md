@@ -4,8 +4,8 @@
 **Last updated:** [YYYY-MM-DD]
 **Source of truth for:** [one line — the approved technologies and usage rules]
 
-> Derived from: PRD.md, ARCHITECTURE.md
-> Downstream: AI-TOOL-GUIDE.md, README.md, BACKLOG.md
+> Derived from: docs/PRD.md, docs/ARCHITECTURE.md
+> Downstream: docs/AI-TOOL-GUIDE.md, README.md, docs/BACKLOG.md
 
 <!-- @inject: _doc-references.md -->
 

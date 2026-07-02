@@ -26,13 +26,13 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 | ---- | --- | ------ | ------------------------ | ------- |
 | 0 | `/proj-init-bootstrap` | cloned target repo + `.proj-init/state.json` | Operator review before apply | Clone the target repo and register it so later steps operate on it |
 | 1 | `/proj-init-repo-setup` | `CONTRIBUTING.md` (governance) + branch protection if plan supports it | Architect | Stand up the branching convention and self-review gate before any doc is written |
-| 2 | `/proj-init-product` | `PRODUCT.md` | Product Owner | Define what we are building and why |
-| 3 | `/proj-init-prd` | `PRD.md` | Product Owner | Translate concept into testable requirements |
-| 4 | `/proj-init-architecture` | `ARCHITECTURE.md` | Architect + PO | Define system structure and design decisions |
-| 5 | `/proj-init-techstack` | `TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) | Architect | Lock approved technologies and usage rules |
-| 6 | `/proj-init-aitoolguide` | `AI-TOOL-GUIDE.md` + adapter files | Architect | Define rules and constraints for all AI tools |
+| 2 | `/proj-init-product` | `docs/PRODUCT.md` | Product Owner | Define what we are building and why |
+| 3 | `/proj-init-prd` | `docs/PRD.md` | Product Owner | Translate concept into testable requirements |
+| 4 | `/proj-init-architecture` | `docs/ARCHITECTURE.md` | Architect + PO | Define system structure and design decisions |
+| 5 | `/proj-init-techstack` | `docs/TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) | Architect | Lock approved technologies and usage rules |
+| 6 | `/proj-init-aitoolguide` | `docs/AI-TOOL-GUIDE.md` + adapter files | Architect | Define rules and constraints for all AI tools |
 | 7 | `/proj-init-readme` | `README.md` | Architect | Entry point: setup, env config, and how to run |
-| 8 | `/proj-init-backlog` | `BACKLOG.md` + host issues/work items | Product Owner | Seed the issue tracker; bridge initiation to execution |
+| 8 | `/proj-init-backlog` | `docs/BACKLOG.md` + host issues/work items | Product Owner | Seed the issue tracker; bridge initiation to execution |
 | 9 | `/proj-init-finalize` | `CONTRIBUTING.md` (init-only material stripped) | Architect | Remove initiation-only governance; hand off a permanent contribution core |
 | — | `/proj-init-cleanup` | workspace unregistered | Operator confirm | Unregister the workspace after Step-09 merges |
 

@@ -1,7 +1,7 @@
 # Step-09: Finalize Governance (Terminal)
 
 **Output:** `CONTRIBUTING.md` (init-only material removed; permanent governance + tooling layer retained)
-**Depends on:** Step-08 (`BACKLOG.md`) merged — this is the last initiation step
+**Depends on:** Step-08 (`docs/BACKLOG.md`) merged — this is the last initiation step
 **Required before:** `/proj-init-cleanup`
 
 ---

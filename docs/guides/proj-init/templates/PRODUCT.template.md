@@ -5,7 +5,7 @@
 **Source of truth for:** [one line — what this product is and why it exists]
 
 > Derived from: (none — starting point)
-> Downstream: PRD.md, README.md, BACKLOG.md
+> Downstream: docs/PRD.md, README.md, docs/BACKLOG.md
 
 <!-- @inject: _doc-references.md -->
 

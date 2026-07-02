@@ -4,8 +4,8 @@
 **Last updated:** [YYYY-MM-DD]
 **Source of truth for:** [one line — the system structure and design decisions]
 
-> Derived from: PRD.md
-> Downstream: TECH-STACK.md, AI-TOOL-GUIDE.md, README.md, BACKLOG.md
+> Derived from: docs/PRD.md
+> Downstream: docs/TECH-STACK.md, docs/AI-TOOL-GUIDE.md, README.md, docs/BACKLOG.md
 
 <!-- @inject: _doc-references.md -->
 

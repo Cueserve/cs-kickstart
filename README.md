@@ -51,13 +51,13 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 | ---- | --- | -------- |
 | 0 | `/proj-init-bootstrap` | cloned target repo + `.proj-init/state.json` registration |
 | 1 | `/proj-init-repo-setup` | `CONTRIBUTING.md` (governance) + branch protection if plan supports it |
-| 2 | `/proj-init-product` | `PRODUCT.md` |
-| 3 | `/proj-init-prd` | `PRD.md` |
-| 4 | `/proj-init-architecture` | `ARCHITECTURE.md` |
-| 5 | `/proj-init-techstack` | `TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) |
-| 6 | `/proj-init-aitoolguide` | `AI-TOOL-GUIDE.md` + one adapter per AI tool in use (e.g. `CLAUDE.md`, `.github/copilot-instructions.md`) |
+| 2 | `/proj-init-product` | `docs/PRODUCT.md` |
+| 3 | `/proj-init-prd` | `docs/PRD.md` |
+| 4 | `/proj-init-architecture` | `docs/ARCHITECTURE.md` |
+| 5 | `/proj-init-techstack` | `docs/TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) |
+| 6 | `/proj-init-aitoolguide` | `docs/AI-TOOL-GUIDE.md` + one adapter per AI tool in use (e.g. `CLAUDE.md`, `.github/copilot-instructions.md`) |
 | 7 | `/proj-init-readme` | the target's project `README.md` |
-| 8 | `/proj-init-backlog` | `BACKLOG.md` + host issues/work items |
+| 8 | `/proj-init-backlog` | `docs/BACKLOG.md` + host issues/work items |
 | 9 | `/proj-init-finalize` | `CONTRIBUTING.md` with initiation-only governance removed + permanent core retained |
 | — | `/proj-init-cleanup` | unregisters the workspace after Step-09 merges |
 
@@ -84,16 +84,16 @@ scripts/bootstrap-target-repo.mjs ← Step-00 script: clone the target repo and 
 README.md                        ← this kit's entrypoint (the control-plane README)
 
 Generated in the TARGET repo after running Step-01 through Step-09:
-PRODUCT.md                       ← product concept (Step-02)
-PRD.md                           ← requirements (Step-03)
-ARCHITECTURE.md                  ← system design (Step-04)
-TECH-STACK.md                    ← approved technologies (Step-05)
+docs/PRODUCT.md                  ← product concept (Step-02)
+docs/PRD.md                      ← requirements (Step-03)
+docs/ARCHITECTURE.md             ← system design (Step-04)
+docs/TECH-STACK.md               ← approved technologies (Step-05)
+docs/AI-TOOL-GUIDE.md            ← AI tool rules shared across all tools (Step-06)
+docs/BACKLOG.md                  ← initial backlog manifest + host issue IDs (Step-08)
 CONTRIBUTING.md                  ← governance + tooling rules (Step-01 and Step-05; initiation-only material stripped in Step-09)
-AI-TOOL-GUIDE.md                 ← AI tool rules shared across all tools (Step-06)
 CLAUDE.md                        ← Claude Code adapter, if in use (Step-06)
 .github/copilot-instructions.md  ← Copilot adapter, if in use (Step-06)
 README.md                        ← the target's project entry point (Step-07)
-BACKLOG.md                       ← initial backlog manifest + host issue IDs (Step-08)
 ```
 
 ## After Initiation

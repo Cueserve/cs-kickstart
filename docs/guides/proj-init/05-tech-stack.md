@@ -1,7 +1,7 @@
 # Step-05: Tech Stack
 
-**Output file:** `TECH-STACK.md`
-**Depends on:** `PRD.md` (Step-03), `ARCHITECTURE.md` (Step-04)
+**Output file:** `docs/TECH-STACK.md`
+**Depends on:** `docs/PRD.md` (Step-03), `docs/ARCHITECTURE.md` (Step-04)
 **Required before:** Step-06 (AI Tool Guide) and any sandbox spike work
 
 ---

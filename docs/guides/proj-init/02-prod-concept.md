@@ -1,6 +1,6 @@
 # Step-02: Product Concept
 
-**Output file:** `PRODUCT.md`
+**Output file:** `docs/PRODUCT.md`
 **Depends on:** nothing — this is the starting point
 **Required before:** Step-03 (PRD)
 

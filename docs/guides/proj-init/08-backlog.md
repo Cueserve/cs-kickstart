@@ -1,8 +1,8 @@
 # Step-08: Initial Backlog
 
-**Output file:** `BACKLOG.md` (manifest of created work items)
+**Output file:** `docs/BACKLOG.md` (manifest of created work items)
 **Creates in host:** GitHub Issues or Azure DevOps work items
-**Depends on:** `PRODUCT.md` (Step-02), `PRD.md` (Step-03), `ARCHITECTURE.md` (Step-04), `TECH-STACK.md` (Step-05), `README.md` (Step-07)
+**Depends on:** `docs/PRODUCT.md` (Step-02), `docs/PRD.md` (Step-03), `docs/ARCHITECTURE.md` (Step-04), `docs/TECH-STACK.md` (Step-05), `README.md` (Step-07)
 **Required before:** first sprint planning, development kickoff
 
 ---

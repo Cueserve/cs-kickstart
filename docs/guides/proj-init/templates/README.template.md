@@ -62,10 +62,10 @@ cp .env.example .env
 
 ## Further Reading
 
-- [PRD.md](PRD.md) — requirements and feature scope
-- [ARCHITECTURE.md](ARCHITECTURE.md) — system structure and design decisions
-- [TECH-STACK.md](TECH-STACK.md) — approved technologies and usage rules
-- [AI-TOOL-GUIDE.md](AI-TOOL-GUIDE.md) — rules and constraints for AI tools
+- [PRD.md](docs/PRD.md) — requirements and feature scope
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — system structure and design decisions
+- [TECH-STACK.md](docs/TECH-STACK.md) — approved technologies and usage rules
+- [AI-TOOL-GUIDE.md](docs/AI-TOOL-GUIDE.md) — rules and constraints for AI tools
 
 ---
 

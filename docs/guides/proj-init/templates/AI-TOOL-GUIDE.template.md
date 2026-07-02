@@ -4,8 +4,8 @@
 **Last updated:** [YYYY-MM-DD]
 **Source of truth for:** [one line — how AI tools must behave on this project]
 
-> Derived from: ARCHITECTURE.md, TECH-STACK.md
-> Downstream: README.md, BACKLOG.md
+> Derived from: docs/ARCHITECTURE.md, docs/TECH-STACK.md
+> Downstream: README.md, docs/BACKLOG.md
 
 <!-- @inject: _doc-references.md -->
 

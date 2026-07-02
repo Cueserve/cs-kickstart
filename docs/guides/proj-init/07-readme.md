@@ -1,7 +1,7 @@
 # Step-07: README
 
-**Output file:** `README.md`
-**Depends on:** `PRODUCT.md` (Step-02), `PRD.md` (Step-03), `ARCHITECTURE.md` (Step-04), `TECH-STACK.md` (Step-05), `AI-TOOL-GUIDE.md` (Step-06)
+**Output file:** `README.md` (repo root)
+**Depends on:** `docs/PRODUCT.md` (Step-02), `docs/PRD.md` (Step-03), `docs/ARCHITECTURE.md` (Step-04), `docs/TECH-STACK.md` (Step-05), `docs/AI-TOOL-GUIDE.md` (Step-06)
 **Required before:** wider repository sharing, onboarding, and declaring initiation complete
 
 ---
@@ -25,7 +25,7 @@ Structure is fixed by the template — `docs/guides/proj-init/templates/README.t
 5. **Install & Run** — exact commands to install dependencies and start the app locally
 6. **Run Tests** — exact commands to run the test suite
 7. **Project Structure** — top-level folder map with one-line purpose per folder
-8. **Further Reading** — `PRD.md` for requirements and feature scope; `ARCHITECTURE.md`, `TECH-STACK.md`, and `AI-TOOL-GUIDE.md` for deeper context on decisions
+8. **Further Reading** — `docs/PRD.md` for requirements and feature scope; `docs/ARCHITECTURE.md`, `docs/TECH-STACK.md`, and `docs/AI-TOOL-GUIDE.md` for deeper context on decisions
 
 ## Why This Matters
 
@@ -49,10 +49,10 @@ Structure is fixed by the template — `docs/guides/proj-init/templates/README.t
 
 Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
 
-- [ ] Output matches `templates/README.template.md` — project pitch on top, all eight sections in order, and **Further Reading** present with links to `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, and `AI-TOOL-GUIDE.md`; no top-level section added or removed, and no `[placeholder]` left unfilled.
+- [ ] Output matches `templates/README.template.md` — project pitch on top, all eight sections in order, and **Further Reading** present with links to `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/TECH-STACK.md`, and `docs/AI-TOOL-GUIDE.md`; no top-level section added or removed, and no `[placeholder]` left unfilled.
 - [ ] Every setup command was personally tested — it works from a clean environment without prior knowledge.
 - [ ] Every environment variable is documented in `.env.example` with a description and where to obtain the value.
 - [ ] Version numbers are present for all prerequisites (runtimes, tools, CLIs).
 - [ ] Project structure section exists with a one-line purpose per top-level folder.
-- [ ] Links to `PRD.md`, `ARCHITECTURE.md`, `TECH-STACK.md`, and `AI-TOOL-GUIDE.md` are present under Further reading.
+- [ ] Links to `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/TECH-STACK.md`, and `docs/AI-TOOL-GUIDE.md` are present under Further reading.
 - [ ] The target repo's prior/placeholder README content is fully replaced — no leftover boilerplate or template scaffolding remains.
