@@ -35,7 +35,7 @@ Structure is fixed by the template — `docs/guides/proj-init/templates/README.t
 
 ## Rules
 
-- This step **writes the target repo's project README**, replacing whatever README the cloned repo currently has (a placeholder, template boilerplate, or an earlier draft). By Step-07, the project is handoff-ready for sharing. Initiation is declared complete only after Step-08 is merged. The Project Initiation guides live in this kit under `docs/guides/proj-init/` and remain as the durable reference — they are not part of the target repo.
+- This step **writes the target repo's project README**, replacing whatever README the cloned repo currently has (a placeholder, template boilerplate, or an earlier draft). By Step-07, the project is handoff-ready for sharing. Initiation is declared complete only after Step-09 is merged (Step-08 seeds the backlog; Step-09 finalizes `CONTRIBUTING.md`). The Project Initiation guides live in this kit under `docs/guides/proj-init/` and remain as the durable reference — they are not part of the target repo.
 - Production implementation may already be in progress after Step-06; Step-07 is the handoff and sharing gate.
 - Write README last. It documents what exists, not what you plan to build.
 - Every command in README must be tested and working before it is committed.

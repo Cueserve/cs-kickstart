@@ -1,6 +1,6 @@
 # Project Initiation Guide — Overview
 
-This folder defines the sequence every new project follows before development begins. This kit is the control plane: Step-00 clones the target repository and registers it, and Step-01 through Step-08 run from this kit against that clone. Run the steps in order; do not skip or reorder them.
+This folder defines the sequence every new project follows before development begins. This kit is the control plane: Step-00 clones the target repository and registers it, and Step-01 through Step-09 run from this kit against that clone. Run the steps in order; do not skip or reorder them.
 
 ## Workflow
 
@@ -17,6 +17,9 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
                      │
                      ▼
                TECH-STACK.md → AI-TOOL-GUIDE.md → README.md → BACKLOG.md
+                                                                   │
+                                                                   ▼
+                                              Step-09: Finalize Governance (strip init-only CONTRIBUTING.md)
 ```
 
 | Step | Run | Output | Approved by (PR/MR gate) | Purpose |
@@ -30,11 +33,12 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 | 6 | `/proj-init-aitoolguide` | `AI-TOOL-GUIDE.md` + adapter files | Architect | Define rules and constraints for all AI tools |
 | 7 | `/proj-init-readme` | `README.md` | Architect | Entry point: setup, env config, and how to run |
 | 8 | `/proj-init-backlog` | `BACKLOG.md` + host issues/work items | Product Owner | Seed the issue tracker; bridge initiation to execution |
-| — | `/proj-init-cleanup` | workspace unregistered | Operator confirm | Unregister the workspace after Step-08 merges |
+| 9 | `/proj-init-finalize-governance` | `CONTRIBUTING.md` (init-only material stripped) | Architect | Remove initiation-only governance; hand off a permanent contribution core |
+| — | `/proj-init-cleanup` | workspace unregistered | Operator confirm | Unregister the workspace after Step-09 merges |
 
 GitHub Copilot users can run matching prompt adapters in `.github/prompts/proj-init-*.prompt.md`; they resolve to the same underlying workflow.
 
-Step-00 is maintained in [00-bootstrap.md](00-bootstrap.md) and implemented by `scripts/bootstrap-target-repo.mjs`. The document-producing workflow for Step-02 through Step-08 is maintained in one place: [_run-step.md](_run-step.md) — it resolves the registered target and runs every git operation and output write against it. Step metadata is maintained in [_steps.yml](_steps.yml). The output structure of each generated document is fixed by its template in [templates/](templates/), with shared writing rules in [templates/_writing-rules.md](templates/_writing-rules.md). Claude commands and Copilot prompts are adapters only. Post-init utility workflows live in [doc-status.md](doc-status.md), [doc-update.md](doc-update.md), and [cleanup.md](cleanup.md).
+Step-00 is maintained in [00-bootstrap.md](00-bootstrap.md) and implemented by `scripts/bootstrap-target-repo.mjs`. The shared workflow for Step-02 through Step-09 is maintained in one place: [_run-step.md](_run-step.md) — it resolves the registered target and runs every git operation and output write against it. Step-02 through Step-08 each produce a source-of-truth document; Step-09 transforms `CONTRIBUTING.md` rather than producing a new document, but runs on the same branch/PR/merge rail. Step metadata is maintained in [_steps.yml](_steps.yml). The output structure of each generated document is fixed by its template in [templates/](templates/), with shared writing rules in [templates/_writing-rules.md](templates/_writing-rules.md). Claude commands and Copilot prompts are adapters only. Post-init utility workflows live in [doc-status.md](doc-status.md), [doc-update.md](doc-update.md), and [cleanup.md](cleanup.md).
 
 ## Check where you are
 
@@ -68,7 +72,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 ## Who does what
 
 - **Product Owner hat** — owns Step-02, Step-03, and Step-08, and co-authors Step-04.
-- **Architect hat** — owns Step-01 and Step-04 through Step-07.
+- **Architect hat** — owns Step-01, Step-04 through Step-07, and Step-09.
 - **Solo / process-enforced** — one person wears both hats. Adopt the hat the step calls for while authoring, then complete the self-review checklist in [01-repo-setup.md](01-repo-setup.md) before merging — never a direct push to `main`.
 
 ## Key Rules
@@ -83,7 +87,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 - Sandbox spikes are allowed only after Step-05 is merged, on isolated spike branches, and must not merge to `main`.
 - Production implementation work starts only after Step-06 is merged.
 - Step-07 is required before wider repository sharing.
-- Step-08 is required before sprint planning and development kickoff. Initiation is declared complete only when Step-08 is merged. Run `/proj-init-cleanup` afterward to unregister the workspace from this kit.
+- Step-08 is required before sprint planning and development kickoff. Step-09 then strips the initiation-only material from `CONTRIBUTING.md`. Initiation is declared complete only when Step-09 is merged. Run `/proj-init-cleanup` afterward to unregister the workspace from this kit.
 - These documents are the single source of truth for their respective areas. Always refer back to them when making decisions or writing code.
 
 ---

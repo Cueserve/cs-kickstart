@@ -31,6 +31,13 @@ For each document, run `git -C "$TARGET" show main:<doc>` and capture the exit c
 
 Exit 0 = merged. Non-zero = not on `main`.
 
+### Step-09 — Governance finalized
+
+Step-09 transforms `CONTRIBUTING.md` rather than producing a new document, so check its content, not existence:
+
+- Run `git -C "$TARGET" show main:CONTRIBUTING.md` and test for the string `INITIATION-ONLY`.
+- Absent = Step-09 merged (`✓ merged`). Present = initiation-only block still there (`— not started`, once Step-08 is merged).
+
 ### In-progress branches
 
 Run `git -C "$TARGET" fetch --prune` then `git -C "$TARGET" branch -r` and collect any branch matching `init/*` (e.g. `origin/init/prd`).
@@ -70,6 +77,7 @@ Example output format:
 | 6    | AI-TOOL-GUIDE.md | — not started | |
 | 7    | README.md       | — not started | |
 | 8    | BACKLOG.md      | — not started | |
+| 9    | Governance finalized | — not started | init-only block still in CONTRIBUTING.md |
 
 **Next:** Step-05 — `/proj-init-techstack` (blocked until Step-04 PR is merged)
 ```
@@ -79,7 +87,8 @@ Example output format:
 After the table, always print one `**Next:**` line:
 
 - If any step before the first gap is `PR open` or `branch open` → state that it must be merged before the next step can start, and name the blocked step.
-- If all steps are merged → print "Initiation complete. Run `/proj-init-cleanup` to unregister the workspace, and `/proj-init-doc-update <docname>` if any document diverges from reality."
+- If Step-09 is the only step not yet merged → name it: "Step-09 — `/proj-init-finalize-governance` (strips the initiation-only block from CONTRIBUTING.md; last step before cleanup)."
+- If all steps through Step-09 are merged → print "Initiation complete. Run `/proj-init-cleanup` to unregister the workspace, and `/proj-init-doc-update <docname>` if any document diverges from reality."
 - Otherwise → name the lowest-numbered step that is `not started` and the command to run it.
 
 ## Nothing else

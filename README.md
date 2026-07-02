@@ -14,7 +14,7 @@ Before writing any code, register your target repo (Step-00), then run the Proje
 
 Start with **Step-00**. It clones your target repository into a local folder and registers it in `.proj-init/state.json`, so every later step operates on that clone. It does not copy any kit files into the target, create product code, or choose a stack. Run `/proj-init-bootstrap` (or use [Step-00](docs/guides/proj-init/00-bootstrap.md) directly in another AI tool).
 
-After Step-00, the process walks through Step-01 to Step-08. Step-02 through Step-08 each produce one source-of-truth document, finalized by a pull request. Use the `/proj-init-*` commands as the primary interface. All adapters load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
+After Step-00, the process walks through Step-01 to Step-09. Step-02 through Step-08 each produce one source-of-truth document, finalized by a pull request; Step-09 strips the initiation-only material from `CONTRIBUTING.md` and hands off a permanent contribution core. Use the `/proj-init-*` commands as the primary interface. All adapters load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
 
 Run exactly one step per session. Start each step session by running `/proj-init-doc-status` before executing the step command.
 
@@ -58,9 +58,10 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 | 6 | `/proj-init-aitoolguide` | `AI-TOOL-GUIDE.md` + one adapter per AI tool in use (e.g. `CLAUDE.md`, `.github/copilot-instructions.md`) |
 | 7 | `/proj-init-readme` | the target's project `README.md` |
 | 8 | `/proj-init-backlog` | `BACKLOG.md` + host issues/work items |
-| — | `/proj-init-cleanup` | unregisters the workspace after Step-08 merges |
+| 9 | `/proj-init-finalize-governance` | `CONTRIBUTING.md` with initiation-only governance removed + permanent core retained |
+| — | `/proj-init-cleanup` | unregisters the workspace after Step-09 merges |
 
-Step-02 through Step-08 write their output into the **registered target repo**, not this kit. Adapters are thin wrappers over the same workflow. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
+Step-02 through Step-09 write their output into the **registered target repo**, not this kit. Adapters are thin wrappers over the same workflow. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
 
 GitHub Copilot users can run the matching adapter prompts in `.github/prompts/proj-init-*.prompt.md` if preferred; they resolve to the same underlying steps.
 
@@ -82,12 +83,12 @@ scripts/bootstrap-target-repo.mjs ← Step-00 script: clone the target repo and 
 .proj-init/state.json            ← Step-00 workspace registration (gitignored, operator-local)
 README.md                        ← this kit's entrypoint (the control-plane README)
 
-Generated in the TARGET repo after running Step-01 through Step-08:
+Generated in the TARGET repo after running Step-01 through Step-09:
 PRODUCT.md                       ← product concept (Step-02)
 PRD.md                           ← requirements (Step-03)
 ARCHITECTURE.md                  ← system design (Step-04)
 TECH-STACK.md                    ← approved technologies (Step-05)
-CONTRIBUTING.md                  ← governance + tooling rules (Step-01 and Step-05)
+CONTRIBUTING.md                  ← governance + tooling rules (Step-01 and Step-05; initiation-only material stripped in Step-09)
 AI-TOOL-GUIDE.md                 ← AI tool rules shared across all tools (Step-06)
 CLAUDE.md                        ← Claude Code adapter, if in use (Step-06)
 .github/copilot-instructions.md  ← Copilot adapter, if in use (Step-06)
@@ -97,7 +98,7 @@ BACKLOG.md                       ← initial backlog manifest + host issue IDs (
 
 ## After Initiation
 
-Step-07 (`/proj-init-readme`) writes **the target's own README** — describing the actual product, its setup, and how to run it. Step-08 (`/proj-init-backlog`) seeds the issue tracker. Once Step-08 is merged, run `/proj-init-cleanup` to unregister the workspace from this kit. The guides in `docs/guides/proj-init/` stay as the durable reference for the process, and this kit's own README is never overwritten.
+Step-07 (`/proj-init-readme`) writes **the target's own README** — describing the actual product, its setup, and how to run it. Step-08 (`/proj-init-backlog`) seeds the issue tracker. Step-09 (`/proj-init-finalize-governance`) removes the initiation-only branching and self-review rules from `CONTRIBUTING.md`, leaving the permanent contribution core plus a stub the team fills in for the development phase. Once Step-09 is merged, run `/proj-init-cleanup` to unregister the workspace from this kit. The guides in `docs/guides/proj-init/` stay as the durable reference for the process, and this kit's own README is never overwritten.
 
 ### Keeping docs current
 

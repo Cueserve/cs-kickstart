@@ -240,7 +240,7 @@ function printResult(result) {
 
   console.log(
     '\nCloned and registered. Next: complete Step-01 (repo governance) against the target, ' +
-      'then run Steps 2–8 from this kit. Run /proj-init-cleanup after Step-08 merges.',
+      'then run Steps 2–9 from this kit. Run /proj-init-cleanup after Step-09 merges.',
   );
 }
 

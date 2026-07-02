@@ -59,7 +59,7 @@ Before merging any `init/*` PR/MR, the author self-certifies:
 - [ ] No upstream document changed after this branch was created.
 - [ ] A PR/MR was opened — no direct push to `main`.
 
-Record this checklist in `CONTRIBUTING.md` so every later step and AI tool applies the same gate.
+Record this checklist in `CONTRIBUTING.md` so every later step and AI tool applies the same gate. Place it **inside the `INITIATION-ONLY` fence** (see below) — it governs producing the initiation documents, not development-phase contribution, so Step-09 removes it when initiation completes.
 
 ## What This Step Produces
 
@@ -67,14 +67,31 @@ Record this checklist in `CONTRIBUTING.md` so every later step and AI tool appli
 
 This layer depends on nothing and is written now. The **tooling layer** (test/lint/build commands, hooks) depends on the stack and is appended later — see `05-tech-stack.md`.
 
-The governance layer covers:
+The governance layer covers two kinds of content: **permanent** rules that outlive initiation, and **initiation-only** rules that govern producing the initiation documents. Fence the initiation-only content so Step-09 can remove it deterministically when initiation completes.
 
-- **Branching strategy** — branch per step off `main`; `main` only ever holds finalized, approved docs.
-- **Branch naming** — `init/<step>` for initiation work (`init/product`, `init/prd`, `init/architecture`, `init/techstack`, `init/aitools`, `init/readme`).
-- **Review flow** — open a PR/MR per branch; merge to `main` = finalized. A merged doc is the only "final" doc.
-- **The gate** — the self-review checklist above. Solo / process-enforced: the author completes it before merging; there is no second reviewer to block the merge.
+**Permanent** (stays after initiation — write it outside any fence):
+
+- **Review flow** — open a PR/MR per branch off `main`; merge to `main` = finalized. A merged change is the only "final" one.
 - **Commit convention** — Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, …). Matches `06-ai-tool-guide.md`.
 - **Direct-push rule** — never push to `main`; no force-pushes to shared branches.
+
+**Initiation-only** (Step-09 removes this — wrap it in the fence shown below):
+
+- **Branch naming** — `init/<step>` for initiation work (`init/product`, `init/prd`, `init/architecture`, `init/techstack`, `init/aitoolguide`, `init/readme`, `init/backlog`).
+- **Branch-per-step** — one branch per initiation step off `main`; `main` only ever holds finalized, approved docs.
+- **The gate** — the self-review checklist above. Solo / process-enforced: the author completes it before merging; there is no second reviewer to block the merge.
+
+Wrap the initiation-only content in HTML-comment markers so its removal in Step-09 is a deterministic strip, not a rewrite:
+
+```markdown
+<!-- BEGIN INITIATION-ONLY -->
+## Initiation branching & self-review gate
+
+… init/<step> branch naming, branch-per-step rule, and the self-review checklist …
+<!-- END INITIATION-ONLY -->
+```
+
+Keep the markers verbatim (this mirrors the protected-block convention used elsewhere in the kit). Step-09 (`/proj-init-finalize-governance`) deletes everything between them, markers included, once Step-08 is merged.
 
 ## Why This Matters
 

@@ -11,11 +11,13 @@ Read `.proj-init/state.json` from this kit root.
 
 ## 1. Confirm initiation is complete
 
-Confirm Step-08 is merged before clearing state — otherwise the operator loses the registered target mid-process.
+Step-09 (`/proj-init-finalize-governance`) is the terminal step. It is done when the `INITIATION-ONLY` fence has been stripped from `CONTRIBUTING.md` on `main`. Confirm that before clearing state — otherwise the operator loses the registered target mid-process.
 
 - Run `git -C "$TARGET" show main:BACKLOG.md`.
-  - Exit 0 → Step-08 is merged; proceed.
-  - Non-zero → **STOP** and tell the operator: `BACKLOG.md is not on main yet — finish Step-08 before cleanup. Re-run with an explicit override only if you intend to abandon this workspace.`
+  - Non-zero → **STOP** and tell the operator: `BACKLOG.md is not on main yet — finish Step-08 (then Step-09) before cleanup. Re-run with an explicit override only if you intend to abandon this workspace.`
+- Run `git -C "$TARGET" show main:CONTRIBUTING.md` and check for the string `INITIATION-ONLY`.
+  - Not present → Step-09 is merged; proceed.
+  - Present → **STOP** and tell the operator: `CONTRIBUTING.md still carries the initiation-only governance block — run Step-09 (/proj-init-finalize-governance) before cleanup. Re-run with an explicit override only if you intend to abandon this workspace.`
 
 If the operator explicitly chooses to abandon an incomplete workspace, allow cleanup after they confirm.
 
@@ -34,5 +36,5 @@ Report that the workspace was unregistered. The target clone on disk is left unt
 ## Rules
 
 - Cleanup only removes `.proj-init/state.json` from this kit. It never deletes, commits to, or pushes the target repository.
-- Do not clear state before Step-08 is merged unless the operator explicitly abandons the workspace.
+- Do not clear state before Step-09 is merged (the `INITIATION-ONLY` fence is gone from `CONTRIBUTING.md` on `main`) unless the operator explicitly abandons the workspace.
 - After cleanup, running any `/proj-init-*` step will stop until Step-00 registers a workspace again.

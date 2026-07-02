@@ -25,7 +25,7 @@ If not, STOP with: `Not at cs-kickstart root — aborting.` Do not interrogate t
 Read in phases. Stop-report early only on a structural FAIL that makes later phases meaningless (e.g. `_steps.yml` missing/unparseable).
 
 - **Phase 0 — Contract.** Read `README.md` + `docs/guides/proj-init/_overview.md`. Extract the *claimed* contract: step list, per-step output doc, ownership, PR-merge-as-final gate, "one step per session" rule.
-- **Phase 1 — Registry (the spine).** Read `docs/guides/proj-init/_steps.yml` + `_run-step.md`. Derive the **expected artifact set**: for each step → {guide file, claude command, template, output doc name, upstream dependency}. Skip entries marked `runner: false` / `kind: utility` (e.g. Step-00) when deriving the doc-step artifact set — they have no template or output doc; for them verify only {guide, claude command, script}.
+- **Phase 1 — Registry (the spine).** Read `docs/guides/proj-init/_steps.yml` + `_run-step.md`. Derive the **expected artifact set**: for each step → {guide file, claude command, template, output doc name, upstream dependency}. Skip entries marked `runner: false` / `kind: utility` (e.g. Step-00) when deriving the doc-step artifact set — they have no template or output doc; for them verify only {guide, claude command, script}. **Transform steps** (runner-governed, but `replacesExisting: true` and no `template` — e.g. Step-09, which edits an already-merged `CONTRIBUTING.md` rather than producing a new doc) have no template and no *new* output doc; for them verify {guide, claude command, prompt} only and do not expect a template.
 - **Phase 2 — Wiring (cheap, list/glob — do not open contents yet).** For every registry entry verify existence of: step guide `NN-*.md`, `.claude/commands/proj-init-*.md`, and (where the step emits a doc) a template under `templates/`. List orphans on both sides: guides/commands/templates with no registry entry, and registry entries with no file.
 - **Phase 3 — Content (open only what a check names).** Deep-read only the files a specific check below requires. Do not read every guide in full unless a check demands it.
 - **Phase 4 — Score + report.** Emit the report format below.
@@ -44,7 +44,7 @@ Each check → `PASS` / `GAP` / `FAIL` with a `file:line` or `file:section` anch
 - No step command is a dead adapter (references a guide/template path that doesn't exist).
 
 ### D2 — Produces the output
-- Step-02 through Step-08 each declare exactly **one** output doc; names match README's table and the templates.
+- Step-02 through Step-08 each declare exactly **one** output doc; names match README's table and the templates. Step-09 is a transform step: its output (`CONTRIBUTING.md`) has no template and is not a new doc — do not flag its missing template as a GAP.
 - `check-template-drift.mjs` is wired as the guard the README claims (template headings → guide section map) — verify by reading the script's intent + one guide/template pair, not by running it.
 - No orphan templates and no doc-producing step missing a template (from Phase 2).
 
@@ -82,7 +82,7 @@ Each check → `PASS` / `GAP` / `FAIL` with a `file:line` or `file:section` anch
 # cs-kickstart Audit — <date>
 
 VERDICT: <Complete | Complete-with-gaps | Incomplete>
-<one sentence: can an operator run clean-checkout → 8 merged docs in target, across sessions, or not>
+<one sentence: can an operator run clean-checkout → 8 merged docs + finalized CONTRIBUTING.md (Step-09) in target, across sessions, or not>
 
 ## Scorecard
 | Dim | Area                     | Rating        | Headline |

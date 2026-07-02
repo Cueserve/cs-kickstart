@@ -146,7 +146,7 @@ steps:
     reviewer: Architect
     commitMessage: "docs: replace boilerplate README with project README (Step-07)"
     prSummary: "Note that the boilerplate README is replaced and include the Step-07 reviewer checklist."
-    finalReminder: "README.md becomes final only when the Architect approves and merges the PR/MR. Initiation is complete only after Step-08 is merged."
+    finalReminder: "README.md becomes final only when the Architect approves and merges the PR/MR. Initiation is complete only after Step-09 is merged."
     specialActions:
       - Replace the target repo's current README with the generated project README.
       - Remove any leftover placeholder or boilerplate content from README.md.
@@ -172,7 +172,7 @@ steps:
     reviewer: Product Owner
     commitMessage: "docs: add BACKLOG.md - Step-08 initial backlog"
     prSummary: "State the epic count, story count, priority breakdown, and include the Step-08 reviewer checklist."
-    finalReminder: "BACKLOG.md becomes final only when the Product Owner approves and merges the PR/MR. Once merged, initiation is complete."
+    finalReminder: "BACKLOG.md becomes final only when the Product Owner approves and merges the PR/MR. Once merged, run Step-09 (/proj-init-finalize-governance) to finalize CONTRIBUTING.md."
     specialPreconditions:
       - Detect host issue tracker CLI availability before confirmation: GitHub gh, Azure DevOps az boards, or PENDING manual creation.
     specialActions:
@@ -180,3 +180,25 @@ steps:
       - Present the derived backlog and wait for approval before host writes or file writes.
       - Create host work items one at a time and capture IDs.
       - If no supported CLI is available, record PENDING IDs and manual creation notes in BACKLOG.md.
+
+  - id: 9
+    command: proj-init-finalize-governance
+    title: Finalize Governance
+    branch: init/finalize-governance
+    outputs:
+      - CONTRIBUTING.md
+    replacesExisting: true    # CONTRIBUTING.md is already on main; this transforms it, so skip the "already finalized" precondition
+    guide: docs/guides/proj-init/09-finalize-governance.md
+    upstream:
+      - BACKLOG.md             # gate: cannot run until Step-08 is merged, making this the terminal step
+    owner: Architect
+    reviewer: Architect
+    commitMessage: "docs: finalize CONTRIBUTING.md for the development phase (Step-09)"
+    prSummary: "State that the init-only governance block was removed, the permanent core and tooling layer were preserved, and the development-phase stub was left for the team; include the Step-09 reviewer checklist."
+    finalReminder: "CONTRIBUTING.md becomes final for the development phase only when the Architect merges the PR/MR. Initiation is complete once this is merged; run /proj-init-cleanup afterward."
+    specialActions:
+      - Read CONTRIBUTING.md from the target's main.
+      - Remove only the fenced INITIATION-ONLY block (markers included). Preserve the permanent governance rules and the entire Step-05 tooling layer verbatim.
+      - Insert the DEVELOPMENT-PHASE-GOVERNANCE stub from the guide where the removed block was.
+      - If the INITIATION-ONLY markers are absent from CONTRIBUTING.md on main, STOP — do not delete lines by inference.
+      - Do not author a full development-phase policy; leave the stub for the team to expand via /proj-init-doc-update.

@@ -26,7 +26,7 @@ This step closes the gap between project definition and execution. By the end, t
 
 ## Why This Matters
 
-- `README.md` ends initiation. Without Step-08, the first action after initiation is "where do we start?" — this step answers that.
+- `README.md` makes the project handoff-ready; this backlog is the last document produced (Step-09 then finalizes `CONTRIBUTING.md`). Without Step-08, the first action after initiation is "where do we start?" — this step answers that.
 - Work items in the tracker are the team's daily operating surface; a doc nobody reads is not a backlog.
 - Traceability from code → story → PRD requirement → product goal closes the loop on the entire initiation chain.
 

@@ -2,7 +2,7 @@
 
 **Output:** A cloned target repo on disk + `.proj-init/state.json` registering it in this kit
 **Depends on:** nothing — this runs before Step-01
-**Required before:** every other step — Step-01 through Step-08 read the registered target from state
+**Required before:** every other step — Step-01 through Step-09 read the registered target from state
 
 ---
 
@@ -34,7 +34,7 @@ Step-00 does two things and nothing else:
    ```
 
 `.proj-init/` is gitignored — it is operator-local state pointing at a folder on
-this machine. It is removed by `/proj-init-cleanup` once Step-08 is merged.
+this machine. It is removed by `/proj-init-cleanup` once Step-09 is merged.
 
 ## Operator Questions — ASK FIRST, do not skip
 
