@@ -53,4 +53,5 @@ Before approving the PR/MR, verify every item. An unchecked item is a reason to 
 - [ ] Non-functional requirements state numbers, not adjectives ("responds in under 200ms", not "fast").
 - [ ] Out-of-scope items for this release are explicit, not implied.
 - [ ] No implementation, architecture, or stack details — requirements only.
+- [ ] §1–§3 (Overview, Target Users, Problem Statements) reference `PRODUCT.md`'s narrative — they summarize and point to it, not restate it. If a paragraph could live verbatim in `PRODUCT.md`, it belongs there, not here.
 - [ ] Every feature traces back to a problem statement or user need in `PRODUCT.md`.
