@@ -61,11 +61,16 @@ in terms of user value.]
 
 ## 6. Functional Requirements
 
-Each requirement has a unique ID and a MoSCoW priority (Must / Should / Could).
+Group requirements under a subsection per capability (mirroring §4). Each requirement
+is a single bullet: **bold ID**, then a ***bold-italic title***, then an *italic
+MoSCoW priority* (Must / Should / Could), then 2–3 sentences of exact behaviour.
+Every requirement has a unique ID; state what the system MUST / SHOULD do, never how.
 
-| ID | Requirement | Priority |
-| --- | --- | --- |
-| PRD-001 | [exact system behaviour, rule, or workflow] | Must |
+### [Capability group — from §4]
+
+- **PRD-001** — ***[requirement title]*** *(Must)* — [The exact system behaviour,
+  rule, or workflow, in 2–3 sentences. No implementation, architecture, or stack
+  detail.]
 
 ## 7. Non-Functional Requirements
 
