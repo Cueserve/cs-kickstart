@@ -18,13 +18,12 @@ This document explains what we are building and why. It is the single place anyo
 
 Structure is fixed by the template — `docs/guides/proj-init/templates/PRODUCT.template.md`. The template owns the section headings and their order; this guide owns what each section must contain. Fill every section; add or drop none.
 
-1. **Overview** — three parts: a one-line **Tagline** that positions the product, an **Objective** (two or three sentences on what it does and what we are trying to achieve), and a short **Description** for a newcomer. Keep the three distinct — do not repeat the same content across them or with Purpose.
+1. **Overview** — four parts in a narrative arc: **Vision** (the aspirational future the product is working toward), **Problem Statement** (the external pain — who is hurt today and what breaks without this), **Objective** (two or three sentences on the goal/outcome the product must achieve), and **Description** (the mechanism — how the product works). Keep the four distinct — do not repeat the same content across them.
 2. **Target Users** — who this is for; the people whose problem we are solving
-3. **Purpose** — why this project exists and the problem it solves
-4. **Features** — the high-level capability areas the product offers; themes of value, not detailed requirements (those live in PRD.md) and not a re-listing of scope
-5. **Scope (In / Out)** — what we are building and, explicitly, what we are not; the boundary that stops scope creep
-6. **Success Criteria** — what "good" looks like; how we will know it is working
-7. **Anti-Patterns** — what to avoid building or doing; approach/behaviour guardrails, not feature exclusions (those live in Scope)
+3. **Features** — the high-level capability areas the product offers; themes of value, not detailed requirements (those live in PRD.md) and not a re-listing of scope
+4. **Scope (In / Out)** — what we are building and, explicitly, what we are not; the boundary that stops scope creep
+5. **Success Criteria** — what "good" looks like; how we will know it is working
+6. **Anti-Patterns** — what to avoid building or doing; approach/behaviour guardrails, not feature exclusions (those live in Scope)
 
 ## Why This Matters
 
@@ -40,7 +39,7 @@ Structure is fixed by the template — `docs/guides/proj-init/templates/PRODUCT.
 
 Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
 
-- [ ] Output matches the template skeleton — header block, all seven sections in order, and the references table present; no top-level section added or removed, and no `[placeholder]` left unfilled.
+- [ ] Output matches the template skeleton — header block, all six sections in order, and the references table present; no top-level section added or removed, and no `[placeholder]` left unfilled.
 - [ ] Target users are specific — not "anyone" or "all users"; a real person with a real problem.
 - [ ] Scope explicitly lists what is **not** being built — not just what is.
 - [ ] Success criteria are measurable — you could verify them without asking the author.
