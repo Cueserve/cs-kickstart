@@ -31,18 +31,20 @@
 ## 1. Overview
 
 [What the product is, why it exists, and its core goals — a concise reference
-anchored to PRODUCT.md.]
+anchored to PRODUCT.md. Summarize; don't restate the narrative.]
 
 ## 2. Target Users
 
-[Who the product is for, refined into actionable personas or usage contexts.]
+[Who the product is for — the personas/usage contexts from PRODUCT.md §2,
+refined for requirement clarity. Reference, don't re-describe.]
 
 - [Persona / usage context] — [the need this release addresses]
 
 ## 3. Problem Statements
 
-[The specific problems being solved, tied to user needs. Every feature must
-trace to one of these.]
+[The specific problems being solved — drawn from PRODUCT.md's Problem Statement,
+sharpened per user need. Every feature must trace to one of these. Summarize,
+don't restate.]
 
 - [Problem statement — the user need it reflects]
 
