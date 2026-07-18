@@ -42,6 +42,10 @@ Structure is fixed by the template — `docs/guides/proj-init/templates/README.t
 - **Detect scaffold mode first, and announce it.** Check whether `package.json` exists on the target's `main` (`git -C "$TARGET" show main:package.json`). This kit is docs-first — Step-07 can legitimately run before the application is scaffolded, so the setup sections have two modes:
   - **Scaffolded** (`package.json` present): every setup command MUST be tested and working before commit, and `.env.example` MUST be reconciled against the real file in the repo — no undocumented keys.
   - **Docs-first** (no `package.json`): the app is not yet scaffolded, so no command can be run. Write **Prerequisites**, **Environment Setup**, **Install & Run**, and **Run Tests** from `TECH-STACK.md` as the *intended* setup. Each of those four sections MUST open with the marker `> **Pending scaffold — unverified.** …`. Commands MUST NOT be presented as tested. `.env.example` keys are derived from `TECH-STACK.md` §6 and flagged for reconciliation when the scaffold lands. This is a sanctioned path, not an override — the mode is recorded in the PR summary so the reviewer applies the matching checklist branch.
+
+    Write each marker in **plain, consistent English**: the fixed opener `> **Pending scaffold — unverified.**` followed by one or two short sentences stating (a) what is missing and (b) that it will be tested/reconciled *when the app is scaffolded*. Keep the wording parallel across all four sections. Example:
+
+    > **Pending scaffold — unverified.** These commands assume the standard setup from `TECH-STACK.md` and have **not** been run yet. They will be tested and corrected when we scaffold the app.
 - Do not duplicate content from `ARCHITECTURE.md` or `TECH-STACK.md` — link to them instead.
 - If setup steps change, update README in the same commit.
 - If any upstream document changes (`PRODUCT.md`, `PRD.MD`, `ARCHITECTURE.md`, `TECH-STACK.md`, `AI-TOOL-GUIDE.md`), reconcile README accordingly.
