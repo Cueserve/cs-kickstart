@@ -1,12 +1,17 @@
 # [Project Name]
 
-[One- or two-sentence pitch — what this project is and who it is for. Derived
-from PRODUCT.md.]
+> [Vision — verbatim copy of the Vision line from PRODUCT.md §1 Overview. Do not
+paraphrase.]
+
+[Badge row — one static shields.io badge per core technology: each Language &
+Framework from TECH-STACK.md §1 and the primary platform from §3. No live-endpoint
+badges.]
 
 ## Project Overview
 
-[What the product does and why it exists. A short paragraph a newcomer reads
-first.]
+[Condensed cold-start summary for a developer — 3–4 sentences on what the product
+does and why it exists. Summarize PRODUCT.md; do not restate it in full. Link to
+PRODUCT.md as the source of truth.]
 
 ## Key Concepts
 
