@@ -142,4 +142,4 @@ Ask the user to confirm before pushing. On confirmation:
 - Body: what changed, why, which downstream documents are flagged, path to `$TARGET/.claude/reconciliation/<docname>-reconcile.md`, and the reviewer checklist from the document's step guide (`docs/guides/proj-init/` in this kit).
 - Reviewer: same gate as the original initiation step (see the table in Section 1).
 
-Remind the user: the document is only updated once the PR/MR is merged to `main`. Work through the reconciliation checklist afterward — one `/proj-init-doc-update <doc>` per flagged downstream document.
+Remind the user: the document is only updated once the PR/MR is merged to `main`. Work through the reconciliation checklist afterward — one `/proj-init-doc-update <doc>` per flagged downstream document
