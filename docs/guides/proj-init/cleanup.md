@@ -38,3 +38,7 @@ Report that the workspace was unregistered. The target clone on disk is left unt
 - Cleanup only removes `.proj-init/state.json` from this kit. It never deletes, commits to, or pushes the target repository.
 - Do not clear state before Step-09 is merged (the `INITIATION-ONLY` fence is gone from `CONTRIBUTING.md` on `main`) unless the operator explicitly abandons the workspace.
 - After cleanup, running any `/proj-init-*` step will stop until Step-00 registers a workspace again.
+- Post-cleanup document maintenance does **not** require re-registering: run
+  `/proj-init-doc-update <docname> --target <target-folder>` or
+  `/proj-init-doc-status --target <target-folder>` against the clone that remains on
+  disk. Only the initiation steps (01–09) need a registered workspace.

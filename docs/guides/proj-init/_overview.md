@@ -94,7 +94,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 
 ## Keeping docs current
 
-After initiation, run `/proj-init-doc-update <docname>` any time a source-of-truth document diverges from reality. It updates only the changed sections and opens a PR through the same review gate that finalized the document.
+After initiation, run `/proj-init-doc-update <docname>` any time a source-of-truth document diverges from reality. It updates only the changed sections and opens a PR through the same review gate that finalized the document. After `/proj-init-cleanup` — or to reach a different project mid-initiation — pass an explicit clone with `--target <folder>` (`/proj-init-doc-update <docname> --target <folder>`, `/proj-init-doc-status --target <folder>`); the command targets that clone directly, bypassing the registered workspace.
 
 **When to update which document:**
 
