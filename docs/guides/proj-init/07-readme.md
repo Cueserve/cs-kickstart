@@ -18,7 +18,7 @@ This document gives a complete, accurate picture of the project: what it is, how
 
 Structure is fixed by the template — `docs/guides/proj-init/templates/README.template.md`. README is the header-block exception: the H1 is the project name, directly under it a vision tagline and a tech-stack badge row, and the cross-document map is the **Further Reading** section, not the references table. The template owns the section headings and their order; this guide owns what each must contain. Fill every section; add or drop none.
 
-1. **Tagline & badges** — directly under the H1: a blockquote tagline that is a **verbatim copy** of the Vision line from `PRODUCT.md` §1 Overview (no paraphrase), followed by a badge row with one static shields.io badge per core technology — each Language & Framework in `TECH-STACK.md` §1 plus the primary platform in §3.
+1. **Tagline & badges** — directly under the H1: a blockquote tagline that is a **verbatim copy** of the Vision line from `PRODUCT.md` §1 Overview (no paraphrase), followed by a badge row with one static shields.io badge per core technology — each Language & Framework in `TECH-STACK.md` §1 that a developer directly installs or invokes, plus the primary platform in §3. A platform-managed runtime — one the §3 platform provides rather than the developer installing it — is covered by the platform badge and gets no separate badge.
 2. **Project Overview** — a **condensed** 3–4 sentence cold-start summary for a developer, then a link to `PRODUCT.md` as the source of truth. Summarize; do not restate `PRODUCT.md` in full.
 3. **Key Concepts** — 3–5 terms or ideas a new developer must understand before reading the code (domain terms from `PRODUCT.md`; structural concepts from `ARCHITECTURE.md`)
 4. **Prerequisites** — exact tools, runtimes, and accounts required before setup (with version numbers)
@@ -52,7 +52,7 @@ Structure is fixed by the template — `docs/guides/proj-init/templates/README.t
 Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
 
 - [ ] Output matches `templates/README.template.md` — vision tagline and tech-stack badge row directly under the H1, all nine sections in order, and **Further Reading** present with links to `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/TECH-STACK.md`, and `docs/AI-TOOL-GUIDE.md`; no top-level section added or removed, and no `[placeholder]` left unfilled.
-- [ ] Tagline under the H1 is a **verbatim copy** of the Vision line from `PRODUCT.md` §1 (not paraphrased), and the badge row covers the core stack — each Language & Framework from `TECH-STACK.md` §1 plus the primary platform from §3.
+- [ ] Tagline under the H1 is a **verbatim copy** of the Vision line from `PRODUCT.md` §1 (not paraphrased), and the badge row covers the core stack — each developer-installed Language & Framework from `TECH-STACK.md` §1 plus the primary platform from §3; platform-managed runtimes are not badged separately.
 - [ ] Project Overview is a condensed summary (not a full restatement of `PRODUCT.md`) and links to `PRODUCT.md`.
 - [ ] **Scaffold mode is stated in the PR summary**, and the setup sections match it:
   - **Scaffolded:** every setup command was personally tested — it works from a clean environment without prior knowledge — and every environment variable is documented in `.env.example` with a description and where to obtain the value.

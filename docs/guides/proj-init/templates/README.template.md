@@ -4,8 +4,9 @@
 paraphrase.]
 
 [Badge row — one static shields.io badge per core technology: each Language &
-Framework from TECH-STACK.md §1 and the primary platform from §3. No live-endpoint
-badges.]
+Framework from TECH-STACK.md §1 that a developer directly installs or invokes, plus
+the primary platform from §3. Exclude platform-managed runtimes (one the §3 platform
+provides) — the platform badge covers them. No live-endpoint badges.]
 
 ## Project Overview
 
