@@ -44,12 +44,12 @@ Every git command, host CLI, and file path below is relative to `$TARGET` (run g
 
 ## Resolve the document path
 
-The argument is the bare document name (e.g. `PRD.md`). Resolve it to its repo path before running any git command: the six content docs live under `docs/` — `docs/PRODUCT.md`, `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/TECH-STACK.md`, `docs/AI-TOOL-GUIDE.md`, `docs/BACKLOG.md`; `README.md` is at the repo root. Use the resolved path everywhere `<DOCNAME>` appears below (e.g. `git -C "$TARGET" show main:docs/PRD.md`). The `docs/update/<docname>` branch and the reconciliation-file slug still use the bare name (e.g. `docs/update/prd`, `prd-reconcile.md`).
+The argument is the bare document name (e.g. `PRD.md`) — any `--target <folder>` flag is consumed in "Resolve the target" above and is not the document name. Resolve the document name to its repo path before running any git command: the six content docs live under `docs/` — `docs/PRODUCT.md`, `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/TECH-STACK.md`, `docs/AI-TOOL-GUIDE.md`, `docs/BACKLOG.md`; `README.md` is at the repo root. Use the resolved path everywhere `<DOCNAME>` appears below (e.g. `git -C "$TARGET" show main:docs/PRD.md`). The `docs/update/<docname>` branch and the reconciliation-file slug still use the bare name (e.g. `docs/update/prd`, `prd-reconcile.md`).
 
 ## 1. Identify the document and the change
 
-- **If a document name was passed as an argument** (e.g. `/proj-init-doc-update PRD.md`): use it. Validate it is in the supported list above — if not, tell the user and stop.
-- **If no argument was given**: ask which document needs updating.
+- **If a document name was passed as an argument** (e.g. `/proj-init-doc-update PRD.md`; the `--target <folder>` flag is not a document name — it was already handled in "Resolve the target" above): use it. Validate it is in the supported list above — if not, tell the user and stop.
+- **If no document name was given** (even if `--target` was): ask which document needs updating.
 
 Then ask one question: *What changed?* (one or two sentences is enough.) Do not ask for more detail yet.
 
