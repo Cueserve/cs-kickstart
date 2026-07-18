@@ -4,7 +4,28 @@ Read-only. No files written, no branches created. Run this any time to see where
 
 ## Resolve the target
 
-Read `.proj-init/state.json` from this kit root and set `TARGET` to its `targetFolder`. If it is missing, print `No initiation workspace found. Run Step-00 (/proj-init-bootstrap) first.` and stop. All git and host-CLI checks below run against `$TARGET`.
+This command accepts an **optional explicit target** so it can report status for a
+finished project (after `/proj-init-cleanup`) or for a different project while an
+initiation is mid-flight — without re-registering.
+
+**Argument parsing:** doc-status takes no document name. Its only argument is
+`--target <folder>`, pointing at an existing local clone of the target repo.
+
+Resolve `TARGET` in this order:
+
+1. **`--target <folder>` given** → resolve it to an absolute path and validate it is a
+   git working tree: `git -C "<path>" rev-parse --is-inside-work-tree`.
+   - Exit 0 → set `TARGET` to that path. Note to the user: "Using explicit target
+     `<path>` — this overrides any registered initiation workspace."
+   - Non-zero → **STOP.** Tell the user: "That path is not a git repository — pass the
+     folder of an existing clone of the target repo."
+2. **No `--target`** → read `.proj-init/state.json` from this kit root and set `TARGET`
+   to its `targetFolder` (the active initiation workspace).
+3. **No `--target` and no `state.json`** → **STOP.** Tell the user: "No initiation
+   workspace found. Run Step-00 (/proj-init-bootstrap) first, or pass a target:
+   `/proj-init-doc-status --target <folder>`."
+
+All git and host-CLI checks below run against `$TARGET`.
 
 ## What to check
 
