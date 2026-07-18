@@ -16,8 +16,11 @@ PRODUCT.md as the source of truth.]
 
 ## Key Concepts
 
-[3–5 terms or ideas a new developer must understand before reading the code.
-Domain terms from PRODUCT.md; structural concepts from ARCHITECTURE.md.]
+[Developer glossary — 3–5 terms or ideas a new developer must understand before
+reading the code. Draw primarily on structural concepts from ARCHITECTURE.md
+(components, boundaries, data flow, key patterns), plus only the few unavoidable
+domain nouns from PRODUCT.md §1/§2. Do not restate PRODUCT.md §3 Features here —
+that is a product capability list, not a glossary.]
 
 - **[Term]** — [plain-language definition]
 
