@@ -1,5 +1,5 @@
 ---
-description: "Update any source-of-truth document after initiation — opens a PR through the same review gate that finalized it"
+description: "Update any source-of-truth document after initiation — opens a PR through the same review gate that finalized it. Accepts --target <folder> to update a finished or other project without re-registering."
 allowed-tools: Read, Write, Edit, Glob, Bash(git:*), Bash(gh:*), Bash(az:*), Bash(glab:*)
 ---
 

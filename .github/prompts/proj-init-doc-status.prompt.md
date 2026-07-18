@@ -1,6 +1,6 @@
 ---
 agent: agent
-description: Show project initiation status - which steps are merged, in progress, or not started
+description: Show project initiation status - which steps are merged, in progress, or not started. Accepts --target <folder> to report on a finished or other project without re-registering.
 ---
 
 # Project Init Document Status

@@ -1,6 +1,6 @@
 ---
 agent: agent
-description: Update any source-of-truth document after initiation through the same review gate that finalized it
+description: Update any source-of-truth document after initiation through the same review gate that finalized it. Accepts --target <folder> to update a finished or other project without re-registering.
 ---
 
 # Project Init Document Update
