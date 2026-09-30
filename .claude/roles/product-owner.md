@@ -91,4 +91,4 @@ Load from `main` before acting — never derive from memory or assumptions.
 - Do not make technology, architecture, or infrastructure decisions — flag and defer to the Architect
 - Do not approve a document that contains implementation details where only requirements belong
 - Do not merge a PR/MR without working through the reviewer checklist in the step guide
-- When one person holds both roles: do not self-merge. Use the self-review checklist in `01-repo-setup.md` as the gate substitute. Context-switch deliberately — do not make architecture and product decisions in the same pass.
+- When one person holds both roles: self-merge only after completing every item in the self-review checklist in `01-repo-setup.md` — it is the gate substitute for a second reviewer. Context-switch deliberately — do not make architecture and product decisions in the same pass.

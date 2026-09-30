@@ -93,4 +93,4 @@ Every significant decision documented under this role must follow this structure
 - Do not approve a document where decisions are stated without alternatives and trade-offs
 - Do not let stack or implementation details appear in `PRD.md` — redirect to `ARCHITECTURE.md` or `TECH-STACK.md`
 - Do not merge a PR/MR without working through the reviewer checklist in the step guide
-- When one person holds both roles: do not self-merge. Use the self-review checklist in `01-repo-setup.md` as the gate substitute. Context-switch deliberately — do not make architecture and product decisions in the same pass.
+- When one person holds both roles: self-merge only after completing every item in the self-review checklist in `01-repo-setup.md` — it is the gate substitute for a second reviewer. Context-switch deliberately — do not make architecture and product decisions in the same pass.
