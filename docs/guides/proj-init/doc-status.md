@@ -36,7 +36,7 @@ Run all checks silently first, then render the status table once. Do not print i
 - Run `git -C "$TARGET" show main:CONTRIBUTING.md` — exit 0 = governance in place.
 - This kit is solo / process-enforced: a `✓ merged` Step-01 means the governance layer (branching convention + self-review checklist) is on `main`. There is no host-enforced reviewer to verify.
 
-### Step-02 through Step-08 — Documents on `main`
+### Step-02 through Step-08 (except Step-07) — Documents on `main`
 
 For each document, run `git -C "$TARGET" show main:<doc>` and capture the exit code:
 
@@ -47,10 +47,16 @@ For each document, run `git -C "$TARGET" show main:<doc>` and capture the exit c
 | 4 | `docs/ARCHITECTURE.md` |
 | 5 | `docs/TECH-STACK.md` |
 | 6 | `docs/AI-TOOL-GUIDE.md` |
-| 7 | `README.md` |
 | 8 | `docs/BACKLOG.md` |
 
 Exit 0 = merged. Non-zero = not on `main`.
+
+### Step-07 — README replaced
+
+The target repo usually has a `README.md` on `main` before Step-07 runs (host boilerplate or a placeholder), so check content, not existence:
+
+- Run `git -C "$TARGET" show main:README.md` and test for both template headings `## Key Concepts` and `## Further Reading`.
+- Both present = Step-07 merged (`✓ merged`). Either absent (or no file) = not merged; if a README exists, put `pre-initiation README on main` in the Detail column.
 
 ### Step-09 — Governance finalized
 
