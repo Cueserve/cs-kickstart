@@ -25,7 +25,7 @@ Then, for the rest of this runner and the step guide:
 Run exactly one initiation step per chat/session.
 
 - Do not execute two step commands in the same session.
-- At the start of every step session, run `docs/guides/proj-init/doc-status.md` against `$TARGET` first.
+- At the start of every step session, run §1 preconditions 1–2 (clean working tree, refresh `main`) first, then run `docs/guides/proj-init/doc-status.md` against `$TARGET`, so status reflects what has been merged on the host. Do not repeat preconditions 1–2 afterward.
 - Continue only the single requested step after status is known.
 - If the user asks to run a different step in the same session, stop and tell them to start a new session for that step.
 
@@ -52,21 +52,25 @@ Run these checks against the target (`$TARGET`) before creating a branch or writ
    - Empty output: proceed.
    - Non-empty output: **STOP** and tell the operator: `Uncommitted changes detected in the target — commit or stash before continuing.`
 
-2. **Upstream documents on `main`** - for every document listed in `upstream`, run `git -C "$TARGET" show main:<document>`.
+2. **Refresh `main`** - run `git -C "$TARGET" checkout main`, then `git -C "$TARGET" pull --ff-only`. PRs/MRs merge on the host, so the local `main` is stale until it is pulled, and every `main:` check below reads the local ref.
+   - Both succeed: proceed.
+   - Either fails (no network or remote access, or local `main` has diverged from `origin/main`): **STOP** and tell the operator: `Could not fast-forward main in the target — resolve the pull error before continuing.` Never run the checks below against a stale `main`.
+
+3. **Upstream documents on `main`** - for every document listed in `upstream`, run `git -C "$TARGET" show main:<document>`.
    - Exit 0 for every document: proceed.
    - Non-zero for any document: **STOP** and tell the operator which prerequisite document must be merged before this step can run.
    - Empty `upstream`: no upstream document is required.
 
-3. **Step not already finalized** - unless the step sets `replacesExisting: true` in `_steps.yml`, run `git -C "$TARGET" show main:<primary-output>` for the step's primary output document — the first entry in the step's `outputs` field (for Step-02 through Step-08 this is the document its `template` produces).
+4. **Step not already finalized** - unless the step sets `replacesExisting: true` in `_steps.yml`, run `git -C "$TARGET" show main:<primary-output>` for the step's primary output document — the first entry in the step's `outputs` field (for Step-02 through Step-08 this is the document its `template` produces).
    - Non-zero (not on `main`): proceed — the step has not been finalized.
    - Exit 0 (already on `main`): **STOP**. The step is already complete. Tell the operator the document is final and to run `/proj-init-doc-update <document>` to revise it instead of re-running the step. Do not branch or regenerate.
    - `replacesExisting: true` (e.g. Step-07, which overwrites the target's pre-existing README): skip this check — the file's presence on `main` is expected and is not proof the step ran. Rely on the §3 branch check and operator confirmation.
 
-4. **Step-01 gate** - skip this check for Step-01 itself, which creates the gate. For every other step, confirm the governance layer exists on the target's `main`: run `git -C "$TARGET" show main:CONTRIBUTING.md`.
+5. **Step-01 gate** - skip this check for Step-01 itself, which creates the gate. For every other step, confirm the governance layer exists on the target's `main`: run `git -C "$TARGET" show main:CONTRIBUTING.md`.
    - Exit 0: proceed. The self-review checklist in `CONTRIBUTING.md` is the gate.
    - Non-zero: **STOP**. Send the operator back to Step-01 — the branching convention and self-review gate must be on `main` before any document is produced.
 
-5. **Additional step preconditions** - apply any `specialPreconditions` from `_steps.yml` and any preconditions in the step guide.
+6. **Additional step preconditions** - apply any `specialPreconditions` from `_steps.yml` and any preconditions in the step guide.
 
 ## 2. Confirm Before Proceeding
 

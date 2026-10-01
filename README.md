@@ -68,7 +68,7 @@ Two one-time setup steps come first, then every document-producing step repeats 
 2. **Answer its questions.** It creates `init/<step>` off `main` in the target, interviews you one question at a time, and revises the draft until you approve.
 3. **Approve the push.** It commits, pushes the branch, and opens the PR/MR. If no host CLI is available, it gives you the URL to open it manually.
 4. **Complete the self-review checklist, then merge.** Merge = finalized.
-5. **Refresh `main` in the target** (`git -C <target-folder> checkout main` then `git -C <target-folder> pull --ff-only`) so the next step sees the merged document. Then start the next step in a new session.
+5. **Start the next step in a new session.** It fast-forwards `main` in the target before checking that the upstream documents are merged.
 
 No draft files, no status flags: a doc on a branch is a draft, a doc on `main` is final.
 
