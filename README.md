@@ -16,7 +16,7 @@ Start with **Step-00**. It clones your target repository into a local folder and
 
 After Step-00, the process walks through Step-01 to Step-09. Step-02 through Step-08 each produce one source-of-truth document, finalized by a pull request; Step-09 strips the initiation-only material from `CONTRIBUTING.md` and hands off a permanent contribution core. Use the `/proj-init-*` commands as the primary interface. All adapters load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
 
-Run exactly one step per session. Start each step session by running `/proj-init-doc-status` before executing the step command.
+Run exactly one step per session. Each step command checks status before it does anything else; run `/proj-init-doc-status` on its own any time.
 
 ## Prerequisites
 
