@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Kickstart Workflow</title>
+<!--
+  Source for proj-init-workflow.pdf. Derived from docs/guides/proj-init/ (_steps.yml,
+  _run-step.md, step guides, cleanup.md, doc-update.md). When a step changes, update
+  this file and regenerate the PDF:
+    chrome --headless=new --no-pdf-header-footer --print-to-pdf=proj-init-workflow.pdf proj-init-workflow.html
+-->
+<style>
+  :root {
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --line: #d5dde7;
+    --ink: #0f2a44;
+    --text: #3b4a5a;
+    --muted: #6b7a8a;
+    --code-bg: #eef2f7;
+    --kit: #1f78c8;      --kit-bg: #e6f1fb;
+    --target: #0f8a6a;   --target-bg: #e3f5ee;
+    --you: #b46504;      --you-bg: #fdf0dc;
+    --host: #4b5d70;     --host-bg: #e9edf2;
+    --sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --mono: "Cascadia Mono", Consolas, "SFMono-Regular", Menlo, monospace;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font: 13px/1.5 var(--sans); }
+  .page { width: 210mm; padding: 13mm 14mm 10mm; margin: 0 auto; break-after: page; }
+  .page:last-child { break-after: auto; }
+  h1 { color: var(--ink); font-size: 30px; line-height: 1.15; margin: 4px 0 10px; letter-spacing: -0.5px; }
+  h2 { color: var(--ink); font-size: 19px; margin: 18px 0 4px; }
+  h3 { color: var(--ink); font-size: 15px; margin: 0; }
+  p { margin: 0 0 8px; }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; color: var(--muted); text-transform: uppercase; }
+  .lead { font-size: 14.5px; color: var(--text); max-width: 165mm; }
+  .sub { color: var(--muted); margin-bottom: 10px; }
+  code, .mono { font-family: var(--mono); font-size: 11.5px; }
+  code { background: var(--code-bg); border-radius: 4px; padding: 1px 4px; color: var(--ink); }
+
+  /* pills */
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid; border-radius: 999px; padding: 3px 11px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+  .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .pill.kit { color: var(--kit); background: var(--kit-bg); }
+  .pill.target { color: var(--target); background: var(--target-bg); }
+  .pill.you { color: var(--you); background: var(--you-bg); }
+  .pill.host { color: var(--host); background: var(--host-bg); }
+  .tag { display: inline-block; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 0 8px; font-family: var(--mono); font-size: 11px; color: var(--ink); }
+
+  /* panels */
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+  .grid3, .grid4 { display: grid; gap: 0; }
+  .grid3 { grid-template-columns: repeat(3, 1fr); }
+  .grid4 { grid-template-columns: repeat(4, 1fr); }
+  .cell { padding: 11px 13px; border-right: 1px solid var(--line); }
+  .cell:last-child { border-right: 0; }
+  .cell h3 { font-size: 14px; margin-bottom: 3px; }
+  .cell .small { font-size: 12px; color: var(--muted); }
+  .cell .mono { display: block; margin-top: 5px; color: var(--ink); font-size: 11px; }
+  .who { font-size: 11px; font-weight: 600; }
+  .who.kit { color: var(--kit); } .who.target { color: var(--target); } .who.you { color: var(--you); } .who.host { color: var(--host); }
+
+  .term { display: grid; grid-template-columns: 92px 1fr; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 6px 0; background: var(--code-bg); }
+  .term .lbl { display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; letter-spacing: 1px; border-right: 1px solid var(--line); }
+  .term .lbl.claude { color: var(--kit); background: var(--kit-bg); }
+  .term .lbl.shell { color: var(--you); background: var(--you-bg); }
+  .term pre { margin: 0; padding: 8px 12px; font: 12px/1.55 var(--mono); color: var(--ink); white-space: pre-wrap; }
+  .term pre .c { color: var(--muted); }
+
+  .note { border: 1px dashed var(--you); background: var(--you-bg); border-radius: 8px; padding: 9px 12px; margin-top: 10px; font-size: 12.5px; }
+  .note b { color: var(--you); }
+
+  /* step cards */
+  .step { display: grid; grid-template-columns: 44px 1fr; gap: 12px; margin-top: 10px; break-inside: avoid; }
+  .num { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--line); background: var(--card); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--ink); font-size: 15px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 15px 10px; }
+  .card-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .card-head .pills { margin: 0; flex-wrap: nowrap; }
+  .card .desc { color: var(--text); margin: 4px 0 6px; font-size: 12.5px; }
+  .kv { display: grid; grid-template-columns: 96px 1fr; column-gap: 12px; row-gap: 4px; font-size: 12px; margin-top: 6px; }
+  .kv dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.8px; color: var(--muted); text-transform: uppercase; padding-top: 1px; }
+  .kv dd { margin: 0; }
+  .kv dd .gate { color: var(--you); }
+
+  /* rules */
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 8px; }
+  .rule { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 12.3px; line-height: 1.45; }
+  .rule b { display: block; color: var(--ink); margin-bottom: 2px; font-size: 13px; }
+
+  ol.after { margin: 6px 0 0; padding-left: 20px; }
+  ol.after li { margin-bottom: 7px; }
+  ol.after li b { color: var(--ink); }
+
+  table.upd { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  table.upd th, table.upd td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); }
+  table.upd th { background: var(--code-bg); color: var(--ink); font-size: 11px; letter-spacing: 0.5px; }
+  table.upd tr:last-child td { border-bottom: 0; }
+  table.upd.tight th, table.upd.tight td { padding: 4px 10px; }
+
+  svg text { font-family: var(--sans); }
+  svg .mono { font-family: var(--mono); }
+  .foot { margin-top: 14px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); }
+
+  @media screen { .page { box-shadow: 0 0 0 1px var(--line); margin-bottom: 16px; background: var(--bg); } }
+  @media screen and (max-width: 820px) {
+    .page { width: auto; padding: 16px; }
+    .grid3, .grid4, .rules { grid-template-columns: 1fr; }
+    .cell { border-right: 0; border-bottom: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================== PAGE 1 ============================== -->
+<section class="page">
+  <div class="eyebrow">Project Kickstart · Project initiation</div>
+  <h1>From empty repo to development-ready</h1>
+  <p class="lead">The initiation workflow, one step at a time. Each step is one Claude command, run in its own fresh session <b>from the kit</b>. It produces one document in your <b>target repo</b>, and that document is final only when you merge its PR/MR to <code>main</code>.</p>
+
+  <div class="pills">
+    <span class="pill kit">Kit · Claude session (control plane)</span>
+    <span class="pill target">Target repo clone</span>
+    <span class="pill you">You (approve, review, merge)</span>
+    <span class="pill host">Git host · PR/MR</span>
+  </div>
+
+  <h2>Two repos, one operator</h2>
+  <p class="sub">You run every command from the kit. The kit's guides, runner and templates never get copied into your project; only the documents you produce land there.</p>
+  <div class="panel grid3">
+    <div class="cell">
+      <div class="who kit">KIT · run commands here</div>
+      <h3>Control plane</h3>
+      <div class="small">Commands, step guides, templates, step registry, role files.</div>
+      <span class="mono">.claude/commands/proj-init-*<br>docs/guides/proj-init/<br>.proj-init/state.json</span>
+    </div>
+    <div class="cell">
+      <div class="who target">TARGET · registered by Step-00</div>
+      <h3>Your project clone</h3>
+      <div class="small">Every git operation and every produced document lands here.</div>
+      <span class="mono">CONTRIBUTING.md · README.md<br>docs/PRODUCT.md … docs/BACKLOG.md<br>AI tool adapters</span>
+    </div>
+    <div class="cell">
+      <div class="who host">GIT HOST · GitHub, Azure DevOps, GitLab, Bitbucket</div>
+      <h3>Review and merge</h3>
+      <div class="small">One branch and one PR/MR per step. Merge to <code>main</code> = final.</div>
+      <span class="mono">init/&lt;step&gt; → PR/MR → main<br>gh · az repos · glab · web UI</span>
+    </div>
+  </div>
+
+  <h2>Where a document sits</h2>
+  <p class="sub">No draft files and no status flags. A doc on a branch is a draft; a doc on <code>main</code> is final.</p>
+  <div class="panel grid4">
+    <div class="cell"><h3>Not started</h3><div class="small">Not on <code>main</code>, no branch</div><span class="mono">—</span></div>
+    <div class="cell"><h3>Draft</h3><div class="small">On <code>init/&lt;step&gt;</code> in the target</div><span class="mono">/proj-init-&lt;step&gt;</span></div>
+    <div class="cell"><h3>In review <span class="who you">· you</span></h3><div class="small">Pushed after your yes, PR/MR open</div><span class="mono">gh pr create · az repos pr create · glab mr create</span></div>
+    <div class="cell"><h3>Final <span class="who you">· you</span></h3><div class="small">Merged after the self-review checklist</div><span class="mono">merge to main</span></div>
+  </div>
+
+  <h2>Start every step the same way</h2>
+  <div class="term"><div class="lbl shell">TERMINAL</div><pre><span class="c"># from the kit folder — never from the target clone</span>
+cd &lt;kit-folder&gt;
+claude</pre></div>
+  <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-&lt;step&gt;          <span class="c"># e.g. /proj-init-product</span></pre></div>
+  <div class="note"><b>One step, one session.</b> For the next step, run <code>/clear</code> or start a new <code>claude</code> session. Steps 01–09 fast-forward <code>main</code> and run the status check themselves; run <code>/proj-init-doc-status</code> any time to see what's merged, what's open, and what's next. GitHub Copilot Chat users run the same <code>/proj-init-*</code> names from <code>.github/prompts/</code>.</div>
+</section>
+
+<!-- ============================== PAGE 2 ============================== -->
+<section class="page">
+  <h2 style="margin-top:0">The whole flow</h2>
+  <p class="sub">Two one-time setup steps, then one document per step. Every step from 01 to 09 ends in a PR/MR that you merge. A step won't start until the documents it depends on are on <code>main</code>.</p>
+
+  <svg viewBox="0 0 760 600" width="100%" role="img" aria-label="Project initiation flow from Step-00 to cleanup">
+    <defs>
+      <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7a8a"/></marker>
+    </defs>
+    <style>
+      .lane { fill: #eef2f7; stroke: #d5dde7; }
+      .lt { font-size: 11.5px; font-weight: 700; fill: #3b4a5a; }
+      .box { fill: #fff; stroke: #1f78c8; stroke-width: 1.4; }
+      .bt { font-size: 11.5px; font-weight: 700; fill: #0f2a44; }
+      .bc { font-size: 10.5px; fill: #1f78c8; }
+      .bo { font-size: 10px; fill: #0f8a6a; }
+      .gate { fill: #fdf0dc; stroke: #b46504; stroke-dasharray: 4 3; }
+      .gt { font-size: 10px; fill: #b46504; font-weight: 600; }
+      .ms { fill: #e3f5ee; stroke: #0f8a6a; }
+      .mt { font-size: 9.8px; fill: #0f8a6a; font-weight: 600; }
+      .ln { stroke: #6b7a8a; stroke-width: 1.3; fill: none; }
+      .after { fill: #fff; stroke: #d5dde7; }
+    </style>
+
+    <!-- lanes -->
+    <rect class="lane" x="6"   y="6" width="172" height="486" rx="8"/>
+    <rect class="lane" x="198" y="6" width="172" height="486" rx="8"/>
+    <rect class="lane" x="390" y="6" width="172" height="486" rx="8"/>
+    <rect class="lane" x="582" y="6" width="172" height="486" rx="8"/>
+    <text class="lt" x="92"  y="27" text-anchor="middle">Set up once</text>
+    <text class="lt" x="284" y="27" text-anchor="middle">Define · Product Owner</text>
+    <text class="lt" x="476" y="27" text-anchor="middle">Design · Architect</text>
+    <text class="lt" x="668" y="27" text-anchor="middle">Hand off</text>
+
+    <!-- lane 1 -->
+    <rect class="box" x="16" y="40" width="152" height="58" rx="5"/>
+    <text class="bt" x="92" y="58" text-anchor="middle">00 · Register target</text>
+    <text class="bc mono" x="92" y="74" text-anchor="middle">/proj-init-bootstrap</text>
+    <text class="bo" x="92" y="89" text-anchor="middle">clone + .proj-init/state.json</text>
+    <rect class="gate" x="22" y="106" width="140" height="20" rx="4"/>
+    <text class="gt" x="92" y="120" text-anchor="middle">you confirm dry-run · no PR</text>
+    <line class="ln" x1="92" y1="126" x2="92" y2="150" marker-end="url(#ar)"/>
+    <rect class="box" x="16" y="152" width="152" height="58" rx="5"/>
+    <text class="bt" x="92" y="170" text-anchor="middle">01 · Repo governance</text>
+    <text class="bc mono" x="92" y="186" text-anchor="middle">/proj-init-repo-setup</text>
+    <text class="bo" x="92" y="201" text-anchor="middle">CONTRIBUTING.md (the gate)</text>
+    <rect class="gate" x="22" y="218" width="140" height="20" rx="4"/>
+    <text class="gt" x="92" y="232" text-anchor="middle">PR/MR · you merge</text>
+
+    <!-- lane 2 -->
+    <rect class="box" x="208" y="40" width="152" height="58" rx="5"/>
+    <text class="bt" x="284" y="58" text-anchor="middle">02 · Product concept</text>
+    <text class="bc mono" x="284" y="74" text-anchor="middle">/proj-init-product</text>
+    <text class="bo" x="284" y="89" text-anchor="middle">docs/PRODUCT.md</text>
+    <rect class="gate" x="214" y="106" width="140" height="20" rx="4"/>
+    <text class="gt" x="284" y="120" text-anchor="middle">PR/MR · you merge</text>
+    <line class="ln" x1="284" y1="126" x2="284" y2="150" marker-end="url(#ar)"/>
+    <rect class="box" x="208" y="152" width="152" height="58" rx="5"/>
+    <text class="bt" x="284" y="170" text-anchor="middle">03 · Requirements</text>
+    <text class="bc mono" x="284" y="186" text-anchor="middle">/proj-init-prd</text>
+    <text class="bo" x="284" y="201" text-anchor="middle">docs/PRD.md</text>
+    <rect class="gate" x="214" y="218" width="140" height="20" rx="4"/>
+    <text class="gt" x="284" y="232" text-anchor="middle">PR/MR · you merge</text>
+
+    <!-- lane 3 -->
+    <rect class="box" x="400" y="40" width="152" height="58" rx="5"/>
+    <text class="bt" x="476" y="58" text-anchor="middle">04 · Architecture</text>
+    <text class="bc mono" x="476" y="74" text-anchor="middle">/proj-init-architecture</text>
+    <text class="bo" x="476" y="89" text-anchor="middle">docs/ARCHITECTURE.md</text>
+    <rect class="gate" x="406" y="106" width="140" height="20" rx="4"/>
+    <text class="gt" x="476" y="120" text-anchor="middle">PR/MR · Architect + PO</text>
+    <line class="ln" x1="476" y1="126" x2="476" y2="150" marker-end="url(#ar)"/>
+    <rect class="box" x="400" y="152" width="152" height="58" rx="5"/>
+    <text class="bt" x="476" y="170" text-anchor="middle">05 · Tech stack</text>
+    <text class="bc mono" x="476" y="186" text-anchor="middle">/proj-init-techstack</text>
+    <text class="bo" x="476" y="201" text-anchor="middle">docs/TECH-STACK.md + tooling</text>
+    <rect class="gate" x="406" y="218" width="140" height="20" rx="4"/>
+    <text class="gt" x="476" y="232" text-anchor="middle">PR/MR · you merge</text>
+    <rect class="ms" x="414" y="246" width="124" height="18" rx="9"/>
+    <text class="mt" x="476" y="259" text-anchor="middle">✓ sandbox spikes allowed</text>
+    <line class="ln" x1="476" y1="264" x2="476" y2="286" marker-end="url(#ar)"/>
+    <rect class="box" x="400" y="288" width="152" height="58" rx="5"/>
+    <text class="bt" x="476" y="306" text-anchor="middle">06 · AI tool guide</text>
+    <text class="bc mono" x="476" y="322" text-anchor="middle">/proj-init-aitoolguide</text>
+    <text class="bo" x="476" y="337" text-anchor="middle">AI-TOOL-GUIDE.md + adapters</text>
+    <rect class="gate" x="406" y="354" width="140" height="20" rx="4"/>
+    <text class="gt" x="476" y="368" text-anchor="middle">PR/MR · you merge</text>
+    <rect class="ms" x="408" y="382" width="136" height="18" rx="9"/>
+    <text class="mt" x="476" y="395" text-anchor="middle">✓ production code may start</text>
+
+    <!-- lane 4 -->
+    <rect class="box" x="592" y="40" width="152" height="58" rx="5"/>
+    <text class="bt" x="668" y="58" text-anchor="middle">07 · Project README</text>
+    <text class="bc mono" x="668" y="74" text-anchor="middle">/proj-init-readme</text>
+    <text class="bo" x="668" y="89" text-anchor="middle">README.md (replaced)</text>
+    <rect class="gate" x="598" y="106" width="140" height="20" rx="4"/>
+    <text class="gt" x="668" y="120" text-anchor="middle">PR/MR · you merge</text>
+    <rect class="ms" x="610" y="134" width="116" height="18" rx="9"/>
+    <text class="mt" x="668" y="147" text-anchor="middle">✓ OK to share the repo</text>
+    <line class="ln" x1="668" y1="152" x2="668" y2="174" marker-end="url(#ar)"/>
+    <rect class="box" x="592" y="176" width="152" height="58" rx="5"/>
+    <text class="bt" x="668" y="194" text-anchor="middle">08 · Initial backlog</text>
+    <text class="bc mono" x="668" y="210" text-anchor="middle">/proj-init-backlog</text>
+    <text class="bo" x="668" y="225" text-anchor="middle">docs/BACKLOG.md + host issues</text>
+    <rect class="gate" x="598" y="242" width="140" height="20" rx="4"/>
+    <text class="gt" x="668" y="256" text-anchor="middle">PR/MR · PO merges</text>
+    <rect class="ms" x="604" y="270" width="128" height="18" rx="9"/>
+    <text class="mt" x="668" y="283" text-anchor="middle">✓ sprint planning can start</text>
+    <line class="ln" x1="668" y1="288" x2="668" y2="310" marker-end="url(#ar)"/>
+    <rect class="box" x="592" y="312" width="152" height="58" rx="5"/>
+    <text class="bt" x="668" y="330" text-anchor="middle">09 · Finalize governance</text>
+    <text class="bc mono" x="668" y="346" text-anchor="middle">/proj-init-finalize</text>
+    <text class="bo" x="668" y="361" text-anchor="middle">CONTRIBUTING.md, init-only cut</text>
+    <rect class="gate" x="598" y="378" width="140" height="20" rx="4"/>
+    <text class="gt" x="668" y="392" text-anchor="middle">PR/MR · initiation complete</text>
+    <line class="ln" x1="668" y1="398" x2="668" y2="420" marker-end="url(#ar)"/>
+    <rect x="602" y="422" width="132" height="52" rx="26" fill="#e6f1fb" stroke="#1f78c8" stroke-dasharray="4 3"/>
+    <text class="bt" x="668" y="443" text-anchor="middle">Cleanup</text>
+    <text class="bc mono" x="668" y="459" text-anchor="middle">/proj-init-cleanup</text>
+
+    <!-- cross-lane connectors -->
+    <path class="ln" d="M162,228 H188 V69 H206" marker-end="url(#ar)"/>
+    <path class="ln" d="M354,228 H380 V69 H398" marker-end="url(#ar)"/>
+    <path class="ln" d="M546,364 H572 V69 H590" marker-end="url(#ar)"/>
+
+    <!-- after initiation band -->
+    <rect class="after" x="6" y="506" width="748" height="86" rx="8"/>
+    <text class="lt" x="20" y="527">After initiation · keep the docs true</text>
+    <rect class="box" x="20" y="537" width="230" height="44" rx="5"/>
+    <text class="bc mono" x="135" y="555" text-anchor="middle">/proj-init-doc-update &lt;doc&gt;</text>
+    <text class="bo" x="135" y="571" text-anchor="middle">optional --target &lt;folder&gt;</text>
+    <line class="ln" x1="250" y1="559" x2="284" y2="559" marker-end="url(#ar)"/>
+    <rect class="box" x="286" y="537" width="168" height="44" rx="5" style="stroke:#0f8a6a"/>
+    <text class="bt" x="370" y="555" text-anchor="middle">docs/update/&lt;doc&gt;</text>
+    <text class="bo" x="370" y="571" text-anchor="middle">+ reconciliation checklist</text>
+    <line class="ln" x1="454" y1="559" x2="488" y2="559" marker-end="url(#ar)"/>
+    <rect class="gate" x="490" y="541" width="150" height="36" rx="5"/>
+    <text class="gt" x="565" y="556" text-anchor="middle">PR/MR · same reviewer</text>
+    <text class="gt" x="565" y="569" text-anchor="middle">that finalized the doc</text>
+    <line class="ln" x1="640" y1="559" x2="660" y2="559" marker-end="url(#ar)"/>
+    <text class="bo" x="664" y="555">then each flagged</text>
+    <text class="bo" x="664" y="568">downstream doc</text>
+  </svg>
+
+  <h2>What each step waits for</h2>
+  <p class="sub">The runner checks these on the target's <code>main</code> before it creates a branch. If any is missing, it stops and names it.</p>
+  <table class="upd">
+    <tr><th>Step</th><th>Needs on main</th><th>Step</th><th>Needs on main</th></tr>
+    <tr><td>01</td><td>Step-00 registration only</td><td>06</td><td><code>ARCHITECTURE.md</code>, <code>TECH-STACK.md</code></td></tr>
+    <tr><td>02</td><td><code>CONTRIBUTING.md</code> (Step-01 gate)</td><td>07</td><td><code>PRODUCT</code>, <code>PRD</code>, <code>ARCHITECTURE</code>, <code>TECH-STACK</code>, <code>AI-TOOL-GUIDE</code></td></tr>
+    <tr><td>03</td><td><code>PRODUCT.md</code></td><td>08</td><td>all of 07's inputs + <code>README.md</code></td></tr>
+    <tr><td>04</td><td><code>PRD.md</code></td><td>09</td><td><code>BACKLOG.md</code></td></tr>
+    <tr><td>05</td><td><code>PRD.md</code>, <code>ARCHITECTURE.md</code></td><td>Cleanup</td><td><code>BACKLOG.md</code>, init-only block gone from <code>CONTRIBUTING.md</code></td></tr>
+  </table>
+</section>
+
+<!-- ============================== PAGE 3 ============================== -->
+<section class="page">
+  <h2 style="margin-top:0">Step by step</h2>
+  <p class="sub">Run every command from the kit folder, one per fresh session. Steps 01–09 share one runner: resolve the target, fast-forward <code>main</code>, check status and preconditions, wait for your <b>yes</b>, branch, interview you one question at a time, draft, commit, then push and open the PR/MR only after a second <b>yes</b>.</p>
+
+  <div class="step"><div class="num">00</div><div class="card">
+    <div class="card-head"><h3>Register the target repo</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">You confirm</span></div></div>
+    <p class="desc">Clones your project repo and records where it lives, so every later step operates on that clone. Nothing is committed or pushed.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-bootstrap</pre></div>
+    <dl class="kv">
+      <dt>Asks</dt><dd>The target's git URL, and an empty or non-existent local folder to clone into.</dd>
+      <dt>Runs</dt><dd><code>node scripts/bootstrap-target-repo.mjs --target &lt;folder&gt; --url &lt;git-url&gt;</code> as a dry run, then again with <code>--apply</code></dd>
+      <dt>Writes</dt><dd>The clone at <code>&lt;folder&gt;</code>, plus <code>.proj-init/state.json</code> in the kit (gitignored, local to this machine)</dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> You review the dry run before <code>--apply</code>. Only one workspace at a time; replace it only with <code>--force</code>.</dd>
+      <dt>Git</dt><dd>No branch, no commit, no PR/MR.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">01</div><div class="card">
+    <div class="card-head"><h3>Set up repo governance</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">You merge</span></div></div>
+    <p class="desc">The gate every later step relies on: the branching convention, the commit convention, and the self-review checklist.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-repo-setup</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
+      <dt>Writes</dt><dd><code>CONTRIBUTING.md</code>: permanent rules plus an <code>INITIATION-ONLY</code> fenced block, and branch protection on <code>main</code> if your host and plan allow it</dd>
+      <dt>Git</dt><dd><code>init/repo-setup</code> · <code>docs: add repo governance baseline (Step-01)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> Self-review checklist, then you merge. Every later step stops until <code>CONTRIBUTING.md</code> is on <code>main</code>.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">02</div><div class="card">
+    <div class="card-head"><h3>Product concept</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">You merge</span></div></div>
+    <p class="desc">What we are building, and why.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-product</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
+      <dt>Reads</dt><dd><code>CONTRIBUTING.md</code> on <code>main</code> (the Step-01 gate)</dd>
+      <dt>Writes</dt><dd><code>docs/PRODUCT.md</code></dd>
+      <dt>Git</dt><dd><code>init/product</code> · <code>docs: add PRODUCT.md (Step-02)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> The Product Owner approves and merges.</dd>
+    </dl>
+  </div></div>
+</section>
+
+<!-- ============================== PAGE 4 ============================== -->
+<section class="page">
+  <div class="step" style="margin-top:0"><div class="num">03</div><div class="card">
+    <div class="card-head"><h3>Product requirements</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">You merge</span></div></div>
+    <p class="desc">Turns the concept into testable requirements.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-prd</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
+      <dt>Reads</dt><dd><code>docs/PRODUCT.md</code></dd>
+      <dt>Writes</dt><dd><code>docs/PRD.md</code></dd>
+      <dt>Git</dt><dd><code>init/prd</code> · <code>docs: add PRD.md (Step-03)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> The Product Owner approves and merges.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">04</div><div class="card">
+    <div class="card-head"><h3>Architecture</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">You merge</span></div></div>
+    <p class="desc">System structure and design decisions. The runner loads both the Architect and Product Owner role context.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-architecture</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect + Product Owner</dd>
+      <dt>Reads</dt><dd><code>docs/PRD.md</code></dd>
+      <dt>Writes</dt><dd><code>docs/ARCHITECTURE.md</code></dd>
+      <dt>Git</dt><dd><code>init/architecture</code> · <code>docs: add ARCHITECTURE.md (Step-04)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> The Architect and Product Owner both approve, then merge.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">05</div><div class="card">
+    <div class="card-head"><h3>Tech stack</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">You merge</span></div></div>
+    <p class="desc">Locks the approved technologies and adds the build/test/lint commands to <code>CONTRIBUTING.md</code>.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-techstack</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
+      <dt>Reads</dt><dd><code>docs/PRD.md</code>, <code>docs/ARCHITECTURE.md</code></dd>
+      <dt>Writes</dt><dd><code>docs/TECH-STACK.md</code>; appends the tooling layer to <code>CONTRIBUTING.md</code> and leaves the Step-01 governance layer intact</dd>
+      <dt>Git</dt><dd><code>init/techstack</code> · <code>docs: add TECH-STACK.md and CONTRIBUTING tooling layer (Step-05)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> The Architect approves and merges.</dd>
+      <dt>After merge</dt><dd>Sandbox spikes are allowed, on isolated spike branches that never merge to <code>main</code>.</dd>
+    </dl>
+  </div></div>
+</section>
+
+<!-- ============================== PAGE 5 ============================== -->
+<section class="page">
+  <div class="step" style="margin-top:0"><div class="num">06</div><div class="card">
+    <div class="card-head"><h3>AI tool guide</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">You merge</span></div></div>
+    <p class="desc">The rules every AI tool follows on this project. Shared rules live in one guide; each adapter carries only what's specific to its tool.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-aitoolguide</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
+      <dt>Asks</dt><dd>Which AI tools the team will use. This is asked before any adapter is generated.</dd>
+      <dt>Reads</dt><dd><code>docs/ARCHITECTURE.md</code>, <code>docs/TECH-STACK.md</code></dd>
+      <dt>Writes</dt><dd><code>docs/AI-TOOL-GUIDE.md</code> every time, plus adapters only for the tools you picked, e.g. <code>CLAUDE.md</code> or <code>.github/copilot-instructions.md</code></dd>
+      <dt>Git</dt><dd><code>init/aitoolguide</code> · <code>docs: add AI-TOOL-GUIDE.md and tool adapters (Step-06)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> The Architect approves and merges.</dd>
+      <dt>After merge</dt><dd>Production implementation can start.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">07</div><div class="card">
+    <div class="card-head"><h3>Project README</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">You merge</span></div></div>
+    <p class="desc">Replaces the target's boilerplate README with a real entry point: setup, environment config, and how to run.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-readme</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
+      <dt>Reads</dt><dd><code>PRODUCT.md</code>, <code>PRD.md</code>, <code>ARCHITECTURE.md</code>, <code>TECH-STACK.md</code>, <code>AI-TOOL-GUIDE.md</code></dd>
+      <dt>Writes</dt><dd><code>README.md</code>, replacing the existing file with all placeholders removed</dd>
+      <dt>Git</dt><dd><code>init/readme</code> · <code>docs: replace boilerplate README with project README (Step-07)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> Every command in the README is tested before commit. The Architect approves and merges.</dd>
+      <dt>After merge</dt><dd>Required before the repo is shared more widely.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">08</div><div class="card">
+    <div class="card-head"><h3>Initial backlog</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill host">Host</span><span class="pill you">You merge</span></div></div>
+    <p class="desc">Epics and stories derived from the product and requirements docs, seeded into your issue tracker.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-backlog</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
+      <dt>Reads</dt><dd>The five docs Step-07 reads, plus <code>README.md</code></dd>
+      <dt>Writes</dt><dd><code>docs/BACKLOG.md</code>, plus host work items via <code>gh</code> or <code>az boards</code>; with neither CLI available, <code>PENDING</code> IDs and manual creation notes</dd>
+      <dt>Git</dt><dd><code>init/backlog</code> · <code>docs: add BACKLOG.md - Step-08 initial backlog</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> You approve the derived backlog before anything is written to the host or to disk. Items are then created one at a time. The Product Owner merges.</dd>
+      <dt>After merge</dt><dd>Required before sprint planning. Next: Step-09.</dd>
+    </dl>
+  </div></div>
+</section>
+
+<!-- ============================== PAGE 6 ============================== -->
+<section class="page">
+  <div class="step" style="margin-top:0"><div class="num">09</div><div class="card">
+    <div class="card-head"><h3>Finalize governance</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">You merge</span></div></div>
+    <p class="desc">Removes the initiation-only rules from <code>CONTRIBUTING.md</code> and hands the team a permanent contribution core.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-finalize</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
+      <dt>Reads</dt><dd><code>docs/BACKLOG.md</code> on <code>main</code> (the gate) and <code>CONTRIBUTING.md</code> on <code>main</code></dd>
+      <dt>Writes</dt><dd><code>CONTRIBUTING.md</code>: the <code>INITIATION-ONLY</code> block is removed (markers included) and a <code>DEVELOPMENT-PHASE-GOVERNANCE</code> stub is inserted. Permanent rules and the tooling layer stay verbatim.</dd>
+      <dt>Git</dt><dd><code>init/finalize</code> · <code>docs: finalize CONTRIBUTING.md for the development phase (Step-09)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> Stops if the <code>INITIATION-ONLY</code> markers are missing. Once the Architect merges, initiation is complete.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">✓</div><div class="card">
+    <div class="card-head"><h3>Clean up the workspace</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">You confirm</span></div></div>
+    <p class="desc">Unregisters the workspace from the kit. The target clone and its remote are left untouched.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-cleanup</pre></div>
+    <dl class="kv">
+      <dt>Checks</dt><dd><code>docs/BACKLOG.md</code> is on <code>main</code> and <code>INITIATION-ONLY</code> is gone from <code>CONTRIBUTING.md</code></dd>
+      <dt>Runs</dt><dd><code>node scripts/bootstrap-target-repo.mjs --clear</code>, after your <b>yes</b></dd>
+      <dt>Writes</dt><dd>Deletes <code>.proj-init/state.json</code>. Nothing else.</dd>
+      <dt>Git</dt><dd>None.</dd>
+    </dl>
+  </div></div>
+
+  <h2>Utilities, any time</h2>
+  <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-doc-status          <span class="c"># read-only: merged, open PRs/MRs, what's next</span>
+/proj-init-doc-update &lt;doc&gt;    <span class="c"># e.g. PRD.md → PR/MR + reconciliation checklist</span>
+<span class="c"># add --target &lt;folder&gt; to either for a finished or other project</span></pre></div>
+
+  <h2>Which document to update</h2>
+  <table class="upd">
+    <tr><th>If this happens</th><th>Run <code>/proj-init-doc-update</code> on</th></tr>
+    <tr><td>Product scope, goal, or target users change</td><td><code>PRODUCT.md</code></td></tr>
+    <tr><td>Requirements or acceptance criteria change</td><td><code>PRD.md</code></td></tr>
+    <tr><td>System design or a major architecture decision changes</td><td><code>ARCHITECTURE.md</code></td></tr>
+    <tr><td>A library, framework, or tool is added, removed, or version-locked</td><td><code>TECH-STACK.md</code></td></tr>
+    <tr><td>AI tool rules, banned patterns, or scope boundaries change</td><td><code>AI-TOOL-GUIDE.md</code></td></tr>
+    <tr><td>Setup steps, env config, or run commands change</td><td><code>README.md</code></td></tr>
+    <tr><td>Epics or stories added, removed, rescoped, or host IDs change</td><td><code>BACKLOG.md</code></td></tr>
+  </table>
+</section>
+
+<!-- ============================== PAGE 7 ============================== -->
+<section class="page">
+  <h2 style="margin-top:0">One step up close</h2>
+  <p class="sub">What happens between you, the Claude session in the kit, the target clone, and your Git host during any step from 01 to 09.</p>
+
+  <svg viewBox="0 0 760 605" width="100%" role="img" aria-label="Sequence of one initiation step">
+    <defs>
+      <marker id="sa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3b4a5a"/></marker>
+    </defs>
+    <style>
+      .hd { stroke-width: 1.3; rx: 6; }
+      .ht { font-size: 12px; font-weight: 700; }
+      .life { stroke: #b8c4d1; stroke-dasharray: 3 4; }
+      .m { stroke: #3b4a5a; stroke-width: 1.2; fill: none; }
+      .r { stroke: #3b4a5a; stroke-width: 1.2; fill: none; stroke-dasharray: 4 3; }
+      .ml { font-size: 10.8px; fill: #0f2a44; }
+      .mm { font-size: 10.3px; fill: #0f2a44; font-family: "Cascadia Mono", Consolas, monospace; }
+      .loop { fill: #f7f9fc; stroke: #8fa0b3; }
+      .lt2 { font-size: 10.5px; font-weight: 700; fill: #4b5d70; }
+    </style>
+
+    <!-- heads -->
+    <rect x="20"  y="10" width="110" height="34" rx="6" fill="#fdf0dc" stroke="#b46504" class="hd"/>
+    <text class="ht" x="75" y="32" text-anchor="middle" fill="#b46504">You</text>
+    <rect x="190" y="10" width="160" height="34" rx="6" fill="#e6f1fb" stroke="#1f78c8" class="hd"/>
+    <text class="ht" x="270" y="32" text-anchor="middle" fill="#1f78c8">Claude session · kit</text>
+    <rect x="420" y="10" width="140" height="34" rx="6" fill="#e3f5ee" stroke="#0f8a6a" class="hd"/>
+    <text class="ht" x="490" y="32" text-anchor="middle" fill="#0f8a6a">Target clone</text>
+    <rect x="620" y="10" width="120" height="34" rx="6" fill="#e9edf2" stroke="#4b5d70" class="hd"/>
+    <text class="ht" x="680" y="32" text-anchor="middle" fill="#4b5d70">Git host</text>
+
+    <line class="life" x1="75"  y1="44" x2="75"  y2="595"/>
+    <line class="life" x1="270" y1="44" x2="270" y2="595"/>
+    <line class="life" x1="490" y1="44" x2="490" y2="595"/>
+    <line class="life" x1="680" y1="44" x2="680" y2="595"/>
+
+    <!-- 1 -->
+    <text class="mm" x="172" y="70" text-anchor="middle">/proj-init-&lt;step&gt;</text>
+    <line class="m" x1="75" y1="76" x2="268" y2="76" marker-end="url(#sa)"/>
+    <!-- 2 self -->
+    <path class="m" d="M270,92 h34 v20 h-32" marker-end="url(#sa)"/>
+    <text class="ml" x="312" y="99">read .proj-init/state.json → TARGET</text>
+    <text class="ml" x="312" y="113">load _run-step.md, _steps.yml, guide, role</text>
+    <!-- 3 -->
+    <text class="ml" x="380" y="138" text-anchor="middle">clean tree? · checkout main · pull --ff-only</text>
+    <text class="ml" x="380" y="151" text-anchor="middle">doc-status · upstream + gate docs on main?</text>
+    <line class="m" x1="270" y1="158" x2="488" y2="158" marker-end="url(#sa)"/>
+    <!-- 4 -->
+    <text class="ml" x="172" y="182" text-anchor="middle">precondition checklist</text>
+    <line class="r" x1="270" y1="188" x2="77" y2="188" marker-end="url(#sa)"/>
+    <!-- 5 -->
+    <text class="ml" x="172" y="208" text-anchor="middle"><tspan font-weight="700">yes</tspan></text>
+    <line class="m" x1="75" y1="214" x2="268" y2="214" marker-end="url(#sa)"/>
+    <!-- 6 -->
+    <text class="mm" x="380" y="238" text-anchor="middle">git checkout -b init/&lt;step&gt;</text>
+    <line class="m" x1="270" y1="244" x2="488" y2="244" marker-end="url(#sa)"/>
+
+    <!-- loop -->
+    <rect class="loop" x="40" y="260" width="270" height="90" rx="4"/>
+    <rect x="40" y="260" width="40" height="16" fill="#e9edf2" stroke="#8fa0b3"/>
+    <text class="lt2" x="60" y="272" text-anchor="middle">loop</text>
+    <text class="lt2" x="92" y="272">until every section is approved</text>
+    <text class="ml" x="172" y="297" text-anchor="middle">one focused question / a draft</text>
+    <line class="r" x1="270" y1="303" x2="77" y2="303" marker-end="url(#sa)"/>
+    <text class="ml" x="172" y="327" text-anchor="middle">answer · revise · approve</text>
+    <line class="m" x1="75" y1="333" x2="268" y2="333" marker-end="url(#sa)"/>
+
+    <!-- 8 -->
+    <text class="ml" x="380" y="372" text-anchor="middle">write &lt;output&gt; · git commit</text>
+    <line class="m" x1="270" y1="378" x2="488" y2="378" marker-end="url(#sa)"/>
+    <!-- 9 -->
+    <text class="ml" x="172" y="402" text-anchor="middle">push and open PR/MR?</text>
+    <line class="r" x1="270" y1="408" x2="77" y2="408" marker-end="url(#sa)"/>
+    <!-- 10 -->
+    <text class="ml" x="172" y="428" text-anchor="middle"><tspan font-weight="700">yes</tspan></text>
+    <line class="m" x1="75" y1="434" x2="268" y2="434" marker-end="url(#sa)"/>
+    <!-- 11 -->
+    <text class="mm" x="475" y="456" text-anchor="middle">git push -u origin init/&lt;step&gt;</text>
+    <text class="mm" x="475" y="470" text-anchor="middle">gh pr create | az repos pr create | glab mr create</text>
+    <line class="m" x1="270" y1="478" x2="678" y2="478" marker-end="url(#sa)"/>
+    <!-- 12 -->
+    <text class="ml" x="172" y="502" text-anchor="middle">PR/MR link + reviewer checklist</text>
+    <line class="r" x1="270" y1="508" x2="77" y2="508" marker-end="url(#sa)"/>
+    <!-- 13 -->
+    <text class="ml" x="378" y="536" text-anchor="middle">tick the self-review checklist · merge to main</text>
+    <line class="m" x1="75" y1="542" x2="678" y2="542" marker-end="url(#sa)"/>
+    <!-- 15 -->
+    <rect x="160" y="562" width="440" height="26" rx="5" fill="#fdf0dc" stroke="#b46504" stroke-dasharray="4 3"/>
+    <text class="ml" x="380" y="579" text-anchor="middle" fill="#b46504">next step → /clear or a new claude session, then the next /proj-init-* command</text>
+  </svg>
+
+  <h2>After the PR/MR opens</h2>
+  <p class="sub">From here on it's your job. The command's job ended when the PR/MR opened.</p>
+  <ol class="after">
+    <li><b>Give it fresh eyes.</b> Wait at least a few hours, ideally a full day, before reviewing.</li>
+    <li><b>Tick the self-review checklist</b> in the PR/MR description: every required section is covered, no upstream doc changed after you branched, and the change went through a PR/MR, not a direct push.</li>
+    <li><b>Merge to <code>main</code>.</b> Merging is what makes it final. Step-04 also needs the Product Owner's sign-off.</li>
+    <li><b>Start the next step in a fresh session.</b> It fast-forwards <code>main</code> in the target before it checks that the upstream documents are merged.</li>
+  </ol>
+</section>
+
+<!-- ============================== PAGE 8 ============================== -->
+<section class="page">
+  <h2 style="margin-top:0">Rules that hold at every step</h2>
+  <div class="rules">
+    <div class="rule"><b>One step, one fresh session.</b>Never run two step commands in the same session. Status is checked first, then only the step you asked for runs.</div>
+    <div class="rule"><b>Run from the kit, write to the target.</b>Commands load guides from the kit and do git work in the registered clone. Kit files are never copied in.</div>
+    <div class="rule"><b>Merge = final.</b>A doc on a branch is a draft; a doc on <code>main</code> is final. There are no draft files and no status flags.</div>
+    <div class="rule"><b>Nothing ships without your yes.</b>Explicit confirmation before branching, before every host write, and before every push.</div>
+    <div class="rule"><b>Never on <code>main</code>.</b>No commits or pushes to <code>main</code>, and no force-pushes to shared branches. Every change goes through a PR/MR.</div>
+    <div class="rule"><b>Upstream first.</b>A step stops if any doc it depends on isn't on <code>main</code>, or if its own output is already final (use <code>/proj-init-doc-update</code> instead).</div>
+    <div class="rule"><b>Same machine, same operator.</b><code>.proj-init/state.json</code> is local to one machine. To continue elsewhere, re-run Step-00.</div>
+    <div class="rule"><b>Never assume an answer.</b>Claude asks one focused question at a time until no template placeholder is left.</div>
+  </div>
+
+  <h2>Milestones</h2>
+  <div class="panel grid4">
+    <div class="cell"><div class="who target">AFTER 05 MERGES</div><h3>Spikes</h3><div class="small">Isolated spike branches only, never merged to <code>main</code>.</div></div>
+    <div class="cell"><div class="who target">AFTER 06 MERGES</div><h3>Production code</h3><div class="small">Implementation work can begin.</div></div>
+    <div class="cell"><div class="who target">AFTER 07 MERGES</div><h3>Share the repo</h3><div class="small">The README is the real entry point.</div></div>
+    <div class="cell"><div class="who target">AFTER 08 MERGES</div><h3>Sprint planning</h3><div class="small">Then Step-09 completes initiation.</div></div>
+  </div>
+
+  <h2>Command cheat sheet</h2>
+  <table class="upd tight">
+    <tr><th>Step</th><th>Claude command</th><th>Produces in the target</th><th>Merged by</th></tr>
+    <tr><td>00</td><td><code>/proj-init-bootstrap</code></td><td>clone + kit-local <code>.proj-init/state.json</code></td><td>— (you confirm)</td></tr>
+    <tr><td>01</td><td><code>/proj-init-repo-setup</code></td><td><code>CONTRIBUTING.md</code> (governance)</td><td>Architect</td></tr>
+    <tr><td>02</td><td><code>/proj-init-product</code></td><td><code>docs/PRODUCT.md</code></td><td>Product Owner</td></tr>
+    <tr><td>03</td><td><code>/proj-init-prd</code></td><td><code>docs/PRD.md</code></td><td>Product Owner</td></tr>
+    <tr><td>04</td><td><code>/proj-init-architecture</code></td><td><code>docs/ARCHITECTURE.md</code></td><td>Architect + PO</td></tr>
+    <tr><td>05</td><td><code>/proj-init-techstack</code></td><td><code>docs/TECH-STACK.md</code> + tooling layer</td><td>Architect</td></tr>
+    <tr><td>06</td><td><code>/proj-init-aitoolguide</code></td><td><code>docs/AI-TOOL-GUIDE.md</code> + adapters</td><td>Architect</td></tr>
+    <tr><td>07</td><td><code>/proj-init-readme</code></td><td><code>README.md</code></td><td>Architect</td></tr>
+    <tr><td>08</td><td><code>/proj-init-backlog</code></td><td><code>docs/BACKLOG.md</code> + host work items</td><td>Product Owner</td></tr>
+    <tr><td>09</td><td><code>/proj-init-finalize</code></td><td><code>CONTRIBUTING.md</code> (init-only removed)</td><td>Architect</td></tr>
+    <tr><td>—</td><td><code>/proj-init-cleanup</code></td><td>nothing; unregisters the workspace</td><td>— (you confirm)</td></tr>
+  </table>
+
+  <p class="foot">Solo / process-enforced: one person may wear both hats; take on the one each step calls for. Source of truth: docs/guides/proj-init/ (_steps.yml, _run-step.md, step guides).</p>
+</section>
+
+</body>
+</html>

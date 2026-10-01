@@ -38,7 +38,7 @@ PRODUCT.md → PRD.md → ARCHITECTURE.md
 
 GitHub Copilot users can run matching prompt adapters in `.github/prompts/proj-init-*.prompt.md`; they resolve to the same underlying workflow.
 
-Step-00 is maintained in [00-bootstrap.md](00-bootstrap.md) and implemented by `scripts/bootstrap-target-repo.mjs`. The shared workflow for Step-02 through Step-09 is maintained in one place: [_run-step.md](_run-step.md) — it resolves the registered target and runs every git operation and output write against it. Step-02 through Step-08 each produce a source-of-truth document; Step-09 transforms `CONTRIBUTING.md` rather than producing a new document, but runs on the same branch/PR/merge rail. Step metadata is maintained in [_steps.yml](_steps.yml). The output structure of each generated document is fixed by its template in [templates/](templates/), with shared writing rules in [templates/_writing-rules.md](templates/_writing-rules.md). Claude commands and Copilot prompts are adapters only. Post-init utility workflows live in [doc-status.md](doc-status.md), [doc-update.md](doc-update.md), and [cleanup.md](cleanup.md).
+Step-00 is maintained in [00-bootstrap.md](00-bootstrap.md) and implemented by `scripts/bootstrap-target-repo.mjs`. The shared workflow for Step-01 through Step-09 is maintained in one place: [_run-step.md](_run-step.md) — it resolves the registered target and runs every git operation and output write against it. Step-02 through Step-08 each produce a source-of-truth document; Step-09 transforms `CONTRIBUTING.md` rather than producing a new document, but runs on the same branch/PR/merge rail. Step metadata is maintained in [_steps.yml](_steps.yml). The output structure of each generated document is fixed by its template in [templates/](templates/), with shared writing rules in [templates/_writing-rules.md](templates/_writing-rules.md). Claude commands and Copilot prompts are adapters only. Post-init utility workflows live in [doc-status.md](doc-status.md), [doc-update.md](doc-update.md), and [cleanup.md](cleanup.md).
 
 ## Check where you are
 
@@ -59,13 +59,13 @@ Step-00 does not copy kit files into the target, create source-of-truth document
 
 Every step is the same five-move loop. A document is **final only when its PR/MR is merged to `main`**.
 
-Run exactly one step per session. Before running any step command, run `/proj-init-doc-status` so the session starts from current truth.
+Run exactly one step per session, from this kit. Each step command fast-forwards `main` in the target and runs the status check before anything else; run `/proj-init-doc-status` on its own any time.
 
-1. **Branch** off `main`: `init/<step>` (e.g. `init/product`).
-2. **Produce the document** — run the step's `/proj-init-*` command. Any other AI tool: open `_run-step.md`, the step entry in `_steps.yml`, and the step guide in your AI chat.
-3. **Open a PR/MR.**
-4. **Complete the self-review checklist, then merge** — merge = finalized. Solo / process-enforced: the author is both product owner and architect and self-certifies before merging.
-5. **The next step branches off the updated `main`.** Command adapters can verify this automatically; otherwise confirm the upstream document is merged before starting.
+1. **Run the step's `/proj-init-*` command.** It resolves the target, checks status and preconditions, and waits for your `yes`. In any other AI tool, open `_run-step.md`, the step entry in `_steps.yml`, and the step guide in your AI chat.
+2. **Answer its questions.** It creates `init/<step>` off `main` in the target (e.g. `init/product`), interviews you one question at a time, and revises the draft until you approve.
+3. **Approve the push.** It commits, pushes the branch, and opens the PR/MR. If no host CLI is available, it gives you the URL to open it manually.
+4. **Complete the self-review checklist, then merge.** Merge = finalized. Solo / process-enforced: the author is both product owner and architect and self-certifies before merging.
+5. **Start the next step in a new session.** It fast-forwards `main` before checking that the upstream documents are merged.
 
 No draft files, no status flags: a doc on a branch is a draft, a doc on `main` is final.
 
@@ -81,7 +81,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 - Run Step-00 before Step-01 to clone the target repo and register it. Every later step reads that registration and operates on the clone.
 - Initiation is single-operator and single-machine: `.proj-init/state.json` is operator-local and gitignored. Run every step from the same machine and operator that ran Step-00. To resume on another machine or as another operator, re-run Step-00 to re-register the target.
 - Run one step per session. Do not execute multiple initiation steps in a single chat/session.
-- Start each step session with `/proj-init-doc-status` before running the step command.
+- Each step command fast-forwards `main` in the target and runs `/proj-init-doc-status` before anything else — no need to run it first.
 - A document becomes final only by merging its PR/MR to `main` — past the required reviewer.
 - If a document changes, run `/proj-init-doc-update`. It now generates a reconciliation checklist automatically for all downstream documents that may be impacted.
 - Sandbox spikes are allowed only after Step-05 is merged, on isolated spike branches, and must not merge to `main`.

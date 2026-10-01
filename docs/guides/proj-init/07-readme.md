@@ -18,15 +18,16 @@ This document gives a complete, accurate picture of the project: what it is, how
 
 Structure is fixed by the template — `docs/guides/proj-init/templates/README.template.md`. README is the header-block exception: the H1 is the project name, directly under it a vision tagline and a tech-stack badge row, and the cross-document map is the **Further Reading** section, not the references table. The template owns the section headings and their order; this guide owns what each must contain. Fill every section; add or drop none.
 
-1. **Tagline & badges** — directly under the H1: a blockquote tagline that is a **verbatim copy** of the Vision line from `PRODUCT.md` §1 Overview (no paraphrase), followed by a badge row with one static shields.io badge per core technology — each Language & Framework in `TECH-STACK.md` §1 that a developer directly installs or invokes, plus the primary platform in §3. A platform-managed runtime — one the §3 platform provides rather than the developer installing it — is covered by the platform badge and gets no separate badge.
-2. **Project Overview** — a **condensed** 3–4 sentence cold-start summary for a developer, then a link to `PRODUCT.md` as the source of truth. Summarize; do not restate `PRODUCT.md` in full.
-3. **Key Concepts** — a developer glossary: 3–5 terms or ideas a new developer must understand before reading the code. Draw **primarily on structural concepts from `ARCHITECTURE.md`** (components, boundaries, data flow, key patterns), plus only the few unavoidable domain nouns from `PRODUCT.md` §1 Description / §2 Target Users. **Do not** restate the capability areas from `PRODUCT.md` §3 Features — that section is a product/business capability list, not a glossary.
-4. **Prerequisites** — exact tools, runtimes, and accounts required before setup (with version numbers)
-5. **Environment Setup** — step-by-step instructions to configure `.env`; document every key in `.env.example` with a description, whether it is required or optional, and where to obtain the value (service dashboard, team wiki, etc.)
-6. **Install & Run** — exact commands to install dependencies and start the app locally
-7. **Run Tests** — exact commands to run the test suite
-8. **Project Structure** — top-level folder map with one-line purpose per folder
-9. **Further Reading** — `docs/PRD.md` for requirements and feature scope; `docs/ARCHITECTURE.md`, `docs/TECH-STACK.md`, and `docs/AI-TOOL-GUIDE.md` for deeper context on decisions
+**Header block (under the H1, not a numbered section) — tagline & badges:** directly under the H1, a blockquote tagline that is a **verbatim copy** of the Vision line from `PRODUCT.md` §1 Overview (no paraphrase), followed by a badge row with one static shields.io badge per core technology — each Language & Framework in `TECH-STACK.md` §1 that a developer directly installs or invokes, plus the primary platform in §3. A platform-managed runtime — one the §3 platform provides rather than the developer installing it — is covered by the platform badge and gets no separate badge.
+
+1. **Project Overview** — a **condensed** 3–4 sentence cold-start summary for a developer, then a link to `PRODUCT.md` as the source of truth. Summarize; do not restate `PRODUCT.md` in full.
+2. **Key Concepts** — a developer glossary: 3–5 terms or ideas a new developer must understand before reading the code. Draw **primarily on structural concepts from `ARCHITECTURE.md`** (components, boundaries, data flow, key patterns), plus only the few unavoidable domain nouns from `PRODUCT.md` §1 Description / §2 Target Users. **Do not** restate the capability areas from `PRODUCT.md` §3 Features — that section is a product/business capability list, not a glossary.
+3. **Prerequisites** — exact tools, runtimes, and accounts required before setup (with version numbers)
+4. **Environment Setup** — step-by-step instructions to configure `.env`; document every key in `.env.example` with a description, whether it is required or optional, and where to obtain the value (service dashboard, team wiki, etc.)
+5. **Install & Run** — exact commands to install dependencies and start the app locally
+6. **Run Tests** — exact commands to run the test suite
+7. **Project Structure** — top-level folder map with one-line purpose per folder
+8. **Further Reading** — `docs/PRD.md` for requirements and feature scope; `docs/ARCHITECTURE.md`, `docs/TECH-STACK.md`, and `docs/AI-TOOL-GUIDE.md` for deeper context on decisions
 
 ## Why This Matters
 
@@ -55,7 +56,7 @@ Structure is fixed by the template — `docs/guides/proj-init/templates/README.t
 
 Before approving the PR/MR, verify every item. An unchecked item is a reason to request changes.
 
-- [ ] Output matches `templates/README.template.md` — vision tagline and tech-stack badge row directly under the H1, all nine sections in order, and **Further Reading** present with links to `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/TECH-STACK.md`, and `docs/AI-TOOL-GUIDE.md`; no top-level section added or removed, and no `[placeholder]` left unfilled.
+- [ ] Output matches `templates/README.template.md` — vision tagline and tech-stack badge row directly under the H1, all eight sections in order, and **Further Reading** present with links to `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/TECH-STACK.md`, and `docs/AI-TOOL-GUIDE.md`; no top-level section added or removed, and no `[placeholder]` left unfilled.
 - [ ] Tagline under the H1 is a **verbatim copy** of the Vision line from `PRODUCT.md` §1 (not paraphrased), and the badge row covers the core stack — each developer-installed Language & Framework from `TECH-STACK.md` §1 plus the primary platform from §3; platform-managed runtimes are not badged separately.
 - [ ] Project Overview is a condensed summary (not a full restatement of `PRODUCT.md`) and links to `PRODUCT.md`.
 - [ ] **Key Concepts is a developer glossary** — terms are structural concepts (from `ARCHITECTURE.md`) plus a few unavoidable domain nouns; it does **not** restate the capability areas from `PRODUCT.md` §3 Features.

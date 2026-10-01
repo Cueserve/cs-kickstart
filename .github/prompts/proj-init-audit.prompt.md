@@ -1,11 +1,11 @@
 ---
 agent: agent
-description: Static completeness audit of the cs-kickstart kit - reads kit files only, writes nothing, executes nothing, emits a scored PASS/GAP/FAIL report
+description: Static completeness audit of the Project Kickstart kit - reads kit files only, writes nothing, executes nothing, emits a scored PASS/GAP/FAIL report
 ---
 
 # Project Init Audit
 
-Run the shared cs-kickstart static audit workflow.
+Run the shared Project Kickstart static audit workflow.
 
 Load `docs/guides/proj-init/audit.md`, then execute it exactly.
 

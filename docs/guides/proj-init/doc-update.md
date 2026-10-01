@@ -55,13 +55,17 @@ Then ask one question: *What changed?* (one or two sentences is enough.) Do not 
 
 ## 2. Preconditions — run before anything else
 
-1. **Document exists on `main`** — run `git -C "$TARGET" show main:<DOCNAME>`.
-   - Exit 0 → proceed.
-   - Non-zero → **STOP.** Tell the user: "That document is not on `main` yet — complete initiation first."
-
-2. **Clean working tree** — run `git -C "$TARGET" status --porcelain`.
+1. **Clean working tree** — run `git -C "$TARGET" status --porcelain`.
    - Empty output → proceed.
    - Non-empty → **STOP.** Tell the user: "Uncommitted changes detected in the target — commit or stash first."
+
+2. **Refresh `main`** — run `git -C "$TARGET" checkout main`, then `git -C "$TARGET" pull --ff-only`, so the update branches from what is actually merged on the host.
+   - Both succeed → proceed.
+   - Either fails → **STOP.** Tell the user: "Could not fast-forward `main` in the target — resolve the pull error before continuing."
+
+3. **Document exists on `main`** — run `git -C "$TARGET" show main:<DOCNAME>`.
+   - Exit 0 → proceed.
+   - Non-zero → **STOP.** Tell the user: "That document is not on `main` yet — complete initiation first."
 
 ## 3. Create the working branch
 
