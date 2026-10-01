@@ -26,6 +26,33 @@ Run exactly one step per session. Start each step session by running `/proj-init
 
 ---
 
+## Workflow at a Glance
+
+The full visual walkthrough covers every step, the exact command, what it reads and writes, and who merges: **[proj-init-workflow.pdf](proj-init-workflow.pdf)** (source: [proj-init-workflow.html](proj-init-workflow.html)).
+
+```mermaid
+flowchart TB
+  subgraph setup["Set up once"]
+    direction LR
+    S0["00 · /proj-init-bootstrap<br/>clone + register target"] --> S1["01 · /proj-init-repo-setup<br/>CONTRIBUTING.md (governance)"]
+  end
+  subgraph define["Define · Product Owner"]
+    direction LR
+    S2["02 · /proj-init-product<br/>docs/PRODUCT.md"] --> S3["03 · /proj-init-prd<br/>docs/PRD.md"]
+  end
+  subgraph design["Design · Architect"]
+    direction LR
+    S4["04 · /proj-init-architecture<br/>docs/ARCHITECTURE.md"] --> S5["05 · /proj-init-techstack<br/>docs/TECH-STACK.md"] --> S6["06 · /proj-init-aitoolguide<br/>docs/AI-TOOL-GUIDE.md + adapters"]
+  end
+  subgraph handoff["Hand off"]
+    direction LR
+    S7["07 · /proj-init-readme<br/>README.md"] --> S8["08 · /proj-init-backlog<br/>docs/BACKLOG.md + host issues"] --> S9["09 · /proj-init-finalize<br/>CONTRIBUTING.md finalized"]
+  end
+  setup --> define --> design --> handoff --> C["cleanup · /proj-init-cleanup<br/>unregister workspace"]
+```
+
+Steps 01–09 each end in a PR/MR that you merge. Merge to `main` = final.
+
 ## How It Works
 
 Two one-time setup steps come first, then every document-producing step repeats the same loop — a document is **final only when its PR is merged to `main`**.
@@ -35,13 +62,13 @@ Two one-time setup steps come first, then every document-producing step repeats 
 - **Step-00 — Register the target repo**: run `/proj-init-bootstrap` or `node scripts/bootstrap-target-repo.mjs --target <folder> --url <git-url> --apply` to clone the target repo and register it in `.proj-init/state.json`.
 - **Step-01 — Set up governance** (in the target): branch protection and the approval gate, before any document is written.
 
-**Then, for each document-producing step (2–8):**
+**Then, for each step from 02 to 09** (fresh session, run from this kit):
 
-1. **Branch** off `main` (`init/<step>`).
-2. **Produce the document** — run the step's `/proj-init-*` command. Any other AI tool: open `docs/guides/proj-init/_run-step.md`, the step entry in `docs/guides/proj-init/_steps.yml`, and the step guide in your AI chat.
-3. **Open a PR.**
-4. **Complete the self-review checklist, then merge** — merge = finalized.
-5. **The next step branches off the updated `main`** — command adapters can verify this automatically; otherwise check manually that the upstream document is merged before starting.
+1. **Run the step's `/proj-init-*` command.** It resolves the target, checks status and preconditions, and waits for your `yes`. In any other AI tool, open `docs/guides/proj-init/_run-step.md`, the step entry in `docs/guides/proj-init/_steps.yml`, and the step guide in your AI chat.
+2. **Answer its questions.** It creates `init/<step>` off `main` in the target, interviews you one question at a time, and revises the draft until you approve.
+3. **Approve the push.** It commits, pushes the branch, and opens the PR/MR. If no host CLI is available, it gives you the URL to open it manually.
+4. **Complete the self-review checklist, then merge.** Merge = finalized.
+5. **Refresh `main` in the target** (`git -C <target-folder> checkout main` then `git -C <target-folder> pull --ff-only`) so the next step sees the merged document. Then start the next step in a new session.
 
 No draft files, no status flags: a doc on a branch is a draft, a doc on `main` is final.
 
