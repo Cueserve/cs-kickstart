@@ -88,7 +88,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 | 9 | `/proj-init-finalize` | `CONTRIBUTING.md` with initiation-only governance removed + permanent core retained |
 | — | `/proj-init-cleanup` | unregisters the workspace after Step-09 merges |
 
-Step-02 through Step-09 write their output into the **registered target repo**, not this kit. Adapters are thin wrappers over the same workflow. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
+Step-01 through Step-09 write their output into the **registered target repo**, not this kit. Adapters are thin wrappers over the same workflow. The maintained workflow lives in `docs/guides/proj-init/_run-step.md`, step-specific metadata lives in `docs/guides/proj-init/_steps.yml`, and document rules live in the numbered step guides.
 
 GitHub Copilot users can run the matching adapter prompts in `.github/prompts/proj-init-*.prompt.md` if preferred; they resolve to the same underlying steps.
 
