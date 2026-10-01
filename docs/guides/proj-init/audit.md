@@ -1,8 +1,8 @@
-# cs-kickstart Static Completeness Audit
+# Project Kickstart Static Completeness Audit
 
 Read-only. No files written, no branches created, nothing executed. Run this any time to check whether the kit is a complete, runnable solution.
 
-You are auditing **this kit** (cs-kickstart), the control plane — not a target repo.
+You are auditing **this kit** (Project Kickstart), the control plane — not a target repo.
 Goal: decide whether this is a **complete, runnable, multi-session, token-lean, question-driven** solution where an operator can start from a clean checkout, run the steps across separate sessions, produce every source-of-truth document, and land them in a registered target repo via merged PRs.
 
 ## Hard scope — static only
@@ -17,8 +17,8 @@ You **read kit files and report**. Zero side effects. If any check would require
 
 ## Precondition
 
-Confirm CWD is the kit root: `README.md` title is "CS Project Kickstart" AND `docs/guides/proj-init/_steps.yml` exists.
-If not, STOP with: `Not at cs-kickstart root — aborting.` Do not interrogate the user; infer from files.
+Confirm CWD is the kit root: `README.md` title is "Project Kickstart" AND `docs/guides/proj-init/_steps.yml` exists.
+If not, STOP with: `Not at the Project Kickstart kit root — aborting.` Do not interrogate the user; infer from files.
 
 ## Read order (token discipline — obey this, do not slurp the repo)
 
@@ -79,7 +79,7 @@ Each check → `PASS` / `GAP` / `FAIL` with a `file:line` or `file:section` anch
 ## Output format
 
 ```
-# cs-kickstart Audit — <date>
+# Project Kickstart Audit — <date>
 
 VERDICT: <Complete | Complete-with-gaps | Incomplete>
 <one sentence: can an operator run clean-checkout → 8 merged docs + finalized CONTRIBUTING.md (Step-09) in target, across sessions, or not>

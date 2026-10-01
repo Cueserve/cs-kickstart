@@ -1,4 +1,4 @@
-# CS Project Kickstart
+# Project Kickstart
 
 > AI-powered starter kit for structured project initiation — tool-agnostic guides with thin adapters for Claude Code and GitHub Copilot
 

@@ -1,11 +1,11 @@
 ---
-description: Static completeness audit of the cs-kickstart kit — reads kit files only, writes nothing, executes nothing, emits a scored PASS/GAP/FAIL report
+description: Static completeness audit of the Project Kickstart kit — reads kit files only, writes nothing, executes nothing, emits a scored PASS/GAP/FAIL report
 allowed-tools: Read, Glob, Grep
 ---
 
-# /proj-init-audit — cs-kickstart Static Completeness Audit
+# /proj-init-audit — Project Kickstart Static Completeness Audit
 
-Run the shared cs-kickstart static audit workflow.
+Run the shared Project Kickstart static audit workflow.
 
 Load `docs/guides/proj-init/audit.md`, then execute it exactly.
 
