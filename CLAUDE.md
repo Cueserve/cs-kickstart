@@ -49,6 +49,14 @@ Changing one step usually touches up to four places — update all that apply:
 
 Adding/removing/reordering a step ALSO means the `README.md` step table and `_overview.md`.
 
+Any change to a step's command, owner/reviewer, upstream, outputs, branch, gate, or the runner's
+loop ALSO means `proj-init-workflow.html` (and the README's "Workflow at a Glance" diagram).
+Regenerate the PDF from it and commit both — there is no CI check for this drift:
+
+```text
+chrome --headless=new --no-pdf-header-footer --print-to-pdf=proj-init-workflow.pdf proj-init-workflow.html
+```
+
 Step-00 (clone + register) and cleanup (clear state) are utilities, not document-producing
 `_run-step.md` steps. Keep Step-00's behavior in `docs/guides/proj-init/00-bootstrap.md`
 and `scripts/bootstrap-target-repo.mjs`, and cleanup's in `docs/guides/proj-init/cleanup.md`

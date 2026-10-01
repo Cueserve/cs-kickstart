@@ -165,7 +165,7 @@
 cd &lt;kit-folder&gt;
 claude</pre></div>
   <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-&lt;step&gt;          <span class="c"># e.g. /proj-init-product</span></pre></div>
-  <div class="note"><b>One step, one session.</b> For the next step, run <code>/clear</code> or start a new <code>claude</code> session. Steps 02–09 run the status check themselves; run <code>/proj-init-doc-status</code> any time to see what's merged, what's open, and what's next. GitHub Copilot Chat users run the same <code>/proj-init-*</code> names from <code>.github/prompts/</code>.</div>
+  <div class="note"><b>One step, one session.</b> For the next step, run <code>/clear</code> or start a new <code>claude</code> session. Steps 01–09 fast-forward <code>main</code> and run the status check themselves; run <code>/proj-init-doc-status</code> any time to see what's merged, what's open, and what's next. GitHub Copilot Chat users run the same <code>/proj-init-*</code> names from <code>.github/prompts/</code>.</div>
 </section>
 
 <!-- ============================== PAGE 2 ============================== -->
@@ -327,7 +327,7 @@ claude</pre></div>
 <!-- ============================== PAGE 3 ============================== -->
 <section class="page">
   <h2 style="margin-top:0">Step by step</h2>
-  <p class="sub">Run every command from the kit folder, one per fresh session. Steps 02–09 share one runner: resolve the target, check status and preconditions, wait for your <b>yes</b>, branch, interview you one question at a time, draft, commit, then push and open the PR/MR only after a second <b>yes</b>.</p>
+  <p class="sub">Run every command from the kit folder, one per fresh session. Steps 01–09 share one runner: resolve the target, fast-forward <code>main</code>, check status and preconditions, wait for your <b>yes</b>, branch, interview you one question at a time, draft, commit, then push and open the PR/MR only after a second <b>yes</b>.</p>
 
   <div class="step"><div class="num">00</div><div class="card">
     <div class="card-head"><h3>Register the target repo</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">You confirm</span></div></div>
@@ -505,9 +505,9 @@ claude</pre></div>
 <!-- ============================== PAGE 7 ============================== -->
 <section class="page">
   <h2 style="margin-top:0">One step up close</h2>
-  <p class="sub">What happens between you, the Claude session in the kit, the target clone, and your Git host during any step from 02 to 09.</p>
+  <p class="sub">What happens between you, the Claude session in the kit, the target clone, and your Git host during any step from 01 to 09.</p>
 
-  <svg viewBox="0 0 760 640" width="100%" role="img" aria-label="Sequence of one initiation step">
+  <svg viewBox="0 0 760 605" width="100%" role="img" aria-label="Sequence of one initiation step">
     <defs>
       <marker id="sa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3b4a5a"/></marker>
     </defs>
@@ -533,10 +533,10 @@ claude</pre></div>
     <rect x="620" y="10" width="120" height="34" rx="6" fill="#e9edf2" stroke="#4b5d70" class="hd"/>
     <text class="ht" x="680" y="32" text-anchor="middle" fill="#4b5d70">Git host</text>
 
-    <line class="life" x1="75"  y1="44" x2="75"  y2="630"/>
-    <line class="life" x1="270" y1="44" x2="270" y2="630"/>
-    <line class="life" x1="490" y1="44" x2="490" y2="630"/>
-    <line class="life" x1="680" y1="44" x2="680" y2="630"/>
+    <line class="life" x1="75"  y1="44" x2="75"  y2="595"/>
+    <line class="life" x1="270" y1="44" x2="270" y2="595"/>
+    <line class="life" x1="490" y1="44" x2="490" y2="595"/>
+    <line class="life" x1="680" y1="44" x2="680" y2="595"/>
 
     <!-- 1 -->
     <text class="mm" x="172" y="70" text-anchor="middle">/proj-init-&lt;step&gt;</text>
@@ -546,8 +546,8 @@ claude</pre></div>
     <text class="ml" x="312" y="99">read .proj-init/state.json → TARGET</text>
     <text class="ml" x="312" y="113">load _run-step.md, _steps.yml, guide, role</text>
     <!-- 3 -->
-    <text class="ml" x="380" y="138" text-anchor="middle">doc-status · git status --porcelain</text>
-    <text class="ml" x="380" y="151" text-anchor="middle">upstream, output, CONTRIBUTING.md on main?</text>
+    <text class="ml" x="380" y="138" text-anchor="middle">clean tree? · checkout main · pull --ff-only</text>
+    <text class="ml" x="380" y="151" text-anchor="middle">doc-status · upstream + gate docs on main?</text>
     <line class="m" x1="270" y1="158" x2="488" y2="158" marker-end="url(#sa)"/>
     <!-- 4 -->
     <text class="ml" x="172" y="182" text-anchor="middle">precondition checklist</text>
@@ -588,12 +588,9 @@ claude</pre></div>
     <!-- 13 -->
     <text class="ml" x="378" y="536" text-anchor="middle">tick the self-review checklist · merge to main</text>
     <line class="m" x1="75" y1="542" x2="678" y2="542" marker-end="url(#sa)"/>
-    <!-- 14 -->
-    <text class="mm" x="282" y="568" text-anchor="middle">git checkout main · git pull</text>
-    <line class="m" x1="75" y1="574" x2="488" y2="574" marker-end="url(#sa)"/>
     <!-- 15 -->
-    <rect x="160" y="592" width="440" height="26" rx="5" fill="#fdf0dc" stroke="#b46504" stroke-dasharray="4 3"/>
-    <text class="ml" x="380" y="609" text-anchor="middle" fill="#b46504">next step → /clear or a new claude session, then the next /proj-init-* command</text>
+    <rect x="160" y="562" width="440" height="26" rx="5" fill="#fdf0dc" stroke="#b46504" stroke-dasharray="4 3"/>
+    <text class="ml" x="380" y="579" text-anchor="middle" fill="#b46504">next step → /clear or a new claude session, then the next /proj-init-* command</text>
   </svg>
 
   <h2>After the PR/MR opens</h2>
@@ -602,10 +599,7 @@ claude</pre></div>
     <li><b>Give it fresh eyes.</b> Wait at least a few hours, ideally a full day, before reviewing.</li>
     <li><b>Tick the self-review checklist</b> in the PR/MR description: every required section is covered, no upstream doc changed after you branched, and the change went through a PR/MR, not a direct push.</li>
     <li><b>Merge to <code>main</code>.</b> Merging is what makes it final. Step-04 also needs the Product Owner's sign-off.</li>
-    <li><b>Refresh <code>main</code> in the target</b>, so the next step's precondition check sees the merged doc:
-      <div class="term"><div class="lbl shell">TERMINAL</div><pre>git -C &lt;target-folder&gt; checkout main
-git -C &lt;target-folder&gt; pull --ff-only</pre></div></li>
-    <li><b>Start the next step in a fresh session.</b></li>
+    <li><b>Start the next step in a fresh session.</b> It fast-forwards <code>main</code> in the target before it checks that the upstream documents are merged.</li>
   </ol>
 </section>
 
