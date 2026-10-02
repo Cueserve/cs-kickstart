@@ -51,10 +51,11 @@ Adding/removing/reordering a step ALSO means the `README.md` step table and `_ov
 
 Any change to a step's command, owner/reviewer, upstream, outputs, branch, gate, or the runner's
 loop ALSO means `proj-init-workflow.html` (and the README's "Workflow at a Glance" diagram).
-Regenerate the PDF from it and commit both — there is no CI check for this drift:
+Regenerate both PDFs from it and commit all three — there is no CI check for this drift:
 
 ```text
 chrome --headless=new --no-pdf-header-footer --print-to-pdf=proj-init-workflow.pdf proj-init-workflow.html
+chrome --headless=new --no-pdf-header-footer --print-to-pdf=proj-init-workflow-by-actor.pdf "file:///<abs-path>/proj-init-workflow.html?only=by-actor"
 ```
 
 Step-00 (clone + register) and cleanup (clear state) are utilities, not document-producing

@@ -9,6 +9,8 @@
   _run-step.md, step guides, cleanup.md, doc-update.md). When a step changes, update
   this file and regenerate the PDF:
     chrome --headless=new --no-pdf-header-footer --print-to-pdf=proj-init-workflow.pdf proj-init-workflow.html
+  The one-page by-actor flow is also published on its own (needs a file:/// URL so the query survives):
+    chrome --headless=new --no-pdf-header-footer --print-to-pdf=proj-init-workflow-by-actor.pdf "file:///<abs-path>/proj-init-workflow.html?only=by-actor"
 -->
 <style>
   :root {
@@ -23,6 +25,8 @@
     --target: #0f8a6a;   --target-bg: #e3f5ee;
     --you: #b46504;      --you-bg: #fdf0dc;
     --host: #4b5d70;     --host-bg: #e9edf2;
+    --po: #a13d6b;       --po-bg: #f8e9f0;
+    --arch: #5b4cb0;     --arch-bg: #eeebfa;
     --sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     --mono: "Cascadia Mono", Consolas, "SFMono-Regular", Menlo, monospace;
   }
@@ -31,6 +35,10 @@
   html, body { margin: 0; background: var(--bg); color: var(--text); font: 13px/1.5 var(--sans); }
   .page { width: 210mm; padding: 13mm 14mm 10mm; margin: 0 auto; break-after: page; }
   .page:last-child { break-after: auto; }
+  /* ?only=by-actor prints just the by-actor page (source of proj-init-workflow-by-actor.pdf) */
+  .only-by-actor .page:not(#by-actor) { display: none; }
+  .only-by-actor #by-actor { break-after: auto; }
+  .only-by-actor #by-actor .sub, .only-by-actor #by-actor .full-only { display: none; }
   h1 { color: var(--ink); font-size: 30px; line-height: 1.15; margin: 4px 0 10px; letter-spacing: -0.5px; }
   h2 { color: var(--ink); font-size: 19px; margin: 18px 0 4px; }
   h3 { color: var(--ink); font-size: 15px; margin: 0; }
@@ -49,6 +57,8 @@
   .pill.target { color: var(--target); background: var(--target-bg); }
   .pill.you { color: var(--you); background: var(--you-bg); }
   .pill.host { color: var(--host); background: var(--host-bg); }
+  .pill.po { color: var(--po); background: var(--po-bg); }
+  .pill.arch { color: var(--arch); background: var(--arch-bg); }
   .tag { display: inline-block; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 0 8px; font-family: var(--mono); font-size: 11px; color: var(--ink); }
 
   /* panels */
@@ -103,6 +113,36 @@
 
   svg text { font-family: var(--sans); }
   svg .mono { font-family: var(--mono); }
+  /* whole flow by actor (wf-*): prefixed so the other SVGs' global classes don't leak in */
+  svg.wf { display: block; margin-top: 6px; }
+  .wf-lane { fill-opacity: 0.55; }
+  .wf-lane.po { fill: var(--po-bg); } .wf-lane.arch { fill: var(--arch-bg); } .wf-lane.host { fill: var(--host-bg); }
+  .wf-name { font-size: 12.5px; font-weight: 700; }
+  .wf-role { font-size: 9.5px; fill: var(--muted); }
+  .wf-phase { font-size: 9px; font-weight: 700; letter-spacing: 1.4px; fill: var(--muted); }
+  .wf-rule { stroke: var(--line); stroke-dasharray: 2 3; }
+  .wf-card { fill: var(--card); stroke-width: 1.3; }
+  .wf-tabt { font-size: 8.5px; font-weight: 700; letter-spacing: 1px; fill: var(--card); }
+  .wf-title { font-size: 12px; font-weight: 700; fill: var(--ink); }
+  .wf-cmd { font-family: var(--mono); font-size: 9.4px; fill: var(--kit); }
+  .wf-out { font-size: 9.6px; font-weight: 600; fill: var(--target); }
+  .wf-doc { fill: var(--target-bg); stroke: var(--target); stroke-width: 0.9; }
+  .wf-flow { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+  .wf-head { fill: var(--muted); }
+  .wf-host { fill: var(--card); stroke: var(--host); stroke-width: 1.2; }
+  .wf-host.none { fill: none; stroke-dasharray: 4 3; }
+  .wf-h1 { font-size: 10.5px; font-weight: 700; fill: var(--ink); }
+  .wf-h2 { font-size: 9.6px; font-weight: 600; }
+  .wf-link { stroke: var(--host); stroke-width: 1.1; stroke-dasharray: 3 3; fill: none; }
+  .wf-ms { fill: var(--target-bg); stroke: var(--target); stroke-width: 0.9; }
+  .wf-mst { font-size: 9.3px; font-weight: 700; fill: var(--target); }
+  .wf-co { fill: var(--po-bg); stroke: var(--po); stroke-dasharray: 4 3; }
+  .wf-cot { font-size: 9.6px; font-weight: 700; fill: var(--po); }
+  .c-po { color: var(--po); } .c-arch { color: var(--arch); } .c-host { color: var(--host); } .c-target { color: var(--target); } .c-muted { color: var(--muted); }
+  .s-po { stroke: var(--po); } .s-arch { stroke: var(--arch); }
+  .f-po { fill: var(--po); } .f-arch { fill: var(--arch); } .f-host { fill: var(--host); } .f-muted { fill: var(--muted); }
+  .t-po { fill: var(--po-bg); } .t-arch { fill: var(--arch-bg); }
+
   .foot { margin-top: 14px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); }
 
   @media screen { .page { box-shadow: 0 0 0 1px var(--line); margin-bottom: 16px; background: var(--bg); } }
@@ -112,6 +152,7 @@
     .cell { border-right: 0; border-bottom: 1px solid var(--line); }
   }
 </style>
+<script>if (new URLSearchParams(location.search).get('only') === 'by-actor') document.documentElement.classList.add('only-by-actor');</script>
 </head>
 <body>
 
@@ -322,6 +363,271 @@ claude</pre></div>
     <tr><td>04</td><td><code>PRD.md</code></td><td>09</td><td><code>BACKLOG.md</code></td></tr>
     <tr><td>05</td><td><code>PRD.md</code>, <code>ARCHITECTURE.md</code></td><td>Cleanup</td><td><code>BACKLOG.md</code>, init-only block gone from <code>CONTRIBUTING.md</code></td></tr>
   </table>
+</section>
+
+<!-- ============================== PAGE 2B ============================== -->
+<section class="page" id="by-actor">
+  <h2 style="margin-top:0">The whole flow, by who does what</h2>
+  <p class="sub">The same flow, read top to bottom. Each step sits in the lane of the role that owns it; an elbow in the arrow is a handoff. The right column shows each PR/MR, who merges it, and what that merge unlocks.</p>
+
+  <svg class="wf" viewBox="0 0 762 908" width="100%" role="img" aria-label="Initiation flow by actor: Product Owner, Architect, and Git host, from Step-00 to cleanup">
+    <defs>
+      <marker id="wf-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="wf-head" d="M0,0 L10,5 L0,10 z"/></marker>
+      <marker id="wf-arh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="f-host" d="M0,0 L10,5 L0,10 z"/></marker>
+      <symbol id="wf-i-person" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="6" r="3.2"/><path d="M3 16c.7-3.2 3-5 6-5s5.3 1.8 6 5"/></g></symbol>
+      <symbol id="wf-i-merge" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="5" cy="3.8" r="1.9"/><circle cx="5" cy="14.2" r="1.9"/><circle cx="13.5" cy="9" r="1.9"/><path d="M5 5.7v6.6M5 6.5c0 2.5 2.4 2.5 6.6 2.5"/></g></symbol>
+      <symbol id="wf-i-down" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2.5v8.5M5.5 7.5 9 11l3.5-3.5M3 12.5v3h12v-3"/></g></symbol>
+      <symbol id="wf-i-dash" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="6.5"/><path d="M6 9h6"/></g></symbol>
+      <symbol id="wf-i-folder" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M2.5 4.5h4.5l1.6 2h6.9v8H2.5z"/><path d="M9 8.5v4M7 10.5h4" stroke-linecap="round"/></g></symbol>
+      <symbol id="wf-i-shield" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M9 2l6 2.4v4.4c0 3.6-2.6 6-6 7.2-3.4-1.2-6-3.6-6-7.2V4.4z"/><path d="M6.3 9l1.9 1.9 3.6-3.7"/></g></symbol>
+      <symbol id="wf-i-bulb" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M9 2.3a4.6 4.6 0 0 0-2.7 8.3v2.2h5.4v-2.2A4.6 4.6 0 0 0 9 2.3z"/><path d="M7 15.6h4"/></g></symbol>
+      <symbol id="wf-i-list" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M2.8 4.6l1.3 1.3 2.3-2.4M2.8 9.6l1.3 1.3 2.3-2.4M8.6 4.8H15M8.6 9.8H15M8.6 14.6H15M3.4 14.6h2.2"/></g></symbol>
+      <symbol id="wf-i-blocks" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><rect x="6" y="2.5" width="6" height="4.5" rx="1"/><rect x="2.3" y="11.5" width="5.6" height="4.5" rx="1"/><rect x="10.1" y="11.5" width="5.6" height="4.5" rx="1"/><path d="M9 7v2.3M5.1 11.5V9.3h7.8v2.2"/></g></symbol>
+      <symbol id="wf-i-layers" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M9 2.3 15.6 6 9 9.7 2.4 6z"/><path d="M2.4 9.4 9 13.1l6.6-3.7M2.4 12.7 9 16.4l6.6-3.7"/></g></symbol>
+      <symbol id="wf-i-spark" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M8 2.5l1.5 4.2 4.2 1.5-4.2 1.5L8 14l-1.5-4.3-4.2-1.5 4.2-1.5z"/><path d="M14.3 12.3v3.6M12.5 14.1h3.6"/></g></symbol>
+      <symbol id="wf-i-book" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M3.8 2.4h7.2l3.2 3.2v10H3.8z"/><path d="M11 2.4v3.2h3.2M6.4 8.6h5.2M6.4 11.2h5.2M6.4 13.6h3"/></g></symbol>
+      <symbol id="wf-i-board" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><rect x="2.3" y="2.8" width="13.4" height="12.4" rx="1.6"/><path d="M6.8 2.8v12.4M11.2 2.8v12.4M3.9 5.8h1.4M3.9 8.3h1.4M8.3 5.8h1.4M12.7 5.8h1.4"/></g></symbol>
+      <symbol id="wf-i-flag" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M4 16V2.4"/><path d="M4 3h9.6l-2.2 3.2 2.2 3.2H4"/></g></symbol>
+      <symbol id="wf-i-check" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><circle cx="9" cy="9" r="6.6"/><path d="M6 9.2l2 2 4-4.2"/></g></symbol>
+      <symbol id="wf-i-pin" viewBox="0 0 18 18"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M4 16V2.4"/><path d="M4 3h9.6l-2.2 3.2 2.2 3.2H4" fill="currentColor"/></g></symbol>
+    </defs>
+
+    <!-- lanes: one per actor -->
+    <rect class="wf-lane po" x="74" y="4" width="224" height="900" rx="10"/>
+    <rect class="wf-lane arch" x="304" y="4" width="224" height="900" rx="10"/>
+    <rect class="wf-lane host" x="534" y="4" width="224" height="900" rx="10"/>
+    <circle class="f-po" cx="98" cy="28" r="14"/>
+    <use href="#wf-i-person" x="90" y="20" width="16" height="16" style="color:var(--card)"/>
+    <text class="wf-name f-po" x="120" y="25">Product Owner</text>
+    <text class="wf-role" x="120" y="39">owns 02 · 03 · 08</text>
+    <circle class="f-arch" cx="328" cy="28" r="14"/>
+    <use href="#wf-i-person" x="320" y="20" width="16" height="16" style="color:var(--card)"/>
+    <text class="wf-name f-arch" x="350" y="25">Architect</text>
+    <text class="wf-role" x="350" y="39">owns 00 · 01 · 04–07 · 09</text>
+    <circle class="f-host" cx="558" cy="28" r="14"/>
+    <use href="#wf-i-merge" x="550" y="20" width="16" height="16" style="color:var(--card)"/>
+    <text class="wf-name f-host" x="580" y="25">Git host</text>
+    <text class="wf-role" x="580" y="39">PR/MR, merge to main</text>
+
+    <!-- phases -->
+    <text class="wf-phase" x="6" y="61">SET UP</text><line class="wf-rule" x1="74" y1="58" x2="754" y2="58"/>
+    <text class="wf-phase" x="6" y="215">DEFINE</text><line class="wf-rule" x1="74" y1="212" x2="754" y2="212"/>
+    <text class="wf-phase" x="6" y="369">DESIGN</text><line class="wf-rule" x1="74" y1="366" x2="754" y2="366"/>
+    <text class="wf-phase" x="6" y="597">HAND OFF</text><line class="wf-rule" x1="74" y1="594" x2="754" y2="594"/>
+    <text class="wf-phase" x="6" y="825">WRAP UP</text><line class="wf-rule" x1="74" y1="822" x2="754" y2="822"/>
+
+    <!-- flow: always downward; elbows mark a handoff between actors -->
+    <path class="wf-flow" d="M416,130 V145" marker-end="url(#wf-ar)"/>
+    <path class="wf-flow" d="M416,200 V208 H186 V229" marker-end="url(#wf-ar)"/>
+    <path class="wf-flow" d="M186,284 V299" marker-end="url(#wf-ar)"/>
+    <path class="wf-flow" d="M186,354 V362 H416 V383" marker-end="url(#wf-ar)"/>
+    <path class="wf-flow" d="M416,438 V453" marker-end="url(#wf-ar)"/>
+    <path class="wf-flow" d="M416,508 V523" marker-end="url(#wf-ar)"/>
+    <path class="wf-flow" d="M416,578 V611" marker-end="url(#wf-ar)"/>
+    <path class="wf-flow" d="M416,666 V674 H186 V681" marker-end="url(#wf-ar)"/>
+    <path class="wf-flow" d="M186,736 V744 H416 V751" marker-end="url(#wf-ar)"/>
+    <path class="wf-flow" d="M416,806 V839" marker-end="url(#wf-ar)"/>
+
+    <!-- step 00 -->
+    <path class="wf-link" d="M548,103 H519" marker-end="url(#wf-arh)"/>
+    <rect class="wf-host none" x="548" y="83" width="196" height="40" rx="8"/>
+    <use href="#wf-i-down" class="c-host" x="557" y="94" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="100">Clone from host</text>
+    <text class="wf-h2 f-muted" x="582" y="114">no branch, no PR/MR</text>
+    <rect class="wf-card s-arch" x="314" y="76" width="204" height="54" rx="8"/>
+    <rect class="f-arch" x="322" y="68.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="328" y="79.2">STEP 00</text>
+    <rect class="t-arch" x="322" y="90" width="26" height="26" rx="7"/>
+    <use href="#wf-i-folder" class="c-arch" x="326" y="94" width="18" height="18"/>
+    <text class="wf-title" x="354" y="96">Register target</text>
+    <text class="wf-cmd" x="354" y="109">/proj-init-bootstrap</text>
+    <path class="wf-doc" d="M354.5,115.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="364" y="123.5">clone + state.json</text>
+
+    <!-- step 01 -->
+    <path class="wf-link" d="M518,173 H547" marker-end="url(#wf-arh)"/>
+    <rect class="wf-host" x="548" y="153" width="196" height="40" rx="8"/>
+    <use href="#wf-i-merge" class="c-host" x="557" y="164" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="170">PR/MR → main</text>
+    <text class="wf-h2 f-arch" x="582" y="184">Architect merges</text>
+    <rect class="wf-card s-arch" x="314" y="146" width="204" height="54" rx="8"/>
+    <rect class="f-arch" x="322" y="138.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="328" y="149.2">STEP 01</text>
+    <rect class="t-arch" x="322" y="160" width="26" height="26" rx="7"/>
+    <use href="#wf-i-shield" class="c-arch" x="326" y="164" width="18" height="18"/>
+    <text class="wf-title" x="354" y="166">Repo governance</text>
+    <text class="wf-cmd" x="354" y="179">/proj-init-repo-setup</text>
+    <path class="wf-doc" d="M354.5,185.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="364" y="193.5">CONTRIBUTING.md</text>
+
+    <!-- step 02 -->
+    <path class="wf-link" d="M288,257 H547" marker-end="url(#wf-arh)"/>
+    <rect class="wf-host" x="548" y="237" width="196" height="40" rx="8"/>
+    <use href="#wf-i-merge" class="c-host" x="557" y="248" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="254">PR/MR → main</text>
+    <text class="wf-h2 f-po" x="582" y="268">Product Owner merges</text>
+    <rect class="wf-card s-po" x="84" y="230" width="204" height="54" rx="8"/>
+    <rect class="f-po" x="92" y="222.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="98" y="233.2">STEP 02</text>
+    <rect class="t-po" x="92" y="244" width="26" height="26" rx="7"/>
+    <use href="#wf-i-bulb" class="c-po" x="96" y="248" width="18" height="18"/>
+    <text class="wf-title" x="124" y="250">Product concept</text>
+    <text class="wf-cmd" x="124" y="263">/proj-init-product</text>
+    <path class="wf-doc" d="M124.5,269.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="134" y="277.5">PRODUCT.md</text>
+
+    <!-- step 03 -->
+    <path class="wf-link" d="M288,327 H547" marker-end="url(#wf-arh)"/>
+    <rect class="wf-host" x="548" y="307" width="196" height="40" rx="8"/>
+    <use href="#wf-i-merge" class="c-host" x="557" y="318" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="324">PR/MR → main</text>
+    <text class="wf-h2 f-po" x="582" y="338">Product Owner merges</text>
+    <rect class="wf-card s-po" x="84" y="300" width="204" height="54" rx="8"/>
+    <rect class="f-po" x="92" y="292.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="98" y="303.2">STEP 03</text>
+    <rect class="t-po" x="92" y="314" width="26" height="26" rx="7"/>
+    <use href="#wf-i-list" class="c-po" x="96" y="318" width="18" height="18"/>
+    <text class="wf-title" x="124" y="320">Requirements</text>
+    <text class="wf-cmd" x="124" y="333">/proj-init-prd</text>
+    <path class="wf-doc" d="M124.5,339.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="134" y="347.5">PRD.md</text>
+
+    <!-- step 04 -->
+    <path class="wf-link" d="M518,411 H547" marker-end="url(#wf-arh)"/>
+    <rect class="wf-host" x="548" y="391" width="196" height="40" rx="8"/>
+    <use href="#wf-i-merge" class="c-host" x="557" y="402" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="408">PR/MR → main</text>
+    <text class="wf-h2 f-arch" x="582" y="422">Architect + PO merge</text>
+    <path class="wf-link s-po" d="M284,411 H314"/>
+    <rect class="wf-co" x="88" y="399" width="196" height="24" rx="12"/>
+    <use href="#wf-i-person" class="c-po" x="97" y="405" width="12" height="12"/>
+    <text class="wf-cot" x="115" y="414.4">Product Owner co-reviews</text>
+    <rect class="wf-card s-arch" x="314" y="384" width="204" height="54" rx="8"/>
+    <rect class="f-arch" x="322" y="376.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="328" y="387.2">STEP 04</text>
+    <rect class="t-arch" x="322" y="398" width="26" height="26" rx="7"/>
+    <use href="#wf-i-blocks" class="c-arch" x="326" y="402" width="18" height="18"/>
+    <text class="wf-title" x="354" y="404">Architecture</text>
+    <text class="wf-cmd" x="354" y="417">/proj-init-architecture</text>
+    <path class="wf-doc" d="M354.5,423.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="364" y="431.5">ARCHITECTURE.md</text>
+
+    <!-- step 05 -->
+    <path class="wf-link" d="M518,481 H547" marker-end="url(#wf-arh)"/>
+    <rect class="wf-host" x="548" y="461" width="196" height="40" rx="8"/>
+    <use href="#wf-i-merge" class="c-host" x="557" y="472" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="478">PR/MR → main</text>
+    <text class="wf-h2 f-arch" x="582" y="492">Architect merges</text>
+    <rect class="wf-ms" x="548" y="505" width="196" height="16" rx="8"/>
+    <use href="#wf-i-pin" class="c-target" x="555" y="508" width="10" height="10"/>
+    <text class="wf-mst" x="569" y="516.3">Sandbox spikes allowed</text>
+    <rect class="wf-card s-arch" x="314" y="454" width="204" height="54" rx="8"/>
+    <rect class="f-arch" x="322" y="446.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="328" y="457.2">STEP 05</text>
+    <rect class="t-arch" x="322" y="468" width="26" height="26" rx="7"/>
+    <use href="#wf-i-layers" class="c-arch" x="326" y="472" width="18" height="18"/>
+    <text class="wf-title" x="354" y="474">Tech stack</text>
+    <text class="wf-cmd" x="354" y="487">/proj-init-techstack</text>
+    <path class="wf-doc" d="M354.5,493.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="364" y="501.5">TECH-STACK.md + tooling</text>
+
+    <!-- step 06 -->
+    <path class="wf-link" d="M518,551 H547" marker-end="url(#wf-arh)"/>
+    <rect class="wf-host" x="548" y="531" width="196" height="40" rx="8"/>
+    <use href="#wf-i-merge" class="c-host" x="557" y="542" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="548">PR/MR → main</text>
+    <text class="wf-h2 f-arch" x="582" y="562">Architect merges</text>
+    <rect class="wf-ms" x="548" y="575" width="196" height="16" rx="8"/>
+    <use href="#wf-i-pin" class="c-target" x="555" y="578" width="10" height="10"/>
+    <text class="wf-mst" x="569" y="586.3">Production code may start</text>
+    <rect class="wf-card s-arch" x="314" y="524" width="204" height="54" rx="8"/>
+    <rect class="f-arch" x="322" y="516.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="328" y="527.2">STEP 06</text>
+    <rect class="t-arch" x="322" y="538" width="26" height="26" rx="7"/>
+    <use href="#wf-i-spark" class="c-arch" x="326" y="542" width="18" height="18"/>
+    <text class="wf-title" x="354" y="544">AI tool guide</text>
+    <text class="wf-cmd" x="354" y="557">/proj-init-aitoolguide</text>
+    <path class="wf-doc" d="M354.5,563.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="364" y="571.5">AI-TOOL-GUIDE + adapters</text>
+
+    <!-- step 07 -->
+    <path class="wf-link" d="M518,639 H547" marker-end="url(#wf-arh)"/>
+    <rect class="wf-host" x="548" y="619" width="196" height="40" rx="8"/>
+    <use href="#wf-i-merge" class="c-host" x="557" y="630" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="636">PR/MR → main</text>
+    <text class="wf-h2 f-arch" x="582" y="650">Architect merges</text>
+    <rect class="wf-ms" x="548" y="663" width="196" height="16" rx="8"/>
+    <use href="#wf-i-pin" class="c-target" x="555" y="666" width="10" height="10"/>
+    <text class="wf-mst" x="569" y="674.3">OK to share the repo</text>
+    <rect class="wf-card s-arch" x="314" y="612" width="204" height="54" rx="8"/>
+    <rect class="f-arch" x="322" y="604.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="328" y="615.2">STEP 07</text>
+    <rect class="t-arch" x="322" y="626" width="26" height="26" rx="7"/>
+    <use href="#wf-i-book" class="c-arch" x="326" y="630" width="18" height="18"/>
+    <text class="wf-title" x="354" y="632">Project README</text>
+    <text class="wf-cmd" x="354" y="645">/proj-init-readme</text>
+    <path class="wf-doc" d="M354.5,651.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="364" y="659.5">README.md (replaced)</text>
+
+    <!-- step 08 -->
+    <path class="wf-link" d="M288,709 H547" marker-end="url(#wf-arh)"/>
+    <rect class="wf-host" x="548" y="689" width="196" height="40" rx="8"/>
+    <use href="#wf-i-merge" class="c-host" x="557" y="700" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="706">PR/MR → main</text>
+    <text class="wf-h2 f-po" x="582" y="720">Product Owner merges</text>
+    <rect class="wf-ms" x="548" y="733" width="196" height="16" rx="8"/>
+    <use href="#wf-i-pin" class="c-target" x="555" y="736" width="10" height="10"/>
+    <text class="wf-mst" x="569" y="744.3">Sprint planning can start</text>
+    <rect class="wf-card s-po" x="84" y="682" width="204" height="54" rx="8"/>
+    <rect class="f-po" x="92" y="674.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="98" y="685.2">STEP 08</text>
+    <rect class="t-po" x="92" y="696" width="26" height="26" rx="7"/>
+    <use href="#wf-i-board" class="c-po" x="96" y="700" width="18" height="18"/>
+    <text class="wf-title" x="124" y="702">Initial backlog</text>
+    <text class="wf-cmd" x="124" y="715">/proj-init-backlog</text>
+    <path class="wf-doc" d="M124.5,721.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="134" y="729.5">BACKLOG.md + host items</text>
+
+    <!-- step 09 -->
+    <path class="wf-link" d="M518,779 H547" marker-end="url(#wf-arh)"/>
+    <rect class="wf-host" x="548" y="759" width="196" height="40" rx="8"/>
+    <use href="#wf-i-merge" class="c-host" x="557" y="770" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="776">PR/MR → main</text>
+    <text class="wf-h2 f-arch" x="582" y="790">Architect merges</text>
+    <rect class="wf-ms" x="548" y="803" width="196" height="16" rx="8"/>
+    <use href="#wf-i-pin" class="c-target" x="555" y="806" width="10" height="10"/>
+    <text class="wf-mst" x="569" y="814.3">Initiation complete</text>
+    <rect class="wf-card s-arch" x="314" y="752" width="204" height="54" rx="8"/>
+    <rect class="f-arch" x="322" y="744.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="328" y="755.2">STEP 09</text>
+    <rect class="t-arch" x="322" y="766" width="26" height="26" rx="7"/>
+    <use href="#wf-i-flag" class="c-arch" x="326" y="770" width="18" height="18"/>
+    <text class="wf-title" x="354" y="772">Finalize governance</text>
+    <text class="wf-cmd" x="354" y="785">/proj-init-finalize</text>
+    <path class="wf-doc" d="M354.5,791.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="364" y="799.5">CONTRIBUTING.md, final</text>
+
+    <!-- cleanup -->
+    <rect class="wf-host none" x="548" y="847" width="196" height="40" rx="8"/>
+    <use href="#wf-i-dash" class="c-muted" x="557" y="858" width="18" height="18"/>
+    <text class="wf-h1" x="582" y="864">No git activity</text>
+    <text class="wf-h2 f-muted" x="582" y="878">clone and remote kept</text>
+    <rect class="wf-card s-arch" x="314" y="840" width="204" height="54" rx="8"/>
+    <rect class="f-arch" x="322" y="832.5" width="56.800000000000004" height="15" rx="7.5"/>
+    <text class="wf-tabt" x="328" y="843.2">CLEANUP</text>
+    <rect class="t-arch" x="322" y="854" width="26" height="26" rx="7"/>
+    <use href="#wf-i-check" class="c-arch" x="326" y="858" width="18" height="18"/>
+    <text class="wf-title" x="354" y="860">Clean up</text>
+    <text class="wf-cmd" x="354" y="873">/proj-init-cleanup</text>
+    <path class="wf-doc" d="M354.5,879.5 h4 l2.5,2.5 v6.5 h-6.5 z"/>
+    <text class="wf-out" x="364" y="887.5">state.json cleared</text>
+  </svg>
+
+  <div class="pills">
+    <span class="pill kit">Command · Claude session in the kit</span>
+    <span class="pill target">Written to the target</span>
+  </div>
+  <p class="foot">Docs land under <code>docs/</code> in the target; <code>README.md</code> and <code>CONTRIBUTING.md</code> stay at the root.<span class="full-only"> Solo team? Wear the hat of the lane the step sits in.</span></p>
 </section>
 
 <!-- ============================== PAGE 3 ============================== -->
