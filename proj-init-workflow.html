@@ -115,6 +115,17 @@
   table.upd th { background: var(--code-bg); color: var(--ink); font-size: 11px; letter-spacing: 0.5px; }
   table.upd tr:last-child td { border-bottom: 0; }
   table.upd.tight th, table.upd.tight td { padding: 4px 10px; }
+  /* commands overview: one card per command; step + command form the highlighted title bar */
+  .cmd-group { font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px; color: var(--muted); text-transform: uppercase; margin: 12px 0 5px; }
+  .cmd { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-bottom: 7px; break-inside: avoid; }
+  .cmd-head { display: flex; align-items: center; gap: 10px; padding: 6px 12px; background: var(--kit-bg); border-bottom: 1px solid var(--line); }
+  .cmd-num { background: var(--ink); color: var(--card); border-radius: 999px; padding: 1px 9px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .cmd-name { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--kit); }
+  .cmd-title { margin-left: auto; font-size: 11.5px; font-weight: 600; color: var(--ink); }
+  .cmd-body { padding: 7px 12px 8px; font-size: 11.8px; line-height: 1.45; }
+  .cmd-body p { margin: 0 0 6px; }
+  .cmd-out { display: grid; grid-template-columns: 70px 1fr; gap: 8px; border-left: 3px solid var(--target); background: var(--target-bg); border-radius: 0 6px 6px 0; padding: 5px 9px; }
+  .cmd-out .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; color: var(--target); padding-top: 1px; }
 
   svg text { font-family: var(--sans); }
   svg .mono { font-family: var(--mono); }
@@ -482,6 +493,124 @@ claude</pre></div>
 
 <!-- ============================== PAGE 3 ============================== -->
 <section class="page">
+  <h2 style="margin-top:0">Commands overview</h2>
+  <p class="sub">Every command runs from the kit folder in a fresh Claude session. Each step is covered in detail on the pages that follow.</p>
+
+  <div class="cmd-group">Initiation · run in order</div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">STEP 00</span><span class="cmd-name">/proj-init-bootstrap</span><span class="cmd-title">Register target</span></div>
+    <div class="cmd-body">
+      <p>Clones the project repository from your Git host into an empty or new local folder and registers that clone as the initiation workspace. The command presents a dry run for review and applies it only after you confirm. From then on, every command runs from the kit but operates on the registered clone, so kit files are never copied into the project.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div>The local clone, plus <code>.proj-init/state.json</code> in the kit (gitignored). Every later step and utility reads this file to locate the target before doing any git work. It is specific to one machine; to continue elsewhere, re-run Step-00.</div></div>
+    </div>
+  </div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">STEP 01</span><span class="cmd-name">/proj-init-repo-setup</span><span class="cmd-title">Repo governance</span></div>
+    <div class="cmd-body">
+      <p>Establishes the repository's governance baseline: the branching convention, the commit message convention, and the self-review checklist every PR/MR must satisfy. Where the Git host and plan permit, it also enables branch protection on <code>main</code>. Rules needed only during initiation are placed in a fenced <code>INITIATION-ONLY</code> block so they can be removed cleanly at the end.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div><code>CONTRIBUTING.md</code>. Steps 02–09 will not start until this file is on <code>main</code>. Its permanent rules govern every contribution for the life of the project; Step-05 extends it and Step-09 finalizes it.</div></div>
+    </div>
+  </div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">STEP 02</span><span class="cmd-name">/proj-init-product</span><span class="cmd-title">Product concept</span></div>
+    <div class="cmd-body">
+      <p>Conducts a structured interview with the Product Owner, one question at a time, to define the product's vision, problem statement, objectives, target users, features, scope boundaries, and success criteria. No answer is assumed; each section is drafted and revised until it is approved.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div><code>docs/PRODUCT.md</code>. The source of truth for product intent: requirements (03) are derived from it, and the README (07) and backlog (08) draw on it. Later changes to scope or goals go through <code>/proj-init-doc-update</code>.</div></div>
+    </div>
+  </div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">STEP 03</span><span class="cmd-name">/proj-init-prd</span><span class="cmd-title">Requirements</span></div>
+    <div class="cmd-body">
+      <p>Translates the approved product concept into a formal requirements document: user stories, functional and non-functional requirements, acceptance criteria, out-of-scope items, dependencies, constraints, and risks. Every requirement is stated so that it can be tested.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div><code>docs/PRD.md</code>. Architecture (04) and technology (05) decisions are made against these requirements, and the backlog's epics and stories (08) are derived from them. Its acceptance criteria give the team a testable definition of each feature.</div></div>
+    </div>
+  </div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">STEP 04</span><span class="cmd-name">/proj-init-architecture</span><span class="cmd-title">Architecture</span></div>
+    <div class="cmd-body">
+      <p>Defines the system architecture: components and their boundaries, data design, data flow, integration points, security posture and data classification, and the non-functional approach. It records the key design decisions and the implementation conventions code must follow. The session loads both Architect and Product Owner context, and both must approve.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div><code>docs/ARCHITECTURE.md</code>. The structural boundary for all implementation. Technology choices (05) and engineering rules (06) are derived from it; design changes after initiation go through <code>/proj-init-doc-update</code>.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== PAGE 4 ============================== -->
+<section class="page">
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">STEP 05</span><span class="cmd-name">/proj-init-techstack</span><span class="cmd-title">Tech stack</span></div>
+    <div class="cmd-body">
+      <p>Selects and locks the approved technologies (languages and frameworks, datastores, cloud and infrastructure services, key libraries and tools) with the trade-offs behind each choice and their versions and constraints. It also adds the project's build, test, and lint commands to <code>CONTRIBUTING.md</code> as a tooling layer, leaving the Step-01 governance rules untouched.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div><code>docs/TECH-STACK.md</code> + tooling layer in <code>CONTRIBUTING.md</code>. Only technologies listed here may be used; adding or replacing one requires <code>/proj-init-doc-update</code>. Once merged, isolated sandbox spikes may begin.</div></div>
+    </div>
+  </div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">STEP 06</span><span class="cmd-name">/proj-init-aitoolguide</span><span class="cmd-title">Engineering rules</span></div>
+    <div class="cmd-body">
+      <p>Defines the engineering rules every contributor follows, human or AI: coding conventions, scope boundaries, banned patterns, testing and documentation rules, decision-escalation criteria, off-limits files, and workflow conventions. The rules are derived from the approved architecture and tech stack. <code>CLAUDE.md</code> points to the shared rules and adds only Claude Code–specific instructions.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div><code>docs/ENGINEERING-RULES.md</code> + <code>CLAUDE.md</code>. Production implementation may start once this is merged. Claude Code reads <code>CLAUDE.md</code> automatically in every session, so AI-assisted work follows the same rules as the team.</div></div>
+    </div>
+  </div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">STEP 07</span><span class="cmd-name">/proj-init-readme</span><span class="cmd-title">Project README</span></div>
+    <div class="cmd-body">
+      <p>Replaces the repository's boilerplate README with the project's real entry point: overview, key concepts, prerequisites, environment setup, install and run, tests, project structure, and links to the source-of-truth documents. Every command in it is executed and verified before commit, and no placeholder may remain.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div><code>README.md</code> (replaced). The first document a new contributor reads and the basis for onboarding. It must be merged before the repository is shared more widely.</div></div>
+    </div>
+  </div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">STEP 08</span><span class="cmd-name">/proj-init-backlog</span><span class="cmd-title">Initial backlog</span></div>
+    <div class="cmd-body">
+      <p>Derives the initial epics and stories from the product and requirements documents and presents them for approval before anything is written. Once approved, it creates the work items in the host tracker one at a time through <code>gh</code> or <code>az boards</code>; if neither CLI is available, it records <code>PENDING</code> IDs and manual creation notes.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div><code>docs/BACKLOG.md</code> + host work items. The starting point for sprint planning, which may begin once it is merged. Its presence on <code>main</code> is also the gate for Step-09.</div></div>
+    </div>
+  </div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">STEP 09</span><span class="cmd-name">/proj-init-finalize</span><span class="cmd-title">Finalize governance</span></div>
+    <div class="cmd-body">
+      <p>Converts <code>CONTRIBUTING.md</code> from its initiation form into its permanent form. It removes the <code>INITIATION-ONLY</code> block, markers included, and inserts a <code>DEVELOPMENT-PHASE-GOVERNANCE</code> stub; the permanent rules and the tooling layer remain verbatim. It halts if the initiation markers are missing.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div><code>CONTRIBUTING.md</code> (final). The permanent contribution policy for the development phase. Merging it completes initiation.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== PAGE 5 ============================== -->
+<section class="page">
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">CLEANUP</span><span class="cmd-name">/proj-init-cleanup</span><span class="cmd-title">Clean up</span></div>
+    <div class="cmd-body">
+      <p>Closes out the initiation workspace. It verifies that <code>BACKLOG.md</code> is on <code>main</code> and the <code>INITIATION-ONLY</code> block is gone, then, after your confirmation, unregisters the workspace. The target clone and its remote are not modified.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div>Deletes <code>.proj-init/state.json</code>; nothing in the target. Frees the kit to register the next project; the finished project stays reachable by the utilities below with <code>--target</code>.</div></div>
+    </div>
+  </div>
+
+  <div class="cmd-group">After initiation · any time</div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">UTILITY</span><span class="cmd-name">/proj-init-doc-status</span><span class="cmd-title">Status</span></div>
+    <div class="cmd-body">
+      <p>Produces a read-only status report: which steps are merged to <code>main</code>, which have open PRs/MRs, and which step comes next. With <code>--target &lt;folder&gt;</code>, it reports on a finished or different project without re-registering it.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div>A status report in the session; writes nothing. Every step runs this check before it starts; run it yourself to see where a project stands at any time.</div></div>
+    </div>
+  </div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">UTILITY</span><span class="cmd-name">/proj-init-doc-update &lt;doc&gt;</span><span class="cmd-title">Update a document</span></div>
+    <div class="cmd-body">
+      <p>Updates a finalized source-of-truth document on a <code>docs/update/&lt;doc&gt;</code> branch, through the same review gate that originally approved it. It analyzes the impact of the change and flags the downstream documents that may need to follow.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div>The updated document and a reconciliation checklist, opened as a PR/MR. Keeps the documentation aligned as the project evolves; work through the checklist afterward with one update per flagged document.</div></div>
+    </div>
+  </div>
+
+  <div class="cmd-group">Kit maintenance</div>
+  <div class="cmd">
+    <div class="cmd-head"><span class="cmd-num">KIT</span><span class="cmd-name">/proj-init-audit</span><span class="cmd-title">Kit audit</span></div>
+    <div class="cmd-body">
+      <p>Performs a static completeness audit of the kit itself, scoring dimensions such as control-plane execution, step outputs, resumability, question-driven drafting, and adapter parity. It reads kit files only: it never touches a target, runs a script, or invokes git.</p>
+      <div class="cmd-out"><span class="lbl">PRODUCES</span><div>A scored PASS / GAP / FAIL report; writes nothing. Intended for kit maintainers, to catch gaps and drift between the guides, the step registry, and the adapters before teams use the kit.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== PAGE 6 ============================== -->
+<section class="page">
   <h2 style="margin-top:0">Step by step</h2>
   <p class="sub">Run every command from the kit folder, one per fresh session. Steps 01–09 share one runner: resolve the target, fast-forward <code>main</code>, check status and preconditions, wait for your <b>yes</b>, branch, interview you one question at a time, draft, commit, then push and open the PR/MR only after a second <b>yes</b>.</p>
   <p class="sub" style="margin-bottom:0">Each step card is tagged with where it runs and who acts:</p>
@@ -530,7 +659,7 @@ claude</pre></div>
   </div></div>
 </section>
 
-<!-- ============================== PAGE 4 ============================== -->
+<!-- ============================== PAGE 7 ============================== -->
 <section class="page">
   <div class="step" style="margin-top:0"><div class="num">03</div><div class="card">
     <div class="card-head"><h3>Product requirements</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
@@ -573,7 +702,7 @@ claude</pre></div>
   </div></div>
 </section>
 
-<!-- ============================== PAGE 5 ============================== -->
+<!-- ============================== PAGE 8 ============================== -->
 <section class="page">
   <div class="step" style="margin-top:0"><div class="num">06</div><div class="card">
     <div class="card-head"><h3>Engineering rules</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
@@ -618,7 +747,7 @@ claude</pre></div>
   </div></div>
 </section>
 
-<!-- ============================== PAGE 6 ============================== -->
+<!-- ============================== PAGE 9 ============================== -->
 <section class="page">
   <div class="step" style="margin-top:0"><div class="num">09</div><div class="card">
     <div class="card-head"><h3>Finalize governance</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
@@ -663,7 +792,7 @@ claude</pre></div>
   </table>
 </section>
 
-<!-- ============================== PAGE 7 ============================== -->
+<!-- ============================== PAGE 10 ============================== -->
 <section class="page">
   <h2 style="margin-top:0">One step up close</h2>
   <p class="sub">What happens between you, the Claude session in the kit, the target clone, and your Git host during any step from 01 to 09.</p>
@@ -764,7 +893,7 @@ claude</pre></div>
   </ol>
 </section>
 
-<!-- ============================== PAGE 8 ============================== -->
+<!-- ============================== PAGE 11 ============================== -->
 <section class="page">
   <h2 style="margin-top:0">Rules that hold at every step</h2>
   <div class="rules">
@@ -785,22 +914,6 @@ claude</pre></div>
     <div class="cell"><div class="who target">AFTER 07 MERGES</div><h3>Share the repo</h3><div class="small">The README is the real entry point.</div></div>
     <div class="cell"><div class="who target">AFTER 08 MERGES</div><h3>Sprint planning</h3><div class="small">Then Step-09 completes initiation.</div></div>
   </div>
-
-  <h2>Command cheat sheet</h2>
-  <table class="upd tight">
-    <tr><th>Step</th><th>Claude command</th><th>Produces in the target</th><th>Merged by</th></tr>
-    <tr><td>00</td><td><code>/proj-init-bootstrap</code></td><td>clone + kit-local <code>.proj-init/state.json</code></td><td>— (you confirm)</td></tr>
-    <tr><td>01</td><td><code>/proj-init-repo-setup</code></td><td><code>CONTRIBUTING.md</code> (governance)</td><td>Architect</td></tr>
-    <tr><td>02</td><td><code>/proj-init-product</code></td><td><code>docs/PRODUCT.md</code></td><td>Product Owner</td></tr>
-    <tr><td>03</td><td><code>/proj-init-prd</code></td><td><code>docs/PRD.md</code></td><td>Product Owner</td></tr>
-    <tr><td>04</td><td><code>/proj-init-architecture</code></td><td><code>docs/ARCHITECTURE.md</code></td><td>Architect + PO</td></tr>
-    <tr><td>05</td><td><code>/proj-init-techstack</code></td><td><code>docs/TECH-STACK.md</code> + tooling layer</td><td>Architect</td></tr>
-    <tr><td>06</td><td><code>/proj-init-aitoolguide</code></td><td><code>docs/ENGINEERING-RULES.md</code> + <code>CLAUDE.md</code></td><td>Architect</td></tr>
-    <tr><td>07</td><td><code>/proj-init-readme</code></td><td><code>README.md</code></td><td>Architect</td></tr>
-    <tr><td>08</td><td><code>/proj-init-backlog</code></td><td><code>docs/BACKLOG.md</code> + host work items</td><td>Product Owner</td></tr>
-    <tr><td>09</td><td><code>/proj-init-finalize</code></td><td><code>CONTRIBUTING.md</code> (init-only removed)</td><td>Architect</td></tr>
-    <tr><td>—</td><td><code>/proj-init-cleanup</code></td><td>nothing; unregisters the workspace</td><td>— (you confirm)</td></tr>
-  </table>
 
   <p class="foot">Solo / process-enforced: one person may wear both hats; take on the one each step calls for. Source of truth: docs/guides/proj-init/ (_steps.yml, _run-step.md, step guides).</p>
 </section>
