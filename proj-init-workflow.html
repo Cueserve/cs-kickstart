@@ -106,9 +106,13 @@
   .rule { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 12.3px; line-height: 1.45; }
   .rule b { display: block; color: var(--ink); margin-bottom: 2px; font-size: 13px; }
 
-  ol.after { margin: 6px 0 0; padding-left: 20px; }
-  ol.after li { margin-bottom: 7px; }
-  ol.after li b { color: var(--ink); }
+  /* stacked rows: label + title left, detail right */
+  .rows .row { display: grid; grid-template-columns: 170px 1fr; align-items: center; border-bottom: 1px solid var(--line); }
+  .rows .row:last-child { border-bottom: 0; }
+  /* left column stretches so its border is a full-height divider; p stays block so inline code flows */
+  .rows .row > div { align-self: stretch; display: flex; flex-direction: column; justify-content: center; padding: 9px 13px; border-right: 1px solid var(--line); }
+  .rows .row h3 { font-size: 14px; }
+  .rows .row p { margin: 0; padding: 9px 14px; font-size: 12.3px; line-height: 1.45; }
 
   table.upd { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
   table.upd th, table.upd td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); }
@@ -164,9 +168,10 @@
   @media screen { .page { box-shadow: 0 0 0 1px var(--line); margin-bottom: 16px; background: var(--bg); } }
   @media screen and (max-width: 820px) {
     .page { width: auto; padding: 16px; }
-    .grid3, .grid4, .rules { grid-template-columns: 1fr; }
+    .grid3, .grid4, .rules, .rows .row { grid-template-columns: 1fr; }
     .cell { border-right: 0; border-bottom: 1px solid var(--line); }
     .states .cell:not(:last-child)::after { display: none; }
+    .rows .row > div { border-right: 0; padding-bottom: 0; }
   }
 </style>
 <script>if (new URLSearchParams(location.search).get('only') === 'by-actor') document.documentElement.classList.add('only-by-actor');</script>
@@ -611,190 +616,7 @@ claude</pre></div>
 
 <!-- ============================== PAGE 6 ============================== -->
 <section class="page">
-  <h2 style="margin-top:0">Step by step</h2>
-  <p class="sub">Run every command from the kit folder, one per fresh session. Steps 01–09 share one runner: resolve the target, fast-forward <code>main</code>, check status and preconditions, wait for your <b>yes</b>, branch, interview you one question at a time, draft, commit, then push and open the PR/MR only after a second <b>yes</b>.</p>
-  <p class="sub" style="margin-bottom:0">Each step card is tagged with where it runs and who acts:</p>
-  <div class="legend">
-    <span class="pill kit">Kit</span><span>Runs in the kit repo. You start each Claude command here, and the guides and templates load from here.</span>
-    <span class="pill target">Target</span><span>Lands in your project clone: the step's branch, commits, and documents.</span>
-    <span class="pill you">Human</span><span>Needs a person to act: confirm, review, approve, or merge. The step's owner (Product Owner and/or Architect) does this.</span>
-  </div>
-
-  <div class="step"><div class="num">00</div><div class="card">
-    <div class="card-head"><h3>Register the target repo</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Clones your project repo and records where it lives, so every later step operates on that clone. Nothing is committed or pushed.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-bootstrap</pre></div>
-    <dl class="kv">
-      <dt>Asks</dt><dd>The target's git URL, and an empty or non-existent local folder to clone into.</dd>
-      <dt>Runs</dt><dd><code>node scripts/bootstrap-target-repo.mjs --target &lt;folder&gt; --url &lt;git-url&gt;</code> as a dry run, then again with <code>--apply</code></dd>
-      <dt>Writes</dt><dd>The clone at <code>&lt;folder&gt;</code>, plus <code>.proj-init/state.json</code> in the kit (gitignored, local to this machine)</dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> You review the dry run before <code>--apply</code>. Only one workspace at a time; replace it only with <code>--force</code>.</dd>
-      <dt>Git</dt><dd>No branch, no commit, no PR/MR.</dd>
-    </dl>
-  </div></div>
-
-  <div class="step"><div class="num">01</div><div class="card">
-    <div class="card-head"><h3>Set up repo governance</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">The gate every later step relies on: the branching convention, the commit convention, and the self-review checklist.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-repo-setup</pre></div>
-    <dl class="kv">
-      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
-      <dt>Writes</dt><dd><code>CONTRIBUTING.md</code>: permanent rules plus an <code>INITIATION-ONLY</code> fenced block, and branch protection on <code>main</code> if your host and plan allow it</dd>
-      <dt>Git</dt><dd><code>init/repo-setup</code> · <code>docs: add repo governance baseline (Step-01)</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> Self-review checklist, then you merge. Every later step stops until <code>CONTRIBUTING.md</code> is on <code>main</code>.</dd>
-    </dl>
-  </div></div>
-
-  <div class="step"><div class="num">02</div><div class="card">
-    <div class="card-head"><h3>Product concept</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">What we are building, and why.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-product</pre></div>
-    <dl class="kv">
-      <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
-      <dt>Reads</dt><dd><code>CONTRIBUTING.md</code> on <code>main</code> (the Step-01 gate)</dd>
-      <dt>Writes</dt><dd><code>docs/PRODUCT.md</code></dd>
-      <dt>Git</dt><dd><code>init/product</code> · <code>docs: add PRODUCT.md (Step-02)</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> The Product Owner approves and merges.</dd>
-    </dl>
-  </div></div>
-</section>
-
-<!-- ============================== PAGE 7 ============================== -->
-<section class="page">
-  <div class="step" style="margin-top:0"><div class="num">03</div><div class="card">
-    <div class="card-head"><h3>Product requirements</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Turns the concept into testable requirements.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-prd</pre></div>
-    <dl class="kv">
-      <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
-      <dt>Reads</dt><dd><code>docs/PRODUCT.md</code></dd>
-      <dt>Writes</dt><dd><code>docs/PRD.md</code></dd>
-      <dt>Git</dt><dd><code>init/prd</code> · <code>docs: add PRD.md (Step-03)</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> The Product Owner approves and merges.</dd>
-    </dl>
-  </div></div>
-
-  <div class="step"><div class="num">04</div><div class="card">
-    <div class="card-head"><h3>Architecture</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">System structure and design decisions. The runner loads both the Architect and Product Owner role context.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-architecture</pre></div>
-    <dl class="kv">
-      <dt>Owner</dt><dd>Architect · reviewed by Architect + Product Owner</dd>
-      <dt>Reads</dt><dd><code>docs/PRD.md</code></dd>
-      <dt>Writes</dt><dd><code>docs/ARCHITECTURE.md</code></dd>
-      <dt>Git</dt><dd><code>init/architecture</code> · <code>docs: add ARCHITECTURE.md (Step-04)</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> The Architect and Product Owner both approve, then merge.</dd>
-    </dl>
-  </div></div>
-
-  <div class="step"><div class="num">05</div><div class="card">
-    <div class="card-head"><h3>Tech stack</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Locks the approved technologies and adds the build/test/lint commands to <code>CONTRIBUTING.md</code>.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-techstack</pre></div>
-    <dl class="kv">
-      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
-      <dt>Reads</dt><dd><code>docs/PRD.md</code>, <code>docs/ARCHITECTURE.md</code></dd>
-      <dt>Writes</dt><dd><code>docs/TECH-STACK.md</code>; appends the tooling layer to <code>CONTRIBUTING.md</code> and leaves the Step-01 governance layer intact</dd>
-      <dt>Git</dt><dd><code>init/techstack</code> · <code>docs: add TECH-STACK.md and CONTRIBUTING tooling layer (Step-05)</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> The Architect approves and merges.</dd>
-      <dt>After merge</dt><dd>Sandbox spikes are allowed, on isolated spike branches that never merge to <code>main</code>.</dd>
-    </dl>
-  </div></div>
-</section>
-
-<!-- ============================== PAGE 8 ============================== -->
-<section class="page">
-  <div class="step" style="margin-top:0"><div class="num">06</div><div class="card">
-    <div class="card-head"><h3>Engineering rules</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">The coding rules every contributor follows, human or AI. Shared rules live in <code>ENGINEERING-RULES.md</code>; <code>CLAUDE.md</code> points to it and adds only what's specific to Claude Code.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-aitoolguide</pre></div>
-    <dl class="kv">
-      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
-      <dt>Reads</dt><dd><code>docs/ARCHITECTURE.md</code>, <code>docs/TECH-STACK.md</code></dd>
-      <dt>Writes</dt><dd><code>docs/ENGINEERING-RULES.md</code> and <code>CLAUDE.md</code></dd>
-      <dt>Git</dt><dd><code>init/aitoolguide</code> · <code>docs: add ENGINEERING-RULES.md and CLAUDE.md (Step-06)</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> The Architect approves and merges.</dd>
-      <dt>After merge</dt><dd>Production implementation can start.</dd>
-    </dl>
-  </div></div>
-
-  <div class="step"><div class="num">07</div><div class="card">
-    <div class="card-head"><h3>Project README</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Replaces the target's boilerplate README with a real entry point: setup, environment config, and how to run.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-readme</pre></div>
-    <dl class="kv">
-      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
-      <dt>Reads</dt><dd><code>PRODUCT.md</code>, <code>PRD.md</code>, <code>ARCHITECTURE.md</code>, <code>TECH-STACK.md</code>, <code>ENGINEERING-RULES.md</code></dd>
-      <dt>Writes</dt><dd><code>README.md</code>, replacing the existing file with all placeholders removed</dd>
-      <dt>Git</dt><dd><code>init/readme</code> · <code>docs: replace boilerplate README with project README (Step-07)</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> Every command in the README is tested before commit. The Architect approves and merges.</dd>
-      <dt>After merge</dt><dd>Required before the repo is shared more widely.</dd>
-    </dl>
-  </div></div>
-
-  <div class="step"><div class="num">08</div><div class="card">
-    <div class="card-head"><h3>Initial backlog</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill host">Host</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Epics and stories derived from the product and requirements docs, seeded into your issue tracker.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-backlog</pre></div>
-    <dl class="kv">
-      <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
-      <dt>Reads</dt><dd>The five docs Step-07 reads, plus <code>README.md</code></dd>
-      <dt>Writes</dt><dd><code>docs/BACKLOG.md</code>, plus host work items via <code>gh</code> or <code>az boards</code>; with neither CLI available, <code>PENDING</code> IDs and manual creation notes</dd>
-      <dt>Git</dt><dd><code>init/backlog</code> · <code>docs: add BACKLOG.md - Step-08 initial backlog</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> You approve the derived backlog before anything is written to the host or to disk. Items are then created one at a time. The Product Owner merges.</dd>
-      <dt>After merge</dt><dd>Required before sprint planning. Next: Step-09.</dd>
-    </dl>
-  </div></div>
-</section>
-
-<!-- ============================== PAGE 9 ============================== -->
-<section class="page">
-  <div class="step" style="margin-top:0"><div class="num">09</div><div class="card">
-    <div class="card-head"><h3>Finalize governance</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Removes the initiation-only rules from <code>CONTRIBUTING.md</code> and hands the team a permanent contribution core.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-finalize</pre></div>
-    <dl class="kv">
-      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
-      <dt>Reads</dt><dd><code>docs/BACKLOG.md</code> on <code>main</code> (the gate) and <code>CONTRIBUTING.md</code> on <code>main</code></dd>
-      <dt>Writes</dt><dd><code>CONTRIBUTING.md</code>: the <code>INITIATION-ONLY</code> block is removed (markers included) and a <code>DEVELOPMENT-PHASE-GOVERNANCE</code> stub is inserted. Permanent rules and the tooling layer stay verbatim.</dd>
-      <dt>Git</dt><dd><code>init/finalize</code> · <code>docs: finalize CONTRIBUTING.md for the development phase (Step-09)</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> Stops if the <code>INITIATION-ONLY</code> markers are missing. Once the Architect merges, initiation is complete.</dd>
-    </dl>
-  </div></div>
-
-  <div class="step"><div class="num">✓</div><div class="card">
-    <div class="card-head"><h3>Clean up the workspace</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Unregisters the workspace from the kit. The target clone and its remote are left untouched.</p>
-    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-cleanup</pre></div>
-    <dl class="kv">
-      <dt>Checks</dt><dd><code>docs/BACKLOG.md</code> is on <code>main</code> and <code>INITIATION-ONLY</code> is gone from <code>CONTRIBUTING.md</code></dd>
-      <dt>Runs</dt><dd><code>node scripts/bootstrap-target-repo.mjs --clear</code>, after your <b>yes</b></dd>
-      <dt>Writes</dt><dd>Deletes <code>.proj-init/state.json</code>. Nothing else.</dd>
-      <dt>Git</dt><dd>None.</dd>
-    </dl>
-  </div></div>
-
-  <h2>Utilities, any time</h2>
-  <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-doc-status          <span class="c"># read-only: merged, open PRs/MRs, what's next</span>
-/proj-init-doc-update &lt;doc&gt;    <span class="c"># e.g. PRD.md → PR/MR + reconciliation checklist</span>
-<span class="c"># add --target &lt;folder&gt; to either for a finished or other project</span></pre></div>
-
-  <h2>Which document to update</h2>
-  <table class="upd">
-    <tr><th>If this happens</th><th>Run <code>/proj-init-doc-update</code> on</th></tr>
-    <tr><td>Product scope, goal, or target users change</td><td><code>PRODUCT.md</code></td></tr>
-    <tr><td>Requirements or acceptance criteria change</td><td><code>PRD.md</code></td></tr>
-    <tr><td>System design or a major architecture decision changes</td><td><code>ARCHITECTURE.md</code></td></tr>
-    <tr><td>A library, framework, or tool is added, removed, or version-locked</td><td><code>TECH-STACK.md</code></td></tr>
-    <tr><td>Coding conventions, banned patterns, or testing rules change</td><td><code>ENGINEERING-RULES.md</code></td></tr>
-    <tr><td>Setup steps, env config, or run commands change</td><td><code>README.md</code></td></tr>
-    <tr><td>Epics or stories added, removed, rescoped, or host IDs change</td><td><code>BACKLOG.md</code></td></tr>
-  </table>
-</section>
-
-<!-- ============================== PAGE 10 ============================== -->
-<section class="page">
-  <h2 style="margin-top:0">One step up close</h2>
+  <h2 style="margin-top:0">Anatomy of a step</h2>
   <p class="sub">What happens between you, the Claude session in the kit, the target clone, and your Git host during any step from 01 to 09.</p>
 
   <svg viewBox="0 0 760 605" width="100%" role="img" aria-label="Sequence of one initiation step">
@@ -884,13 +706,196 @@ claude</pre></div>
   </svg>
 
   <h2>After the PR/MR opens</h2>
-  <p class="sub">From here on it's your job. The command's job ended when the PR/MR opened.</p>
-  <ol class="after">
-    <li><b>Give it fresh eyes.</b> Wait at least a few hours, ideally a full day, before reviewing.</li>
-    <li><b>Tick the self-review checklist</b> in the PR/MR description: every required section is covered, no upstream doc changed after you branched, and the change went through a PR/MR, not a direct push.</li>
-    <li><b>Merge to <code>main</code>.</b> Merging is what makes it final. Step-04 also needs the Product Owner's sign-off.</li>
-    <li><b>Start the next step in a fresh session.</b> It fast-forwards <code>main</code> in the target before it checks that the upstream documents are merged.</li>
-  </ol>
+  <p class="sub">The command stops once the PR/MR is open. The rest is yours.</p>
+  <div class="panel rows">
+    <div class="row"><div><div class="who you">1 · WAIT</div><h3>Fresh eyes</h3></div><p>Leave the PR/MR at least a few hours, ideally a full day, before you review it. This is the first item on the self-review checklist.</p></div>
+    <div class="row"><div><div class="who you">2 · REVIEW</div><h3>Self-review checklist</h3></div><p>Tick the rest in the PR/MR description: every section the step guide requires is covered, no upstream doc changed after you branched, and the change came through a PR/MR, not a direct push.</p></div>
+    <div class="row"><div><div class="who you">3 · MERGE</div><h3>Merge = final</h3></div><p>Merging to <code>main</code> is what makes the document final; there are no draft flags. Step-04 needs both the Architect and the Product Owner to approve.</p></div>
+    <div class="row"><div><div class="who you">4 · CONTINUE</div><h3>Next step</h3></div><p>Run <code>/clear</code> or start a new <code>claude</code> session, then the next command. It fast-forwards <code>main</code> in the target and stops if an upstream doc isn't merged yet.</p></div>
+  </div>
+</section>
+
+<!-- ============================== PAGE 7 ============================== -->
+<section class="page">
+  <h2 style="margin-top:0">Step by step</h2>
+  <p class="sub">Run every command from the kit folder, one per fresh session. Steps 01–09 share one runner: resolve the target, fast-forward <code>main</code>, check status and preconditions, wait for your <b>yes</b>, branch, interview you one question at a time, draft, commit, then push and open the PR/MR only after a second <b>yes</b>.</p>
+  <p class="sub" style="margin-bottom:0">Each step card is tagged with where it runs and who acts:</p>
+  <div class="legend">
+    <span class="pill kit">Kit</span><span>Runs in the kit repo. You start each Claude command here, and the guides and templates load from here.</span>
+    <span class="pill target">Target</span><span>Lands in your project clone: the step's branch, commits, and documents.</span>
+    <span class="pill you">Human</span><span>Needs a person to act: confirm, review, approve, or merge. The step's owner (Product Owner and/or Architect) does this.</span>
+  </div>
+
+  <div class="step"><div class="num">00</div><div class="card">
+    <div class="card-head"><h3>Register the target repo</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Clones your project repo and records where it lives, so every later step operates on that clone. Nothing is committed or pushed.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-bootstrap</pre></div>
+    <dl class="kv">
+      <dt>Asks</dt><dd>The target's git URL, and an empty or non-existent local folder to clone into.</dd>
+      <dt>Runs</dt><dd><code>node scripts/bootstrap-target-repo.mjs --target &lt;folder&gt; --url &lt;git-url&gt;</code> as a dry run, then again with <code>--apply</code></dd>
+      <dt>Writes</dt><dd>The clone at <code>&lt;folder&gt;</code>, plus <code>.proj-init/state.json</code> in the kit (gitignored, local to this machine)</dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> You review the dry run before <code>--apply</code>. Only one workspace at a time; replace it only with <code>--force</code>.</dd>
+      <dt>Git</dt><dd>No branch, no commit, no PR/MR.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">01</div><div class="card">
+    <div class="card-head"><h3>Set up repo governance</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
+    <p class="desc">The gate every later step relies on: the branching convention, the commit convention, and the self-review checklist.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-repo-setup</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
+      <dt>Writes</dt><dd><code>CONTRIBUTING.md</code>: permanent rules plus an <code>INITIATION-ONLY</code> fenced block, and branch protection on <code>main</code> if your host and plan allow it</dd>
+      <dt>Git</dt><dd><code>init/repo-setup</code> · <code>docs: add repo governance baseline (Step-01)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> Self-review checklist, then you merge. Every later step stops until <code>CONTRIBUTING.md</code> is on <code>main</code>.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">02</div><div class="card">
+    <div class="card-head"><h3>Product concept</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
+    <p class="desc">What we are building, and why.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-product</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
+      <dt>Reads</dt><dd><code>CONTRIBUTING.md</code> on <code>main</code> (the Step-01 gate)</dd>
+      <dt>Writes</dt><dd><code>docs/PRODUCT.md</code></dd>
+      <dt>Git</dt><dd><code>init/product</code> · <code>docs: add PRODUCT.md (Step-02)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> The Product Owner approves and merges.</dd>
+    </dl>
+  </div></div>
+</section>
+
+<!-- ============================== PAGE 8 ============================== -->
+<section class="page">
+  <div class="step" style="margin-top:0"><div class="num">03</div><div class="card">
+    <div class="card-head"><h3>Product requirements</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Turns the concept into testable requirements.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-prd</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
+      <dt>Reads</dt><dd><code>docs/PRODUCT.md</code></dd>
+      <dt>Writes</dt><dd><code>docs/PRD.md</code></dd>
+      <dt>Git</dt><dd><code>init/prd</code> · <code>docs: add PRD.md (Step-03)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> The Product Owner approves and merges.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">04</div><div class="card">
+    <div class="card-head"><h3>Architecture</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
+    <p class="desc">System structure and design decisions. The runner loads both the Architect and Product Owner role context.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-architecture</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect + Product Owner</dd>
+      <dt>Reads</dt><dd><code>docs/PRD.md</code></dd>
+      <dt>Writes</dt><dd><code>docs/ARCHITECTURE.md</code></dd>
+      <dt>Git</dt><dd><code>init/architecture</code> · <code>docs: add ARCHITECTURE.md (Step-04)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> The Architect and Product Owner both approve, then merge.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">05</div><div class="card">
+    <div class="card-head"><h3>Tech stack</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Locks the approved technologies and adds the build/test/lint commands to <code>CONTRIBUTING.md</code>.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-techstack</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
+      <dt>Reads</dt><dd><code>docs/PRD.md</code>, <code>docs/ARCHITECTURE.md</code></dd>
+      <dt>Writes</dt><dd><code>docs/TECH-STACK.md</code>; appends the tooling layer to <code>CONTRIBUTING.md</code> and leaves the Step-01 governance layer intact</dd>
+      <dt>Git</dt><dd><code>init/techstack</code> · <code>docs: add TECH-STACK.md and CONTRIBUTING tooling layer (Step-05)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> The Architect approves and merges.</dd>
+      <dt>After merge</dt><dd>Sandbox spikes are allowed, on isolated spike branches that never merge to <code>main</code>.</dd>
+    </dl>
+  </div></div>
+</section>
+
+<!-- ============================== PAGE 9 ============================== -->
+<section class="page">
+  <div class="step" style="margin-top:0"><div class="num">06</div><div class="card">
+    <div class="card-head"><h3>Engineering rules</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
+    <p class="desc">The coding rules every contributor follows, human or AI. Shared rules live in <code>ENGINEERING-RULES.md</code>; <code>CLAUDE.md</code> points to it and adds only what's specific to Claude Code.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-aitoolguide</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
+      <dt>Reads</dt><dd><code>docs/ARCHITECTURE.md</code>, <code>docs/TECH-STACK.md</code></dd>
+      <dt>Writes</dt><dd><code>docs/ENGINEERING-RULES.md</code> and <code>CLAUDE.md</code></dd>
+      <dt>Git</dt><dd><code>init/aitoolguide</code> · <code>docs: add ENGINEERING-RULES.md and CLAUDE.md (Step-06)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> The Architect approves and merges.</dd>
+      <dt>After merge</dt><dd>Production implementation can start.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">07</div><div class="card">
+    <div class="card-head"><h3>Project README</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Replaces the target's boilerplate README with a real entry point: setup, environment config, and how to run.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-readme</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
+      <dt>Reads</dt><dd><code>PRODUCT.md</code>, <code>PRD.md</code>, <code>ARCHITECTURE.md</code>, <code>TECH-STACK.md</code>, <code>ENGINEERING-RULES.md</code></dd>
+      <dt>Writes</dt><dd><code>README.md</code>, replacing the existing file with all placeholders removed</dd>
+      <dt>Git</dt><dd><code>init/readme</code> · <code>docs: replace boilerplate README with project README (Step-07)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> Every command in the README is tested before commit. The Architect approves and merges.</dd>
+      <dt>After merge</dt><dd>Required before the repo is shared more widely.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">08</div><div class="card">
+    <div class="card-head"><h3>Initial backlog</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill host">Host</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Epics and stories derived from the product and requirements docs, seeded into your issue tracker.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-backlog</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
+      <dt>Reads</dt><dd>The five docs Step-07 reads, plus <code>README.md</code></dd>
+      <dt>Writes</dt><dd><code>docs/BACKLOG.md</code>, plus host work items via <code>gh</code> or <code>az boards</code>; with neither CLI available, <code>PENDING</code> IDs and manual creation notes</dd>
+      <dt>Git</dt><dd><code>init/backlog</code> · <code>docs: add BACKLOG.md - Step-08 initial backlog</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> You approve the derived backlog before anything is written to the host or to disk. Items are then created one at a time. The Product Owner merges.</dd>
+      <dt>After merge</dt><dd>Required before sprint planning. Next: Step-09.</dd>
+    </dl>
+  </div></div>
+</section>
+
+<!-- ============================== PAGE 10 ============================== -->
+<section class="page">
+  <div class="step" style="margin-top:0"><div class="num">09</div><div class="card">
+    <div class="card-head"><h3>Finalize governance</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Removes the initiation-only rules from <code>CONTRIBUTING.md</code> and hands the team a permanent contribution core.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-finalize</pre></div>
+    <dl class="kv">
+      <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
+      <dt>Reads</dt><dd><code>docs/BACKLOG.md</code> on <code>main</code> (the gate) and <code>CONTRIBUTING.md</code> on <code>main</code></dd>
+      <dt>Writes</dt><dd><code>CONTRIBUTING.md</code>: the <code>INITIATION-ONLY</code> block is removed (markers included) and a <code>DEVELOPMENT-PHASE-GOVERNANCE</code> stub is inserted. Permanent rules and the tooling layer stay verbatim.</dd>
+      <dt>Git</dt><dd><code>init/finalize</code> · <code>docs: finalize CONTRIBUTING.md for the development phase (Step-09)</code></dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> Stops if the <code>INITIATION-ONLY</code> markers are missing. Once the Architect merges, initiation is complete.</dd>
+    </dl>
+  </div></div>
+
+  <div class="step"><div class="num">✓</div><div class="card">
+    <div class="card-head"><h3>Clean up the workspace</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Unregisters the workspace from the kit. The target clone and its remote are left untouched.</p>
+    <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-cleanup</pre></div>
+    <dl class="kv">
+      <dt>Checks</dt><dd><code>docs/BACKLOG.md</code> is on <code>main</code> and <code>INITIATION-ONLY</code> is gone from <code>CONTRIBUTING.md</code></dd>
+      <dt>Runs</dt><dd><code>node scripts/bootstrap-target-repo.mjs --clear</code>, after your <b>yes</b></dd>
+      <dt>Writes</dt><dd>Deletes <code>.proj-init/state.json</code>. Nothing else.</dd>
+      <dt>Git</dt><dd>None.</dd>
+    </dl>
+  </div></div>
+
+  <h2>Utilities, any time</h2>
+  <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-doc-status          <span class="c"># read-only: merged, open PRs/MRs, what's next</span>
+/proj-init-doc-update &lt;doc&gt;    <span class="c"># e.g. PRD.md → PR/MR + reconciliation checklist</span>
+<span class="c"># add --target &lt;folder&gt; to either for a finished or other project</span></pre></div>
+
+  <h2>Which document to update</h2>
+  <table class="upd">
+    <tr><th>If this happens</th><th>Run <code>/proj-init-doc-update</code> on</th></tr>
+    <tr><td>Product scope, goal, or target users change</td><td><code>PRODUCT.md</code></td></tr>
+    <tr><td>Requirements or acceptance criteria change</td><td><code>PRD.md</code></td></tr>
+    <tr><td>System design or a major architecture decision changes</td><td><code>ARCHITECTURE.md</code></td></tr>
+    <tr><td>A library, framework, or tool is added, removed, or version-locked</td><td><code>TECH-STACK.md</code></td></tr>
+    <tr><td>Coding conventions, banned patterns, or testing rules change</td><td><code>ENGINEERING-RULES.md</code></td></tr>
+    <tr><td>Setup steps, env config, or run commands change</td><td><code>README.md</code></td></tr>
+    <tr><td>Epics or stories added, removed, rescoped, or host IDs change</td><td><code>BACKLOG.md</code></td></tr>
+  </table>
 </section>
 
 <!-- ============================== PAGE 11 ============================== -->
