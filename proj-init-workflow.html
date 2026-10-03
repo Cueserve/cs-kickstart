@@ -11,6 +11,8 @@
     chrome --headless=new --no-pdf-header-footer --print-to-pdf=proj-init-workflow.pdf proj-init-workflow.html
   The one-page by-actor flow is also published on its own (needs a file:/// URL so the query survives):
     chrome --headless=new --no-pdf-header-footer --print-to-pdf=proj-init-workflow-by-actor.pdf "file:///<abs-path>/proj-init-workflow.html?only=by-actor"
+  Pages 1–5 (intro, by-actor flow, commands overview) are also published on their own:
+    chrome --headless=new --no-pdf-header-footer --print-to-pdf=proj-init-workflow-overview.pdf "file:///<abs-path>/proj-init-workflow.html?only=overview"
 -->
 <style>
   :root {
@@ -39,6 +41,9 @@
   .only-by-actor .page:not(#by-actor) { display: none; }
   .only-by-actor #by-actor { break-after: auto; }
   .only-by-actor #by-actor .sub, .only-by-actor #by-actor .full-only { display: none; }
+  /* ?only=overview prints pages 1–5, through #overview-end (source of proj-init-workflow-overview.pdf) */
+  .only-overview #overview-end ~ .page { display: none; }
+  .only-overview #overview-end { break-after: auto; }
   h1 { color: var(--ink); font-size: 30px; line-height: 1.15; margin: 4px 0 10px; letter-spacing: -0.5px; }
   h2 { color: var(--ink); font-size: 19px; margin: 18px 0 4px; }
   h3 { color: var(--ink); font-size: 15px; margin: 0; }
@@ -174,7 +179,7 @@
     .rows .row > div { border-right: 0; padding-bottom: 0; }
   }
 </style>
-<script>if (new URLSearchParams(location.search).get('only') === 'by-actor') document.documentElement.classList.add('only-by-actor');</script>
+<script>var only = new URLSearchParams(location.search).get('only'); if (only === 'by-actor' || only === 'overview') document.documentElement.classList.add('only-' + only);</script>
 </head>
 <body>
 
@@ -579,7 +584,7 @@ claude</pre></div>
 </section>
 
 <!-- ============================== PAGE 5 ============================== -->
-<section class="page">
+<section class="page" id="overview-end">
   <div class="cmd">
     <div class="cmd-head"><span class="cmd-num">CLEANUP</span><span class="cmd-name">/proj-init-cleanup</span><span class="cmd-title">Clean up</span></div>
     <div class="cmd-body">
