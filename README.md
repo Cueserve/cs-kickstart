@@ -1,10 +1,27 @@
 # Project Kickstart
 
-> AI-powered starter kit for structured project initiation — tool-agnostic guides with thin adapters for Claude Code and GitHub Copilot
+> AI-driven playbook for project initiation — **10 steps to launch a clean, governed, build-ready code repository**
 
-A control-plane kit that guides teams through a **clear, step‑by‑step project‑initiation process** before any coding begins. You run this kit as the control plane: Step-00 clones your target repository and registers it, you run the steps from here, and the target ends up with a consistent set of source‑of‑truth documents (`PRODUCT.md` → `README.md`) along with the rules that keep everything aligned as the project grows. The kit's guides, runner, and adapters are never copied into the target — only the documents you produce land there. This kit is not tied to any tech stack — the technology stack is chosen during the initiation process (Step-05).
+An AI-assisted starter kit to launch a new software project in a structured, reviewable way, before any code is written. The kit guides the team through ten steps, Step-00 to Step-09. In each step after Step-00, the AI assistant asks questions, drafts the step's documents (most from a predefined template), and submits them as a pull request. The Product Owner and/or Architect reviews it, and the documents become final only when the PR is approved and merged to `main`.
 
----
+The kit acts as a **control plane**: it runs from its own repository and acts on a separate target repository. Step-00 clones the target and registers it locally, and every later step writes its output into that clone. The kit's guides, templates, and commands are never copied into the target.
+
+When initiation is complete, the target contains:
+
+| Document | Purpose |
+| -------- | ------- |
+| `CONTRIBUTING.md` | Governance and tooling rules |
+| `docs/PRODUCT.md` | Product concept |
+| `docs/PRD.md` | Product requirements |
+| `docs/ARCHITECTURE.md` | System design |
+| `docs/TECH-STACK.md` | Approved technologies |
+| `docs/ENGINEERING-RULES.md` | Coding conventions, banned patterns, and testing rules |
+| `CLAUDE.md` and/or `.github/copilot-instructions.md` | Instructions for the AI coding assistant in use |
+| `README.md` | The project's entry point |
+| `docs/BACKLOG.md` | Initial backlog |
+
+The kit does not assume a technology stack; the stack is chosen in Step-05. It works with Claude Code and GitHub Copilot (agent mode). Other AI tools that can read and write files and run shell commands can follow the step guides directly.
+
 
 ## 🚀 Start Here
 
@@ -14,7 +31,7 @@ Before writing any code, register your target repo (Step-00), then run the Proje
 
 Start with **Step-00**. It clones your target repository into a local folder and registers it in `.proj-init/state.json`, so every later step operates on that clone. It does not copy any kit files into the target, create product code, or choose a stack. Run `/proj-init-bootstrap` (or use [Step-00](docs/guides/proj-init/00-bootstrap.md) directly in another AI tool).
 
-After Step-00, the process walks through Step-01 to Step-09. Step-02 through Step-08 each produce one source-of-truth document, finalized by a pull request; Step-09 strips the initiation-only material from `CONTRIBUTING.md` and hands off a permanent contribution core. Use the `/proj-init-*` commands as the primary interface. All adapters load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
+After Step-00, the process walks through Step-01 to Step-09. Step-02 through Step-08 each produce their own source-of-truth documents, finalized by a pull request; Step-09 strips the initiation-only material from `CONTRIBUTING.md` and hands off a permanent contribution core. Use the `/proj-init-*` commands as the primary interface. All adapters load the same shared runner, step registry, and step guides from `docs/guides/proj-init/` in this kit, and write the produced documents into the registered target repo.
 
 Run exactly one step per session. Each step command checks status before it does anything else; run `/proj-init-doc-status` on its own any time.
 
@@ -42,7 +59,7 @@ flowchart TB
   end
   subgraph design["Design · Architect"]
     direction LR
-    S4["04 · /proj-init-architecture<br/>docs/ARCHITECTURE.md"] --> S5["05 · /proj-init-techstack<br/>docs/TECH-STACK.md"] --> S6["06 · /proj-init-aitoolguide<br/>docs/AI-TOOL-GUIDE.md + adapters"]
+    S4["04 · /proj-init-architecture<br/>docs/ARCHITECTURE.md"] --> S5["05 · /proj-init-techstack<br/>docs/TECH-STACK.md"] --> S6["06 · /proj-init-aitoolguide<br/>docs/ENGINEERING-RULES.md + AI tool files"]
   end
   subgraph handoff["Hand off"]
     direction LR
@@ -82,7 +99,7 @@ No draft files, no status flags: a doc on a branch is a draft, a doc on `main` i
 | 3 | `/proj-init-prd` | `docs/PRD.md` |
 | 4 | `/proj-init-architecture` | `docs/ARCHITECTURE.md` |
 | 5 | `/proj-init-techstack` | `docs/TECH-STACK.md` (+ `CONTRIBUTING.md` tooling layer) |
-| 6 | `/proj-init-aitoolguide` | `docs/AI-TOOL-GUIDE.md` + one adapter per AI tool in use (e.g. `CLAUDE.md`, `.github/copilot-instructions.md`) |
+| 6 | `/proj-init-aitoolguide` | `docs/ENGINEERING-RULES.md` + one file per AI tool in use (e.g. `CLAUDE.md`, `.github/copilot-instructions.md`) |
 | 7 | `/proj-init-readme` | the target's project `README.md` |
 | 8 | `/proj-init-backlog` | `docs/BACKLOG.md` + host issues/work items |
 | 9 | `/proj-init-finalize` | `CONTRIBUTING.md` with initiation-only governance removed + permanent core retained |
@@ -115,11 +132,11 @@ docs/PRODUCT.md                  ← product concept (Step-02)
 docs/PRD.md                      ← requirements (Step-03)
 docs/ARCHITECTURE.md             ← system design (Step-04)
 docs/TECH-STACK.md               ← approved technologies (Step-05)
-docs/AI-TOOL-GUIDE.md            ← AI tool rules shared across all tools (Step-06)
+docs/ENGINEERING-RULES.md        ← coding conventions, banned patterns, testing rules (Step-06)
 docs/BACKLOG.md                  ← initial backlog manifest + host issue IDs (Step-08)
 CONTRIBUTING.md                  ← governance + tooling rules (Step-01 and Step-05; initiation-only material stripped in Step-09)
-CLAUDE.md                        ← Claude Code adapter, if in use (Step-06)
-.github/copilot-instructions.md  ← Copilot adapter, if in use (Step-06)
+CLAUDE.md                        ← Claude Code instructions, if in use (Step-06)
+.github/copilot-instructions.md  ← GitHub Copilot instructions, if in use (Step-06)
 README.md                        ← the target's project entry point (Step-07)
 ```
 
