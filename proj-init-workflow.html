@@ -727,8 +727,8 @@ claude</pre></div>
   </div>
 
   <div class="step"><div class="num">00</div><div class="card">
-    <div class="card-head"><h3>Register the target repo</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Clones your project repo and records where it lives, so every later step operates on that clone. Nothing is committed or pushed.</p>
+    <div class="card-head"><h3>Register target</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Clones the project repository from your Git host and registers that clone as the initiation workspace. From then on, every command runs from the kit but operates on the registered clone.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-bootstrap</pre></div>
     <dl class="kv">
       <dt>Asks</dt><dd>The target's git URL, and an empty or non-existent local folder to clone into.</dd>
@@ -740,8 +740,8 @@ claude</pre></div>
   </div></div>
 
   <div class="step"><div class="num">01</div><div class="card">
-    <div class="card-head"><h3>Set up repo governance</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">The gate every later step relies on: the branching convention, the commit convention, and the self-review checklist.</p>
+    <div class="card-head"><h3>Repo governance</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Establishes the repository's governance baseline: the branching convention, the commit message convention, and the self-review checklist every PR/MR must satisfy.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-repo-setup</pre></div>
     <dl class="kv">
       <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
@@ -753,7 +753,7 @@ claude</pre></div>
 
   <div class="step"><div class="num">02</div><div class="card">
     <div class="card-head"><h3>Product concept</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">What we are building, and why.</p>
+    <p class="desc">Conducts a structured interview with the Product Owner, one question at a time, to define the product's vision, problem statement, objectives, target users, features, scope boundaries, and success criteria.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-product</pre></div>
     <dl class="kv">
       <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
@@ -768,8 +768,8 @@ claude</pre></div>
 <!-- ============================== PAGE 8 ============================== -->
 <section class="page">
   <div class="step" style="margin-top:0"><div class="num">03</div><div class="card">
-    <div class="card-head"><h3>Product requirements</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Turns the concept into testable requirements.</p>
+    <div class="card-head"><h3>Requirements</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Translates the approved product concept into a formal requirements document. Every requirement is stated so that it can be tested.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-prd</pre></div>
     <dl class="kv">
       <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
@@ -782,7 +782,7 @@ claude</pre></div>
 
   <div class="step"><div class="num">04</div><div class="card">
     <div class="card-head"><h3>Architecture</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">System structure and design decisions. The runner loads both the Architect and Product Owner role context.</p>
+    <p class="desc">Defines the system architecture and records the key design decisions and the implementation conventions code must follow. The session loads both Architect and Product Owner context.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-architecture</pre></div>
     <dl class="kv">
       <dt>Owner</dt><dd>Architect · reviewed by Architect + Product Owner</dd>
@@ -795,7 +795,7 @@ claude</pre></div>
 
   <div class="step"><div class="num">05</div><div class="card">
     <div class="card-head"><h3>Tech stack</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Locks the approved technologies and adds the build/test/lint commands to <code>CONTRIBUTING.md</code>.</p>
+    <p class="desc">Selects and locks the approved technologies with the trade-offs behind each choice, and adds the project's build, test, and lint commands to <code>CONTRIBUTING.md</code> as a tooling layer.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-techstack</pre></div>
     <dl class="kv">
       <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
@@ -812,7 +812,7 @@ claude</pre></div>
 <section class="page">
   <div class="step" style="margin-top:0"><div class="num">06</div><div class="card">
     <div class="card-head"><h3>Engineering rules</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">The coding rules every contributor follows, human or AI. Shared rules live in <code>ENGINEERING-RULES.md</code>; <code>CLAUDE.md</code> points to it and adds only what's specific to Claude Code.</p>
+    <p class="desc">Defines the engineering rules every contributor follows, human or AI, derived from the approved architecture and tech stack. <code>CLAUDE.md</code> points to the shared rules and adds only Claude Code–specific instructions.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-aitoolguide</pre></div>
     <dl class="kv">
       <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
@@ -826,21 +826,21 @@ claude</pre></div>
 
   <div class="step"><div class="num">07</div><div class="card">
     <div class="card-head"><h3>Project README</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Replaces the target's boilerplate README with a real entry point: setup, environment config, and how to run.</p>
+    <p class="desc">Replaces the repository's boilerplate README with the project's real entry point: overview, prerequisites, environment setup, install and run, tests, and links to the source-of-truth documents.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-readme</pre></div>
     <dl class="kv">
       <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
       <dt>Reads</dt><dd><code>PRODUCT.md</code>, <code>PRD.md</code>, <code>ARCHITECTURE.md</code>, <code>TECH-STACK.md</code>, <code>ENGINEERING-RULES.md</code></dd>
       <dt>Writes</dt><dd><code>README.md</code>, replacing the existing file with all placeholders removed</dd>
       <dt>Git</dt><dd><code>init/readme</code> · <code>docs: replace boilerplate README with project README (Step-07)</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> Every command in the README is tested before commit. The Architect approves and merges.</dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> Every command in the README is executed and verified before commit. The Architect approves and merges.</dd>
       <dt>After merge</dt><dd>Required before the repo is shared more widely.</dd>
     </dl>
   </div></div>
 
   <div class="step"><div class="num">08</div><div class="card">
     <div class="card-head"><h3>Initial backlog</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill host">Host</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Epics and stories derived from the product and requirements docs, seeded into your issue tracker.</p>
+    <p class="desc">Derives the initial epics and stories from the product and requirements documents and creates them as work items in the host tracker.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-backlog</pre></div>
     <dl class="kv">
       <dt>Owner</dt><dd>Product Owner · reviewed by Product Owner</dd>
@@ -857,7 +857,7 @@ claude</pre></div>
 <section class="page">
   <div class="step" style="margin-top:0"><div class="num">09</div><div class="card">
     <div class="card-head"><h3>Finalize governance</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill target">Target</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Removes the initiation-only rules from <code>CONTRIBUTING.md</code> and hands the team a permanent contribution core.</p>
+    <p class="desc">Converts <code>CONTRIBUTING.md</code> from its initiation form into its permanent form: the permanent contribution policy for the development phase.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-finalize</pre></div>
     <dl class="kv">
       <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
@@ -869,8 +869,8 @@ claude</pre></div>
   </div></div>
 
   <div class="step"><div class="num">✓</div><div class="card">
-    <div class="card-head"><h3>Clean up the workspace</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">Human</span></div></div>
-    <p class="desc">Unregisters the workspace from the kit. The target clone and its remote are left untouched.</p>
+    <div class="card-head"><h3>Clean up</h3><div class="pills"><span class="pill kit">Kit</span><span class="pill you">Human</span></div></div>
+    <p class="desc">Closes out the initiation workspace by unregistering it. The target clone and its remote are not modified.</p>
     <div class="term"><div class="lbl claude">CLAUDE</div><pre>/proj-init-cleanup</pre></div>
     <dl class="kv">
       <dt>Checks</dt><dd><code>docs/BACKLOG.md</code> is on <code>main</code> and <code>INITIATION-ONLY</code> is gone from <code>CONTRIBUTING.md</code></dd>
