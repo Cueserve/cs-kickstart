@@ -723,12 +723,11 @@ claude</pre></div>
 <!-- ============================== PAGE 7 ============================== -->
 <section class="page">
   <h2 style="margin-top:0">Step by step</h2>
-  <p class="sub">Run every command from the kit folder, one per fresh session. Steps 01–09 share one runner: resolve the target, fast-forward <code>main</code>, check status and preconditions, wait for your <b>yes</b>, branch, interview you one question at a time, draft, commit, then push and open the PR/MR only after a second <b>yes</b>.</p>
-  <p class="sub" style="margin-bottom:0">Each step card is tagged with where it runs and who acts:</p>
+  <p class="sub" style="margin-bottom:0">Run every command from the kit folder, one per fresh session; steps 01–09 all follow the runner in <b>Anatomy of a step</b>. Each card is tagged with where it runs and who acts:</p>
   <div class="legend">
     <span class="pill kit">Kit</span><span>Runs in the kit repo. You start each Claude command here, and the guides and templates load from here.</span>
     <span class="pill target">Target</span><span>Lands in your project clone: the step's branch, commits, and documents.</span>
-    <span class="pill you">Human</span><span>Needs a person to act: confirm, review, approve, or merge. The step's owner (Product Owner and/or Architect) does this.</span>
+    <span class="pill you">Human</span><span>Needs the step's owner (Product Owner and/or Architect) to confirm, review, approve, or merge.</span>
   </div>
 
   <div class="step"><div class="num">00</div><div class="card">
@@ -739,7 +738,7 @@ claude</pre></div>
       <dt>Asks</dt><dd>The target's git URL, and an empty or non-existent local folder to clone into.</dd>
       <dt>Runs</dt><dd><code>node scripts/bootstrap-target-repo.mjs --target &lt;folder&gt; --url &lt;git-url&gt;</code> as a dry run, then again with <code>--apply</code></dd>
       <dt>Writes</dt><dd>The clone at <code>&lt;folder&gt;</code>, plus <code>.proj-init/state.json</code> in the kit (gitignored, local to this machine)</dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> You review the dry run before <code>--apply</code>. Only one workspace at a time; replace it only with <code>--force</code>.</dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> You review the dry run before <code>--apply</code>. One workspace at a time; <code>--force</code> replaces it.</dd>
       <dt>Git</dt><dd>No branch, no commit, no PR/MR.</dd>
     </dl>
   </div></div>
@@ -752,7 +751,7 @@ claude</pre></div>
       <dt>Owner</dt><dd>Architect · reviewed by Architect</dd>
       <dt>Writes</dt><dd><code>CONTRIBUTING.md</code>: permanent rules plus an <code>INITIATION-ONLY</code> fenced block, and branch protection on <code>main</code> if your host and plan allow it</dd>
       <dt>Git</dt><dd><code>init/repo-setup</code> · <code>docs: add repo governance baseline (Step-01)</code></dd>
-      <dt>Gate</dt><dd><span class="gate">■</span> Self-review checklist, then you merge. Every later step stops until <code>CONTRIBUTING.md</code> is on <code>main</code>.</dd>
+      <dt>Gate</dt><dd><span class="gate">■</span> Self-review checklist, then you merge. Steps 02–09 won't start until it's on <code>main</code>.</dd>
     </dl>
   </div></div>
 
