@@ -40,3 +40,6 @@ next-env.d.ts
 
 # project-initiation control-plane state (operator-local target path)
 /.proj-init/
+
+# maintainer's personal to-do list (operator-local)
+/TODO.md
