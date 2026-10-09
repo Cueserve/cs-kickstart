@@ -26,10 +26,9 @@ them without this product.]
 ### Objective
 
 [Two or three sentences — the goal/outcome the product must achieve. Example:
-"PractitionerPRO is an intuitive centralized platform for customer management,
-job tracking, workflow automation, and reporting. It delivers real-time
-visibility and operational control through AI-driven workflows, keeping teams
-organized and consistent without added complexity."]
+"Harborline helps independent marina operators keep every berth earning through
+the season. Operators should see fewer empty berth-nights, zero double-bookings,
+and boaters who can confirm a slip before they leave their home port."]
 
 ### Description
 
